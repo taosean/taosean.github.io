@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="taosean&#39;s 学习之旅">
-<meta property="og:url" content="http://yoursite.com/tags/GPU/index.html">
+<meta property="og:url" content="https://taosean.github.io/tags/GPU/index.html">
 <meta property="og:site_name" content="taosean&#39;s 学习之旅">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
@@ -415,6 +415,46 @@ MathJax.Hub.Queue(function() {
     <script>
         $(document).ready(function() {
             $("button").click(function() {
+                $(".article-info").toggle(200);
+            });
+        });
+    </script>
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+
+  </div>
+</body>
+</html>
+(function() {
                 $(".article-info").toggle(200);
             });
         });
