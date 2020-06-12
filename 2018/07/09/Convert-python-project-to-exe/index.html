@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>将包含 caffe 的 python 工程打包成一个 exe 文件 | taosean&#39;s 学习之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="由于工作原因，需要将一个基于 caffe 的深度学习检测工程转换成 exe 文件，在此过程中遇到了许多问题，现将其记录下来，以供参考。">
+<meta name="keywords" content="python,pyinstaller,打包,caffe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将包含 caffe 的 python 工程打包成一个 exe 文件">
+<meta property="og:url" content="http://yoursite.com/2018/07/09/Convert-python-project-to-exe/index.html">
+<meta property="og:site_name" content="taosean&#39;s 学习之旅">
+<meta property="og:description" content="由于工作原因，需要将一个基于 caffe 的深度学习检测工程转换成 exe 文件，在此过程中遇到了许多问题，现将其记录下来，以供参考。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-02-11T05:36:08.947Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="将包含 caffe 的 python 工程打包成一个 exe 文件">
+<meta name="twitter:description" content="由于工作原因，需要将一个基于 caffe 的深度学习检测工程转换成 exe 文件，在此过程中遇到了许多问题，现将其记录下来，以供参考。">
+  
+    <link rel="alternative" href="/atom.xml" title="taosean&#39;s 学习之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.jpg" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">taosean</a></h1>
+        </hgroup>
+        
+        <p class="header-subtitle"  style="color:#aaaaaa">亡命之徒</p><br>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="标题搜索" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0)
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>外部链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                            <li><a  href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="https://github.com/taosean" title="github">github</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/C/" style="font-size: 15px;">C++</a> <a href="/tags/CNN/" style="font-size: 10px;">CNN</a> <a href="/tags/CPU/" style="font-size: 12.5px;">CPU</a> <a href="/tags/Caffe/" style="font-size: 15px;">Caffe</a> <a href="/tags/Convolution/" style="font-size: 10px;">Convolution</a> <a href="/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/tags/FLOPs/" style="font-size: 10px;">FLOPs</a> <a href="/tags/Faster-R-CNN/" style="font-size: 12.5px;">Faster R-CNN</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/IPC/" style="font-size: 10px;">IPC</a> <a href="/tags/JavaScript/" style="font-size: 12.5px;">JavaScript</a> <a href="/tags/Kalman/" style="font-size: 10px;">Kalman</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Node-js/" style="font-size: 12.5px;">Node.js</a> <a href="/tags/ORB/" style="font-size: 10px;">ORB</a> <a href="/tags/PCA/" style="font-size: 10px;">PCA</a> <a href="/tags/PEX/" style="font-size: 10px;">PEX</a> <a href="/tags/Porting/" style="font-size: 10px;">Porting</a> <a href="/tags/Process/" style="font-size: 10px;">Process</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Python-layer/" style="font-size: 10px;">Python layer</a> <a href="/tags/RPN/" style="font-size: 12.5px;">RPN</a> <a href="/tags/Release/" style="font-size: 10px;">Release</a> <a href="/tags/SE/" style="font-size: 10px;">SE</a> <a href="/tags/Tensorflow/" style="font-size: 10px;">Tensorflow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/WinAPI/" style="font-size: 10px;">WinAPI</a> <a href="/tags/Windows/" style="font-size: 12.5px;">Windows</a> <a href="/tags/Yolo/" style="font-size: 12.5px;">Yolo</a> <a href="/tags/anchor/" style="font-size: 12.5px;">anchor</a> <a href="/tags/caffe/" style="font-size: 10px;">caffe</a> <a href="/tags/calibration/" style="font-size: 10px;">calibration</a> <a href="/tags/camera/" style="font-size: 10px;">camera</a> <a href="/tags/cpu/" style="font-size: 10px;">cpu</a> <a href="/tags/cuda/" style="font-size: 10px;">cuda</a> <a href="/tags/darknet/" style="font-size: 10px;">darknet</a> <a href="/tags/deformable-RoI-pooling/" style="font-size: 10px;">deformable RoI pooling</a> <a href="/tags/deformable-convolution/" style="font-size: 10px;">deformable convolution</a> <a href="/tags/dependencies/" style="font-size: 10px;">dependencies</a> <a href="/tags/feature-extraction/" style="font-size: 10px;">feature extraction</a> <a href="/tags/file-mapping/" style="font-size: 10px;">file mapping</a> <a href="/tags/flatten/" style="font-size: 10px;">flatten</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/gpu/" style="font-size: 12.5px;">gpu</a> <a href="/tags/imaging/" style="font-size: 10px;">imaging</a> <a href="/tags/keypoint/" style="font-size: 10px;">keypoint</a> <a href="/tags/mobile/" style="font-size: 10px;">mobile</a> <a href="/tags/opencv/" style="font-size: 10px;">opencv</a> <a href="/tags/optical-flow/" style="font-size: 10px;">optical flow</a> <a href="/tags/padding/" style="font-size: 10px;">padding</a> <a href="/tags/process/" style="font-size: 10px;">process</a> <a href="/tags/pyinstaller/" style="font-size: 12.5px;">pyinstaller</a> <a href="/tags/python/" style="font-size: 17.5px;">python</a> <a href="/tags/scipy/" style="font-size: 10px;">scipy</a> <a href="/tags/shiv/" style="font-size: 10px;">shiv</a> <a href="/tags/shuffle/" style="font-size: 10px;">shuffle</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/tracking/" style="font-size: 10px;">tracking</a> <a href="/tags/unicode/" style="font-size: 10px;">unicode</a> <a href="/tags/utf-8/" style="font-size: 10px;">utf-8</a> <a href="/tags/version-control/" style="font-size: 10px;">version control</a> <a href="/tags/visual-studio/" style="font-size: 10px;">visual studio</a> <a href="/tags/vs/" style="font-size: 10px;">vs</a> <a href="/tags/xml/" style="font-size: 10px;">xml</a> <a href="/tags/yolo/" style="font-size: 10px;">yolo</a> <a href="/tags/yolov3/" style="font-size: 10px;">yolov3</a> <a href="/tags/中文/" style="font-size: 10px;">中文</a> <a href="/tags/主成分分析/" style="font-size: 10px;">主成分分析</a> <a href="/tags/依赖/" style="font-size: 10px;">依赖</a> <a href="/tags/协同计算/" style="font-size: 10px;">协同计算</a> <a href="/tags/协方差/" style="font-size: 10px;">协方差</a> <a href="/tags/协方差矩阵/" style="font-size: 10px;">协方差矩阵</a> <a href="/tags/单核/" style="font-size: 10px;">单核</a> <a href="/tags/卡尔曼/" style="font-size: 10px;">卡尔曼</a> <a href="/tags/卡尔曼滤波/" style="font-size: 10px;">卡尔曼滤波</a> <a href="/tags/发行/" style="font-size: 10px;">发行</a> <a href="/tags/回归/" style="font-size: 12.5px;">回归</a> <a href="/tags/图像匹配/" style="font-size: 10px;">图像匹配</a> <a href="/tags/图像检索/" style="font-size: 10px;">图像检索</a> <a href="/tags/多核/" style="font-size: 10px;">多核</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/异构/" style="font-size: 10px;">异构</a> <a href="/tags/成像原理/" style="font-size: 10px;">成像原理</a> <a href="/tags/截屏/" style="font-size: 10px;">截屏</a> <a href="/tags/打包/" style="font-size: 10px;">打包</a> <a href="/tags/日文/" style="font-size: 10px;">日文</a> <a href="/tags/权限/" style="font-size: 10px;">权限</a> <a href="/tags/深度学习/" style="font-size: 10px;">深度学习</a> <a href="/tags/特征提取/" style="font-size: 10px;">特征提取</a> <a href="/tags/环境变量/" style="font-size: 10px;">环境变量</a> <a href="/tags/目标检测/" style="font-size: 20px;">目标检测</a> <a href="/tags/相机/" style="font-size: 10px;">相机</a> <a href="/tags/移植/" style="font-size: 10px;">移植</a> <a href="/tags/线程/" style="font-size: 12.5px;">线程</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/网页/" style="font-size: 10px;">网页</a> <a href="/tags/调试/" style="font-size: 10px;">调试</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/进程/" style="font-size: 12.5px;">进程</a> <a href="/tags/进程池/" style="font-size: 10px;">进程池</a> <a href="/tags/进程通信/" style="font-size: 10px;">进程通信</a> <a href="/tags/阻塞/" style="font-size: 10px;">阻塞</a> <a href="/tags/非阻塞/" style="font-size: 10px;">非阻塞</a>
+                    </div>
+                </section>
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-outlinks">
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">csdn</a><br>
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">segmentfault</a><br>
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">简书</a><br>
+                    
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱足球，爱图像</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">taosean</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.jpg" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">taosean</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">亡命之徒</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/taosean" title="github">github</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-Convert-python-project-to-exe" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/07/09/Convert-python-project-to-exe/" class="article-date">
+      <time datetime="2018-07-09T08:40:39.000Z" itemprop="datePublished">2018-07-09</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      将包含 caffe 的 python 工程打包成一个 exe 文件
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/caffe/">caffe</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pyinstaller/">pyinstaller</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/打包/">打包</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>由于工作原因，需要将一个基于 caffe 的深度学习检测工程转换成 exe 文件，在此过程中遇到了许多问题，现将其记录下来，以供参考。<br><a id="more"></a></p>
+<h2 id="fpn-ported-改动"><a href="#fpn-ported-改动" class="headerlink" title="fpn_ported 改动"></a>fpn_ported 改动</h2><h3 id="Caffe-related"><a href="#Caffe-related" class="headerlink" title="Caffe related"></a>Caffe related</h3><p>1 caffe/pycaffe.py L13 <code>from ._caffe</code> 改成了 <code>from caffe._caffe</code>。因为最后 <code>dist\runcaffe_fpn\</code> 里有一个  <code>caffe._caffe.pyd</code> 文件，因此需要 import 此文件。（个人解释见下文）<br>2 caffe/__init__.py L2 <code>from._caffe</code> 改成了 <code>from caffe._caffe</code><br>caffe/__init__.py L3 <code>from._caffe</code> 改成了 <code>from caffe._caffe</code><br>3 caffe 中关于图像读入的部分都是用的 skimage 进行实现，但是似乎 pyinstaller 对 skimage 的支持并不好，因此需要对 caffe 中的相关部分用 cv2 进行替代。</p>
+<blockquote>
+<p>My Python project includes A Caffe module which run a simple image classification process. One basic function is Caffe calling skimage.io to load image:<br><a href="https://github.com/BVLC/caffe/blob/master/python/caffe/io.py" target="_blank" rel="noopener">https://github.com/BVLC/caffe/blob/master/python/caffe/io.py</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_image</span><span class="params">(filename, color=True)</span>:</span></span><br><span class="line">    img = skimage.img_as_float(skimage.io.imread(filename, as_grey=<span class="keyword">not</span> color)).astype(np.float32)</span><br><span class="line">    <span class="keyword">if</span> img.ndim == <span class="number">2</span>:</span><br><span class="line">        img = img[:, :, np.newaxis]</span><br><span class="line">        <span class="keyword">if</span> color:</span><br><span class="line">            img = np.tile(img, (<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>))</span><br><span class="line">    <span class="keyword">elif</span> img.shape[<span class="number">2</span>] == <span class="number">4</span>:</span><br><span class="line">        img = img[:, :, :<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">return</span> img</span><br></pre></td></tr></table></figure></p>
+<p>I wonder if PyInstaller currently has a good support for Python package skimage. But from what I know by now, it doesn’t.</p>
+<p>Run from Python source code files, it works fine. But when I packed all things into one single binary file, it can not load image at all. And after debugging and googleing for a long time – I always thought maybe I did something wrong – I get rid of this. PyInstaller hates skimage! So at last I use cv2 instead. And it works smoothly.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cv2_load_image</span><span class="params">(filename, color=True)</span>:</span></span><br><span class="line">    img = cv2.imread(filename).astype(np.float32) / <span class="number">255</span></span><br><span class="line">    <span class="keyword">if</span> img.ndim == <span class="number">3</span>:</span><br><span class="line">        img[:,:,:] = img[:,:,<span class="number">2</span>::<span class="number">-1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> img.ndim == <span class="number">2</span>:</span><br><span class="line">        img = img[:, :, np.newaxis]</span><br><span class="line">        <span class="keyword">if</span> color:</span><br><span class="line">            img = np.tile(img, (<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>))</span><br><span class="line">    <span class="keyword">elif</span> img.shape[<span class="number">2</span>] == <span class="number">4</span>:</span><br><span class="line">        img = img[:, :, :<span class="number">3</span>]</span><br><span class="line">    <span class="keyword">return</span> img</span><br></pre></td></tr></table></figure></p>
+<p>For all above details, please do check out PyInstaller Documentation: <a href="https://media.readthedocs.org/pdf/pyinstaller/latest/pyinstaller.pdf" target="_blank" rel="noopener">https://media.readthedocs.org/pdf/pyinstaller/latest/pyinstaller.pdf</a></p>
+</blockquote>
+<p>具体参考<a href="https://handong1587.github.io/programming_study/2016/12/24/pyinstaller-and-others.html#continue-tackling-weird-stuffs" target="_blank" rel="noopener">这篇文章</a></p>
+<p><br></p>
+<h3 id="Numpy-related"><a href="#Numpy-related" class="headerlink" title="Numpy related"></a>Numpy related</h3><p>1 numpy.core.__init__.py 中 <code>from .info import __doc__</code> 改成 <code>from numpy.core.info import __doc__</code><br>2 <code>from . import multiarray</code> 改成 <code>from numpy.core import multiarray</code><br>3 将 numpy.core.__init__.py 中其他的代表当前目录的 <code>.</code> 都替换成 <code>numpy.core</code><br>4 将 numpy.fft.fftpack.py 中的 <code>from . fft import fftpack_lite as fftpack</code> 改成 <code>from numpy.fft import fftpack_lite as fftpack</code><br>5.将 numpy.random.__init__.py 中的 <code>from .mtrand import *</code> 改成 <code>from numpy.random.mtrand import *</code><br><strong>个人观点：</strong> 似乎无需像第3步一样将所有的 . 都改成绝对路径，貌似只有使用 <code>.</code> 导入 pyd 文件的导入语句会报找不到的错误。因此只需将导入 pyd 文件的语句更改即可。</p>
+<p><br></p>
+<h3 id="os-os-path-related"><a href="#os-os-path-related" class="headerlink" title="os, os.path related"></a>os, os.path related</h3><h4 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h4><p>&emsp;&emsp;打包后运行时，在最外层的 runcaffe_fpn.py 中 import os 可以成功，但是在  <code>models/rpn/proposal_layer.py</code> 和 <code>lib/config.py</code> 中 <code>import os</code> 就会报错 <code>no module named path</code>。</p>
+<p><br></p>
+<h4 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h4><p>&emsp;&emsp;由于 os 和 os.path 的特殊性，即 os.py 中根据平台不同，import 不同的文件作为 path 模块，例如，在 Windows 中，使用 <code>import ntpath as path</code> 并将其命名为 os.path 模块。此外，os.py 和 ntpath.py 文件存在相互 import 的情况，不知为什么，工程中一些文件中，如 config.py 中，import os 语句会报错 no module namded path。</p>
+<p><br></p>
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h4><p>&emsp;&emsp;<del>由于 config.py 等文件中调用了 os.py 中的 makedirs 等函数以及 ntpath.py 中的一些函数。因此，尝试将 os.py 与 ntpath.py 文件解耦（其实是无法解耦的，因为 os.py 需要导入 ntpath.py 中的属性并供其函数使用），因此将 os.py 中 <code>import ntpath as path</code>  句注释，将 <code>sys.modules[&#39;os.path&#39;] = path</code> 和 <code>from os.path import (curdir, pardir, sep, pathsep, defpath, extsep, altsep, devnull)</code> 注释掉，换成 <code>from _ntpath import (curdir, pardir, sep, pathsep, defpath, extsep, altsep, devnull)</code> （<code>from _ntpath</code> 是因为如果直接使用 <code>from ntpath</code> 的话，它会自动调用 anaconda 下的 <code>ntpath.py</code> 文件，会导致前面的错误，因此，将 os.py 和 ntpath.py 文件拷贝至一个包下，并都在前面加上下划线进行重命名）。实际操作中，我是创建了一个名为 os_modified 的包，并将重命名后的 _os.py 和 _ntpath.py 文件放进去作为模块。在工程文件中调用 os 和 os.path 的地方，将 <code>import os</code> 和 <code>import os.path as osp</code> 改成 <code>import modified_os._os as os</code> 和 <code>import modified_os._ntpath as osp</code>。工程文件中导入的其他一些包，如 genericpath，也会 import os，我也将这些文件拷贝进 modified_os 中重命名， 如 _genericpath，并将其中的 import os 改成 import _os as os。在工程文件中有 <code>import genericpath</code> 的地方改成 <code>import modified_path._genericpath as genericpath</code>。其他有类似情况的也按此方法处理。总之，os_modified 模块下，都是在工程文件中使用到，且其有 <code>import os</code> 或 <code>import os.path</code> 的，我将所有这些文件集中到一个名为 modified_os 的模块下，当工程文件中调用到这些时，就调用此模块下的版本，而不是 anaconda 的原始版本。这样就解决了 <code>no module named path</code> 的错误。</del></p>
+<p><br></p>
+<h4 id="Comment"><a href="#Comment" class="headerlink" title="Comment"></a>Comment</h4><p>&emsp;&emsp;上面所述的关于 os, os.path 的部分全部不需要，只需要将 os.py, ntpath.py 两个文件通过 <code>--add-binary=&quot;/path/to/os.py;.&quot; --add-binary=&quot;/path/to/ntpath.py;.&quot;</code> 添加进去即可。这样，在 <code>dist/runcaffe_fpn/</code> 下就会有 <code>os.py</code> 和 <code>ntpath.py</code> 两个文件。当一个 <code>.py</code> 文件是从 exe 文件中开始执行，即是 boundled 的时候，pyinstaller 的 bootloader 将 <code>frozen</code> 属性添加进 sys 模块中。因此，可以通过<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">if</span> getattr(sys, <span class="string">'frozen'</span>, <span class="keyword">False</span>):</span><br><span class="line">    <span class="comment"># running in a bundle</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># running live</span></span><br></pre></td></tr></table></figure></p>
+<p>来在工程文件中进行判断此工程文件是用 python 脚本调用执行的还是用 exe 文件调用执行的。如果是用 python 脚本调用，则根据其导入模块的结构进行 import。比如 <code>fast_rcnn/nms_wrapper.py</code> 需要导入 <code>nms/gpu_nms.pyd</code> 和 <code>fast_rcnn/config.py</code>。在脚本模式下，需使用 <code>from nms.gpu_nms import gpu_nms</code> 和 <code>from fast_rcnn.config import cfg</code> 进行调用。而在 boundle 模式下，使用 <code>from gpu_nms import gpu_nms</code> 和 <code>from config import cfg</code> 进行调用即可。需要注意的是，在 boundle 模式下，还需使用 <code>--add-binary</code> 选项将 <code>gpu_nms.pyd</code> 和 <code>config.py</code> 两个文件添加进去，这样它的 import 语句才会生效。</p>
+<p>上述做法有效的<font color="orange"><strong>原因</strong></font>是：pyinstaller 似乎将工程中不同层次的脚本（即存在调用关系）所需的依赖都展开放在最后打包的依赖项所在的文件夹下，即 <code>sys._MEIPASS</code> 所指向路径下，是没有目录层次的。因此，当处于 boundle 模式下时，<code>from gpu_nms import gpu_nms</code> 语句会直接对 <code>sys.__MEIPASS</code> 目录下的 <code>gpu_nms.pyd</code> 文件进行 import。在解决 os, os.path 问题时，将 os.py 和 ntpath.py 文件都添加进去，就不会有找不到的问题。并且按照理论，import os 所导入的文件应该是 <code>sys._MEIPASS</code> 路径下的 os.py。（已验证）</p>
+<p>工程文件中的示例如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">if</span> getattr(sys, <span class="string">'frozen'</span>, <span class="keyword">False</span>): <span class="comment"># boundle 模式</span></span><br><span class="line">    <span class="keyword">from</span> gpu_nms <span class="keyword">import</span> gpu_nms</span><br><span class="line">    <span class="keyword">from</span> config <span class="keyword">import</span> cfg</span><br><span class="line"><span class="keyword">else</span>: <span class="comment"># 脚本模式</span></span><br><span class="line">    <span class="keyword">from</span> nms.gpu_nms <span class="keyword">import</span> gpu_nms</span><br><span class="line">    <span class="keyword">from</span> fast_rcnn.config <span class="keyword">import</span> cfg</span><br></pre></td></tr></table></figure></p>
+<p><br><br>&emsp;&emsp;解决了 os 和 pyd 文件导入的问题后，exe 可以成功运行了。但是美中不足的是，运行 exe 除了需要作为参数的那些文件外，还一直需要 <code>proposal_layer.py</code> 文件，这是不好的，因为不能向客户透露源码。因此，尝试将 <code>proposal_layer.py</code> 文件也用 <code>--add-binary</code> 选项添加进去。但是这样并没有用。究其原因是，<code>proposal_layer.py</code> 是在 <code>.prototxt</code> 文件中指定的（即 python 层中的 module 参数），原来为 <code>module: rpn.proposal_layer</code>。这是因为 prototxt 文件同级目录下有一个 rpn 文件夹，其下有一个 <code>proposal_layer.py</code> 文件。由于将 <code>proposal_layer.py</code> 文件添加进 <code>sys._MEIPASS</code> 后其名称仍为 <code>proposal_layer.py</code>，而 prototxt 中指定为 <code>rpn.proposal_layer</code>，不统一。因此，将 rpn 文件夹下的两个文件，<code>proposal_layer.py</code> 和 <code>generate_anchors.py</code>，放置到与 prototxt 文件同级目录下，并将 prototxt 中的 <code>rpn.proposal_layer</code> 改成 <code>proposal_layer</code>. 再将 <code>proposal_layer.py</code> 用 <code>--add-binary</code> 添加进去，就可以在 <code>sys._MEIPASS</code> 中调用 <code>proposal_layer.py</code> 了，这样再运行单个的 exe 文件时就不需带着 <code>proposal_layer.py</code> 文件了，因为它会调用 <code>sys._MEIPASS</code> 下的 <code>proposal_layer.py</code>。</p>
+<p>Pyinstaller 打包命令如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pyinstaller -F --add-binary=&quot;models/nms/gpu_nms.pyd;.&quot; ^</span><br><span class="line">               --add-binary=&quot;models/fast_rcnn/bbox_transform.py;.&quot; ^</span><br><span class="line">               --add-binary=&quot;models/fast_rcnn/config.py;.&quot; ^</span><br><span class="line">               --add-binary=&quot;models/fast_rcnn/nms_wrapper.py;.&quot; ^</span><br><span class="line">               --add-binary=&quot;models/proposal_layer.py;.&quot; ^</span><br><span class="line">               --add-binary=&quot;models/generate_anchors.py;.&quot; ^</span><br><span class="line">               --add-binary=&quot;H:/Develop/Anaconda2/setup/Lib/os.py;.&quot; ^</span><br><span class="line">               --add-binary=&quot;H:/Develop/Anaconda2/setup/Lib/ntpath.py;.&quot; ^</span><br><span class="line">               runcaffe_fpn.py</span><br></pre></td></tr></table></figure></p>
+<p>最后，如上面的代码所示，我是将所有的除 caffe 模块外的额外 python 脚本都添加进了 <code>sys._MEIPASS</code> 中，保证可以有效调用。</p>
+<h2 id="Pyinstaller-使用方法记录"><a href="#Pyinstaller-使用方法记录" class="headerlink" title="Pyinstaller 使用方法记录"></a>Pyinstaller 使用方法记录</h2><h3 id="Pyinstaller-运行时路径问题"><a href="#Pyinstaller-运行时路径问题" class="headerlink" title="Pyinstaller 运行时路径问题"></a>Pyinstaller 运行时路径问题</h3><p>&emsp;&emsp;pyinstaller 在打包后，会将 <code>frozen</code> 属性添加进 sys 变量。因此，可以使用 <code>getattr(sys, &#39;frozen&#39;, False)</code> 来判断当前执行的脚本是否是用 python 脚本执行的还是 exe 文件执行的。</p>
+<p>&emsp;&emsp;pyinstaller 有两种打包模式，一种是 onefile 模式，即将所有的依赖文件都打包成一个单独的 exe 文件，在运行此 exe 文件时，将其所包含的依赖文件临时解压到某个目录下，并在此目录下进行执行。另一种是 one-folder 模式，将生成的 exe 文件和依赖文件都放在 dist 文件夹下与被打包的 script 同名的文件夹中。在运行 exe 文件时，不需要将依赖文件解压，因此速度更快一些。很显然，one-file 模式的 exe 文件会比较大。当运行 exe 文件时，pyinstaller 的 bootloader 将 bundle folder 的绝对路径添加进 sys._MEIPASS 中。其实，这就是 exe 文件执行时，依赖文件所在的位置。需要注意的是，one-folder 模式下的 exe 文件必须和依赖文件在同一路径下，否则会找不到依赖。</p>
+<p><br></p>
+<h3 id="hidden-import"><a href="#hidden-import" class="headerlink" title="hidden-import"></a>hidden-import</h3><p>在一次测试中，我用 <code>R.py</code> 导入了 <code>libs/rpn/proposal_layer.py</code>，在<code>proposal_layer.py</code> 中 <code>from ..fast_rcnn.nms_wrapper import nms</code>，在 <code>libs/fast_rcnn.nms_wrapper.py</code> 中 <code>from ..nms.gpu_nms import gpu_nms</code>，在 <code>libs/nms/</code> 下有一个 <code>gpu_nms.pyd</code> 文件。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    <br><br>
+
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2018/07/09/Convert-python-project-to-exe/">将包含 caffe 的 python 工程打包成一个 exe 文件</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问 taosean 的个人博客">taosean</a></p>
+        <p><span>发布时间:</span>2018年07月09日 - 16时40分</p>
+        <p><span>最后更新:</span>2020年02月11日 - 13时36分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/09/Convert-python-project-to-exe/" title="将包含 caffe 的 python 工程打包成一个 exe 文件">http://yoursite.com/2018/07/09/Convert-python-project-to-exe/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/07/09/Convert-python-project-to-exe/　　作者: taosean" title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2018/07/24/encoding-problem/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          python 中关于字符的编码方式
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2018/07/04/Linux-caffe-path-setting/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux 下 Caffe 的路径设置问题</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#fpn-ported-改动"><span class="toc-number">1.</span> <span class="toc-text">fpn_ported 改动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Caffe-related"><span class="toc-number">1.1.</span> <span class="toc-text">Caffe related</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Numpy-related"><span class="toc-number">1.2.</span> <span class="toc-text">Numpy related</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#os-os-path-related"><span class="toc-number">1.3.</span> <span class="toc-text">os, os.path related</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Problem"><span class="toc-number">1.3.1.</span> <span class="toc-text">Problem</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Analysis"><span class="toc-number">1.3.2.</span> <span class="toc-text">Analysis</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Solution"><span class="toc-number">1.3.3.</span> <span class="toc-text">Solution</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Comment"><span class="toc-number">1.3.4.</span> <span class="toc-text">Comment</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pyinstaller-使用方法记录"><span class="toc-number">2.</span> <span class="toc-text">Pyinstaller 使用方法记录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pyinstaller-运行时路径问题"><span class="toc-number">2.1.</span> <span class="toc-text">Pyinstaller 运行时路径问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hidden-import"><span class="toc-number">2.2.</span> <span class="toc-text">hidden-import</span></a></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+    <style>
+        .toc {
+            white-space: nowrap;
+            overflow-x: hidden;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $(".toc li a").mouseover(function() {
+                var title = $(this).attr('href');
+                $(this).attr("title", title);
+            });
+        })
+    </script>
+
+
+
+
+
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2018/07/24/encoding-problem/" title="上一篇: python 中关于字符的编码方式">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2018/07/04/Linux-caffe-path-setting/" title="下一篇: Linux 下 Caffe 的路径设置问题">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/10/29/Packaging-Python/">打包 Python 工程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/22/Convert-Tensorflow-Model-to-Caffe/">将 Tensorflow 模型移植到 Caffe 上</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/04/Kalman-Filter/">卡尔曼滤波</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Heterogeneous-Computing/">(转载) 浅谈多节点 CPU+GPU 协同计算负载均衡性设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Cxx-Related/">一些 C++ 相关的概念和操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/14/Process-and-Thread/">进程和线程及相关概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/03/light-weight-CNN-operations/">轻量卷积神经网络的一些操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/31/Git-Usage/">Git的使用流程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/31/AlexyAB-Darknet/">AlexeyAB/Darknet 的使用经验总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/20/Build-opencv-with-GPU/">OpenCV 4.0.1 + CUDA 8.0 + Visual Studio 2015 + Win10</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/02/Pyinstaller-with-Scipy/">Pyinstaller with Scipy</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/25/optical-flow/">光流法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/covariance-and-covariance-matrix/">协方差及协方差矩阵</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/07/linux-install-setting-process/">Centos 系统下深度学习环境配置及 tensorflow 安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/">Windows 下利用共享内存实现进程间通信</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/Visual-Studio-Configuration/">Visual Studio 环境变量配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/15/camera-calibration/">相机成像原理和参数标定</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/14/tensorflow-1-x-cookbook/">tensorflow-1.x-cookbook 读书笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/13/ORB-Feature/">ORB 特征提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/06/Faster-RCNN-Python-layer/">Faster RCNN 中自定义 Python 层的作用理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/24/encoding-problem/">python 中关于字符的编码方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Convert-python-project-to-exe/">将包含 caffe 的 python 工程打包成一个 exe 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/Linux-caffe-path-setting/">Linux 下 Caffe 的路径设置问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/Caffe-install/">Windows 下 Caffe 安装及测试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/22/python-thread/">python 多线程模块 threading 及 多进程模块 multiprocessing</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/15/jupyter-add-kernel/">jupyter notebook 增加内核</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/vim/">vim</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Deformable-Convolutional-Networks/">Deformable Convolutional Networks 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/FPN/">FPN</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/25/Faster-R-CNN/">RPN 中的 loss 理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/20/Yolo-v2/">Yolo v2 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/19/Yolo/">Yolo v1 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/16/node-random-number-service/">使用 Node.js 生成随机数的服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/16/Webpage2Picture/">如何截取网页长屏</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2020 taosean
+            </div>
+            <div class="footer-right">
+                <a href="https://github.com/taosean" target="_blank">Github</a> of taosean
+                <!-- <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a> -->
+            </div>
+        </div>
+
+        
+
+
+        <!-- <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+
+    </div>
+</footer>
+
+    </div>
+
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+
+  </div>
+</body>
+</html>

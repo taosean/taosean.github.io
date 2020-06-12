@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>Windows 下利用共享内存实现进程间通信 | taosean&#39;s 学习之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文主要记载了在 Windows 下如何通过调用 WinApi ，利用 共享内存 实现 进程间通信 (Inter Process Communication, IPC).">
+<meta name="keywords" content="C++,Windows,IPC,Python,WinAPI,file mapping,进程通信">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 下利用共享内存实现进程间通信">
+<meta property="og:url" content="http://yoursite.com/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/index.html">
+<meta property="og:site_name" content="taosean&#39;s 学习之旅">
+<meta property="og:description" content="本文主要记载了在 Windows 下如何通过调用 WinApi ，利用 共享内存 实现 进程间通信 (Inter Process Communication, IPC).">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-12-06T08:30:16.835Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Windows 下利用共享内存实现进程间通信">
+<meta name="twitter:description" content="本文主要记载了在 Windows 下如何通过调用 WinApi ，利用 共享内存 实现 进程间通信 (Inter Process Communication, IPC).">
+  
+    <link rel="alternative" href="/atom.xml" title="taosean&#39;s 学习之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.jpg" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">taosean</a></h1>
+        </hgroup>
+        
+        <p class="header-subtitle"  style="color:#aaaaaa">亡命之徒</p><br>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="标题搜索" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0)
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>外部链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                            <li><a  href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="https://github.com/taosean" title="github">github</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/C/" style="font-size: 15px;">C++</a> <a href="/tags/CNN/" style="font-size: 10px;">CNN</a> <a href="/tags/CPU/" style="font-size: 12.5px;">CPU</a> <a href="/tags/Caffe/" style="font-size: 15px;">Caffe</a> <a href="/tags/Convolution/" style="font-size: 10px;">Convolution</a> <a href="/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/tags/FLOPs/" style="font-size: 10px;">FLOPs</a> <a href="/tags/Faster-R-CNN/" style="font-size: 12.5px;">Faster R-CNN</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/IPC/" style="font-size: 10px;">IPC</a> <a href="/tags/JavaScript/" style="font-size: 12.5px;">JavaScript</a> <a href="/tags/Kalman/" style="font-size: 10px;">Kalman</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Node-js/" style="font-size: 12.5px;">Node.js</a> <a href="/tags/ORB/" style="font-size: 10px;">ORB</a> <a href="/tags/PCA/" style="font-size: 10px;">PCA</a> <a href="/tags/PEX/" style="font-size: 10px;">PEX</a> <a href="/tags/Porting/" style="font-size: 10px;">Porting</a> <a href="/tags/Process/" style="font-size: 10px;">Process</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Python-layer/" style="font-size: 10px;">Python layer</a> <a href="/tags/RPN/" style="font-size: 12.5px;">RPN</a> <a href="/tags/Release/" style="font-size: 10px;">Release</a> <a href="/tags/SE/" style="font-size: 10px;">SE</a> <a href="/tags/Tensorflow/" style="font-size: 10px;">Tensorflow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/WinAPI/" style="font-size: 10px;">WinAPI</a> <a href="/tags/Windows/" style="font-size: 12.5px;">Windows</a> <a href="/tags/Yolo/" style="font-size: 12.5px;">Yolo</a> <a href="/tags/anchor/" style="font-size: 12.5px;">anchor</a> <a href="/tags/caffe/" style="font-size: 10px;">caffe</a> <a href="/tags/calibration/" style="font-size: 10px;">calibration</a> <a href="/tags/camera/" style="font-size: 10px;">camera</a> <a href="/tags/cpu/" style="font-size: 10px;">cpu</a> <a href="/tags/cuda/" style="font-size: 10px;">cuda</a> <a href="/tags/darknet/" style="font-size: 10px;">darknet</a> <a href="/tags/deformable-RoI-pooling/" style="font-size: 10px;">deformable RoI pooling</a> <a href="/tags/deformable-convolution/" style="font-size: 10px;">deformable convolution</a> <a href="/tags/dependencies/" style="font-size: 10px;">dependencies</a> <a href="/tags/feature-extraction/" style="font-size: 10px;">feature extraction</a> <a href="/tags/file-mapping/" style="font-size: 10px;">file mapping</a> <a href="/tags/flatten/" style="font-size: 10px;">flatten</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/gpu/" style="font-size: 12.5px;">gpu</a> <a href="/tags/imaging/" style="font-size: 10px;">imaging</a> <a href="/tags/keypoint/" style="font-size: 10px;">keypoint</a> <a href="/tags/mobile/" style="font-size: 10px;">mobile</a> <a href="/tags/opencv/" style="font-size: 10px;">opencv</a> <a href="/tags/optical-flow/" style="font-size: 10px;">optical flow</a> <a href="/tags/padding/" style="font-size: 10px;">padding</a> <a href="/tags/process/" style="font-size: 10px;">process</a> <a href="/tags/pyinstaller/" style="font-size: 12.5px;">pyinstaller</a> <a href="/tags/python/" style="font-size: 17.5px;">python</a> <a href="/tags/scipy/" style="font-size: 10px;">scipy</a> <a href="/tags/shiv/" style="font-size: 10px;">shiv</a> <a href="/tags/shuffle/" style="font-size: 10px;">shuffle</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/tracking/" style="font-size: 10px;">tracking</a> <a href="/tags/unicode/" style="font-size: 10px;">unicode</a> <a href="/tags/utf-8/" style="font-size: 10px;">utf-8</a> <a href="/tags/version-control/" style="font-size: 10px;">version control</a> <a href="/tags/visual-studio/" style="font-size: 10px;">visual studio</a> <a href="/tags/vs/" style="font-size: 10px;">vs</a> <a href="/tags/xml/" style="font-size: 10px;">xml</a> <a href="/tags/yolo/" style="font-size: 10px;">yolo</a> <a href="/tags/yolov3/" style="font-size: 10px;">yolov3</a> <a href="/tags/中文/" style="font-size: 10px;">中文</a> <a href="/tags/主成分分析/" style="font-size: 10px;">主成分分析</a> <a href="/tags/依赖/" style="font-size: 10px;">依赖</a> <a href="/tags/协同计算/" style="font-size: 10px;">协同计算</a> <a href="/tags/协方差/" style="font-size: 10px;">协方差</a> <a href="/tags/协方差矩阵/" style="font-size: 10px;">协方差矩阵</a> <a href="/tags/单核/" style="font-size: 10px;">单核</a> <a href="/tags/卡尔曼/" style="font-size: 10px;">卡尔曼</a> <a href="/tags/卡尔曼滤波/" style="font-size: 10px;">卡尔曼滤波</a> <a href="/tags/发行/" style="font-size: 10px;">发行</a> <a href="/tags/回归/" style="font-size: 12.5px;">回归</a> <a href="/tags/图像匹配/" style="font-size: 10px;">图像匹配</a> <a href="/tags/图像检索/" style="font-size: 10px;">图像检索</a> <a href="/tags/多核/" style="font-size: 10px;">多核</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/异构/" style="font-size: 10px;">异构</a> <a href="/tags/成像原理/" style="font-size: 10px;">成像原理</a> <a href="/tags/截屏/" style="font-size: 10px;">截屏</a> <a href="/tags/打包/" style="font-size: 10px;">打包</a> <a href="/tags/日文/" style="font-size: 10px;">日文</a> <a href="/tags/权限/" style="font-size: 10px;">权限</a> <a href="/tags/深度学习/" style="font-size: 10px;">深度学习</a> <a href="/tags/特征提取/" style="font-size: 10px;">特征提取</a> <a href="/tags/环境变量/" style="font-size: 10px;">环境变量</a> <a href="/tags/目标检测/" style="font-size: 20px;">目标检测</a> <a href="/tags/相机/" style="font-size: 10px;">相机</a> <a href="/tags/移植/" style="font-size: 10px;">移植</a> <a href="/tags/线程/" style="font-size: 12.5px;">线程</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/网页/" style="font-size: 10px;">网页</a> <a href="/tags/调试/" style="font-size: 10px;">调试</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/进程/" style="font-size: 12.5px;">进程</a> <a href="/tags/进程池/" style="font-size: 10px;">进程池</a> <a href="/tags/进程通信/" style="font-size: 10px;">进程通信</a> <a href="/tags/阻塞/" style="font-size: 10px;">阻塞</a> <a href="/tags/非阻塞/" style="font-size: 10px;">非阻塞</a>
+                    </div>
+                </section>
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-outlinks">
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">csdn</a><br>
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">segmentfault</a><br>
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">简书</a><br>
+                    
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱足球，爱图像</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">taosean</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.jpg" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">taosean</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">亡命之徒</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/taosean" title="github">github</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-Inter-Process-Communication-by-Shared-Memory-on-Windows" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/" class="article-date">
+      <time datetime="2018-12-03T09:27:14.000Z" itemprop="datePublished">2018-12-03</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Windows 下利用共享内存实现进程间通信
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IPC/">IPC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WinAPI/">WinAPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Windows/">Windows</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/file-mapping/">file mapping</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/进程通信/">进程通信</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>本文主要记载了在 Windows 下如何通过调用 WinApi ，利用 <code>共享内存</code> 实现 进程间通信 (Inter Process Communication, IPC).<br><a id="more"></a><br>&emsp;&emsp; 本文主要是通过 FileMapping 的方式实现进程间通信。目前已实现进程间共享字符串以及 opencv 的 Mat 对象 （以 <code>uchar *</code> 方式）。</p>
+<p><br></p>
+<h2 id="两个-C-进程之间的通信"><a href="#两个-C-进程之间的通信" class="headerlink" title="两个 C++ 进程之间的通信"></a>两个 C++ 进程之间的通信</h2><p>参考文章 <a href="https://blog.csdn.net/u012234115/article/details/82114631" target="_blank" rel="noopener">C++共享内存实现（windows和linux）</a></p>
+<p>上面的文章只实现了字符串的进程间通信，根据实际需要，需要进程间传递图像对象，此处使用 opencv 的 <code>Mat</code> 对象来表示。由于 <code>Mat</code> 对象有一个 <code>uchar* data</code> 属性，指向 Mat 的实际数据。因此，这里通过传输 <code>uchar* data</code> 到共享内存，并在 Reader 中重建 <code>Mat</code> 对象 (C++)。<br>参考文章 <a href="https://www.cnblogs.com/Lalafengchui/p/4223584.html" target="_blank" rel="noopener">Windows进程间通信—共享内存映射文件（FileMapping）</a>.</p>
+<p><strong>注意：</strong>这里在传递时需要将图像的 长、宽、高 等参数一并传递，这样在 Reader 中可以根据读到的尺寸进行恢复。因为在 Reader 端一开始得到的是共享内存的首地址。C++ 中用三个 <code>int</code> 类型来表示 <code>width</code>, <code>height</code>, <code>channel</code>。这三个 <code>int</code> 是写到表示数据的 <code>uchar *</code> 的最前面的。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// code snippet in img_reader.cpp</span></span><br><span class="line"><span class="keyword">int</span> width, height;</span><br><span class="line">uchar* tmp = (uchar*) <span class="built_in">malloc</span>(buffer_size);</span><br><span class="line"><span class="built_in">memcpy</span>(tmp, &amp;width, <span class="keyword">sizeof</span>(width)) <span class="comment">// 将 width 首地址开始的 4 个 byte 内容拷贝到 tmp 所指向的地址。</span></span><br><span class="line">tmp += <span class="keyword">sizeof</span>(width); <span class="comment">// tmp 向后移动 sizeof(width) 个 uchar 的长度。</span></span><br><span class="line"><span class="built_in">memcpy</span>(tmp, &amp;height, <span class="keyword">sizeof</span>(height))</span><br><span class="line">tmp += <span class="keyword">sizeof</span>(height)</span><br></pre></td></tr></table></figure></p>
+<p><br></p>
+<h2 id="C-和-python-进程之间的通信"><a href="#C-和-python-进程之间的通信" class="headerlink" title="C++ 和 python 进程之间的通信"></a>C++ 和 python 进程之间的通信</h2><p><em>C++ 作 Writer， python 作 Reader</em><br>参考文章：<a href="https://mail.python.org/pipermail/python-list/2005-March/302108.html" target="_blank" rel="noopener">Shared Memory Example (Python, ctypes, VC++)</a>。<br>python 中 使用 <code>ctypes</code> 来调用 <code>win32 api</code>，方法与 C++ Reader 中的类似。区别在于获取共享内存的首地址后，python 中可以通过 slicing 的方式获取不同地址的值。最后得到 width, height, channel 以及数据，将数据转换成 ndarray 即可使用 opencv 显示。</p>
+<p><br></p>
+<h2 id="FileMapping-原理"><a href="#FileMapping-原理" class="headerlink" title="FileMapping 原理"></a>FileMapping 原理</h2><p>这里使用了 FileMapping 的方式进行 IPC。<br>Writer 使用的 API 有</p>
+<blockquote>
+<p><a href="https://docs.microsoft.com/en-us/windows/desktop/api/fileapi/nf-fileapi-createfilea" target="_blank" rel="noopener">CreateFile</a><br><a href="https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-createfilemappinga" target="_blank" rel="noopener">CreateFileMapping</a><br><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366761%28v=vs.85%29.aspx?f=255&amp;MSPPError=-2147217396" target="_blank" rel="noopener">MapViewOfFile</a><br> <code>MapViewOfFile</code> 最后返回的是共享内存的指针。通过将数据 <code>memcpy</code> 到这里实现共享。</p>
+</blockquote>
+<p>Reader 使用的 API 有</p>
+<blockquote>
+<p><a href="https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-openfilemappinga" target="_blank" rel="noopener">OpenFileMapping</a><br><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366761%28v=vs.85%29.aspx?f=255&amp;MSPPError=-2147217396" target="_blank" rel="noopener">MapViewOfFile</a><br><code>MapViewOfFile</code> 最后返回的是共享内存的指针。可通过从这里读数据重建图像。</p>
+</blockquote>
+<p>关于以上提及 API 的详细解释：</p>
+<blockquote>
+<p><a href="https://blog.csdn.net/bxsec/article/details/76566011" target="_blank" rel="noopener">Windows核心编程-CreateFile详解</a></p>
+</blockquote>
+<p><br></p>
+<h2 id="File-Mapping-代码"><a href="#File-Mapping-代码" class="headerlink" title="File Mapping 代码"></a>File Mapping 代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// img_writer.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2\core\core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2\highgui\highgui.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"></span><br><span class="line"><span class="comment">//struct MyData</span></span><br><span class="line"><span class="comment">//&#123;</span></span><br><span class="line"><span class="comment">//	int width;</span></span><br><span class="line"><span class="comment">//	int height;</span></span><br><span class="line"><span class="comment">//	int channel;</span></span><br><span class="line"><span class="comment">//	MyData(int _width, int _height, int _channel) : width(_width), height(_height), channel(_channel)</span></span><br><span class="line"><span class="comment">//	&#123;&#125;</span></span><br><span class="line"><span class="comment">//&#125;;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">writeMemory</span><span class="params">(<span class="keyword">char</span>* imgDir)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// define shared data</span></span><br><span class="line">	<span class="keyword">char</span> *shared_file_name = <span class="string">"file_name_sean"</span>;</span><br><span class="line">	<span class="keyword">char</span> * shared_object_name = <span class="string">"Local\\object_name_sean"</span>;</span><br><span class="line"></span><br><span class="line">	Mat img = imread(imgDir, IMREAD_COLOR);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> width = img.cols;</span><br><span class="line">	<span class="keyword">int</span> height = img.rows;</span><br><span class="line">	<span class="keyword">int</span> channel = img.channels();</span><br><span class="line">	uchar* img_data = img.data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> data_size = <span class="keyword">sizeof</span>(uchar) * width * height * channel;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> buffer_size = data_size + <span class="number">3</span> * <span class="keyword">sizeof</span>(<span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"share buffer "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// create shared memory file</span></span><br><span class="line">	HANDLE hFile = CreateFile(shared_file_name,</span><br><span class="line">		GENERIC_READ | GENERIC_WRITE,</span><br><span class="line">		FILE_SHARE_READ | FILE_SHARE_WRITE,</span><br><span class="line">		<span class="literal">NULL</span>,</span><br><span class="line">		OPEN_ALWAYS, <span class="comment">// open exist or create new, overwrite file</span></span><br><span class="line">		FILE_ATTRIBUTE_NORMAL,</span><br><span class="line">		<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE)</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"create file error"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">	HANDLE shared_file_handler = CreateFileMapping(</span><br><span class="line">		hFile, <span class="comment">// Use paging file - shared memory</span></span><br><span class="line">		<span class="literal">NULL</span>,                 <span class="comment">// Default security attributes</span></span><br><span class="line">		PAGE_READWRITE,       <span class="comment">// Allow read and write access</span></span><br><span class="line">		<span class="number">0</span>,                    <span class="comment">// High-order DWORD of file mapping max size</span></span><br><span class="line">		buffer_size,            <span class="comment">// Low-order DWORD of file mapping max size</span></span><br><span class="line">		shared_object_name);    <span class="comment">// Name of the file mapping object</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (shared_file_handler) &#123;</span><br><span class="line">		<span class="comment">// map memory file view, get pointer to the shared memory</span></span><br><span class="line">		LPVOID lp_base = MapViewOfFile(</span><br><span class="line">			shared_file_handler,  <span class="comment">// Handle of the map object</span></span><br><span class="line">			FILE_MAP_ALL_ACCESS,  <span class="comment">// Read and write access</span></span><br><span class="line">			<span class="number">0</span>,                    <span class="comment">// High-order DWORD of the file offset</span></span><br><span class="line">			<span class="number">0</span>,                    <span class="comment">// Low-order DWORD of the file offset</span></span><br><span class="line">			buffer_size);           <span class="comment">// The number of bytes to map to view</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// write width, height, channel to a memory</span></span><br><span class="line">		uchar* tmp = (uchar*) <span class="built_in">malloc</span>(buffer_size);</span><br><span class="line">		<span class="built_in">memcpy</span>(tmp, &amp;width, <span class="keyword">sizeof</span>(width));</span><br><span class="line">		tmp += <span class="keyword">sizeof</span>(width);</span><br><span class="line">		<span class="built_in">memcpy</span>(tmp, &amp;height, <span class="keyword">sizeof</span>(height));</span><br><span class="line">		tmp += <span class="keyword">sizeof</span>(height);</span><br><span class="line">		<span class="built_in">memcpy</span>(tmp, &amp;channel, <span class="keyword">sizeof</span>(channel));</span><br><span class="line">		tmp += <span class="keyword">sizeof</span>(channel);</span><br><span class="line">		<span class="built_in">memcpy</span>(tmp, img.data, data_size);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">			uchar val = tmp[i];</span><br><span class="line">			<span class="built_in">cout</span> &lt;&lt; (<span class="keyword">int</span>)val &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// copy data to shared memory</span></span><br><span class="line">		tmp -= <span class="keyword">sizeof</span>(<span class="keyword">int</span>) * <span class="number">3</span>;</span><br><span class="line">		<span class="built_in">memcpy</span>(lp_base, tmp, buffer_size);</span><br><span class="line"></span><br><span class="line">		<span class="built_in">free</span>(tmp);</span><br><span class="line"></span><br><span class="line">		FlushViewOfFile(lp_base, buffer_size); <span class="comment">// can choose save to file or not</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// process wait here for other task to read data</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"already write to shared memory, wait ..."</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">		this_thread::sleep_for(chrono::seconds(<span class="number">6000</span>));</span><br><span class="line"></span><br><span class="line">		<span class="comment">// close shared memory file</span></span><br><span class="line">		UnmapViewOfFile(lp_base);</span><br><span class="line">		CloseHandle(shared_file_handler);</span><br><span class="line">		CloseHandle(hFile);</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"shared memory closed"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"create mapping file error"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span>* imgDir = <span class="string">"C:/Users/taoxuan.G08/Documents/Visual Studio 2015/Projects/cnpy-solution/cv/vehicle.jpeg"</span>;</span><br><span class="line">	writeMemory(imgDir);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// img_reader.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2\core\core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2\highgui\highgui.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readMemory</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span> *shared_object_name = <span class="string">"Local\\object_name_sean"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// open shared memory file</span></span><br><span class="line">	HANDLE shared_file_handler = OpenFileMapping(</span><br><span class="line">		FILE_MAP_ALL_ACCESS,</span><br><span class="line">		<span class="literal">NULL</span>,</span><br><span class="line">		shared_object_name);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (shared_file_handler) &#123;</span><br><span class="line"></span><br><span class="line">		LPVOID lp_base = MapViewOfFile(</span><br><span class="line">			shared_file_handler,</span><br><span class="line">			FILE_MAP_ALL_ACCESS,</span><br><span class="line">			<span class="number">0</span>,</span><br><span class="line">			<span class="number">0</span>,</span><br><span class="line">			<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// copy shared data from memory</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"read shared data: "</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">		uchar* tmp = (uchar*)lp_base;</span><br><span class="line">		<span class="keyword">int</span> width;</span><br><span class="line">		<span class="keyword">int</span> height;</span><br><span class="line">		<span class="keyword">int</span> channel;</span><br><span class="line">		<span class="built_in">memcpy</span>(&amp;width, tmp, <span class="keyword">sizeof</span>(width));</span><br><span class="line">		tmp += <span class="keyword">sizeof</span>(<span class="keyword">int</span>);</span><br><span class="line">		<span class="built_in">memcpy</span>(&amp;height, tmp, <span class="keyword">sizeof</span>(height));</span><br><span class="line">		tmp += <span class="keyword">sizeof</span>(<span class="keyword">int</span>);</span><br><span class="line">		<span class="built_in">memcpy</span>(&amp;channel, tmp, <span class="keyword">sizeof</span>(channel));</span><br><span class="line">		tmp += <span class="keyword">sizeof</span>(<span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line">		Mat img = Mat(height, width, CV_8UC3);</span><br><span class="line">		<span class="built_in">memcpy</span>(img.data, tmp, height * width * channel);</span><br><span class="line"></span><br><span class="line">		namedWindow(<span class="string">"test"</span>);</span><br><span class="line">		imshow(<span class="string">"test"</span>, img);</span><br><span class="line">		waitKey(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// close share memory file</span></span><br><span class="line">		UnmapViewOfFile(lp_base);</span><br><span class="line">		CloseHandle(shared_file_handler);</span><br><span class="line"></span><br><span class="line">	&#125; <span class="keyword">else</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"open mapping file error"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">	readMemory();</span><br><span class="line"></span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># img_reader.py</span></span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">FILE_MAP_ALL_ACCESS = <span class="number">0xF001F</span></span><br><span class="line">szName = c_char_p(<span class="string">'Local\object_name_sean'</span>)</span><br><span class="line"></span><br><span class="line">hMapObject = windll.kernel32.OpenFileMappingA(FILE_MAP_ALL_ACCESS, <span class="keyword">False</span>, szName)</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Error after OpenFileMappingA -&gt;"</span>, GetLastError()  <span class="comment"># If everything runs smoothly, GetLastError should return 0</span></span><br><span class="line"><span class="keyword">if</span> hMapObject == <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Could not open file mapping object'</span></span><br><span class="line">    <span class="keyword">raise</span> windll.WindowsError()</span><br><span class="line"></span><br><span class="line">pBuf = windll.kernel32.MapViewOfFile(hMapObject, FILE_MAP_ALL_ACCESS, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">"Error after MapViewOfFile -&gt;"</span>, GetLastError()  <span class="comment"># If everything runs smoothly, GetLastError should return 0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> pBuf == <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'Could not map view of file'</span></span><br><span class="line">    windll.kernel32.GetLastError()</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    pBuf_int = cast(pBuf, POINTER(c_int))</span><br><span class="line">    width, height, channel = pBuf_int[:<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">    data_len = width * height * channel</span><br><span class="line">    pBuf_ubyte = cast(pBuf, POINTER(c_ubyte))</span><br><span class="line">    data_ubyte = pBuf_ubyte[: data_len]  <span class="comment"># The pointer is already incremented by 12 bytes, not sure why.</span></span><br><span class="line"></span><br><span class="line">    image = np.asarray(data_ubyte, dtype=np.uint8)</span><br><span class="line">    image = image.reshape((height, width, channel))</span><br><span class="line"></span><br><span class="line">    cv2.imshow(<span class="string">'python image'</span>, image)</span><br><span class="line">    cv2.waitKey()</span><br><span class="line"></span><br><span class="line">windll.kernel32.UnmapViewOfFile(pBuf)</span><br><span class="line">windll.kernel32.CloseHandle(hMapObject)</span><br></pre></td></tr></table></figure>
+<p><a href="img_writer.cpp">img_writer in C++</a> <a href="img_reader.cpp">img_reader in C++</a> <a href="img_reader.py">img_reader in python</a></p>
+<p><em><font color="orange">不知为什么，python 版的 reader 用脚本执行正常，但是用 pyinstaller 打包成 exe 后就无法获取共享内存的指针，<code>MapViewOfFile</code> 始终返回 0，正在解决这个问题。</font></em></p>
+<p><em><font color="green">除此之外，发现 python 版中在执行完 <code>OpenFileMappingA</code> 和 <code>MapViewOfFile</code> 后，分别调用 <code>GetLastError</code> 都应该返回 0 (0 表示没有错误)。C++ 版本的 reader 就是如此。但是 <code>img_reader.py</code> 用脚本方式执行却都返回 2，按理说返回 2 了就表示有错，应该无法正确读取共享内存数据，但是用脚本方式执行却可以读取图像数据。这一点很奇怪。而将 <code>img_reader.py</code> 转换成 exe 后，在 <code>OpenFileMappingA</code> 后调用 <code>GetLastError</code> 返回 2，<code>MapViewOfFile</code> 后返回 6，也无法正确读取图像数据。</font></em></p>
+<p>由于现有的方法无法在转成 exe 后成功运行，考虑使用新的方法来读取共享内存。这里使用了 <code>mmap</code> 库。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mmap</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">shm = mmap.mmap(<span class="number">0</span>, <span class="number">720</span>*<span class="number">480</span>*<span class="number">3</span>+<span class="number">12</span>, <span class="string">"object_name_sean"</span>, mmap.ACCESS_READ)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> shm</span><br><span class="line"><span class="keyword">if</span> shm:</span><br><span class="line">    header = shm.read(<span class="number">12</span>)</span><br><span class="line">    width_str = header[:<span class="number">4</span>]</span><br><span class="line">    height_str = header[<span class="number">4</span>:<span class="number">8</span>]</span><br><span class="line">    channel_str = header[<span class="number">8</span>:<span class="number">12</span>]</span><br><span class="line"></span><br><span class="line">    width = struct.unpack(<span class="string">'&lt;i'</span>, width_str)[<span class="number">0</span>]</span><br><span class="line">    height = struct.unpack(<span class="string">'&lt;i'</span>, height_str)[<span class="number">0</span>]</span><br><span class="line">    channel = struct.unpack(<span class="string">'&lt;i'</span>, channel_str)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">print</span> width, height, channel</span><br><span class="line"></span><br><span class="line">    data = shm.read(width * height * channel)</span><br><span class="line"></span><br><span class="line">    img_data = [ord(x) <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">    <span class="keyword">print</span> img_data[:<span class="number">10</span>]</span><br><span class="line"></span><br><span class="line">    image = np.asarray(img_data, dtype=np.uint8)</span><br><span class="line">    image = image.reshape((height, width, channel))</span><br><span class="line"></span><br><span class="line">    cv2.imshow(<span class="string">'python image'</span>, image)</span><br><span class="line">    cv2.waitKey()</span><br><span class="line"></span><br><span class="line">shm.close()</span><br></pre></td></tr></table></figure></p>
+<p><a href="reader_mmap.py">img reader in python mmap</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    <br><br>
+
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/">Windows 下利用共享内存实现进程间通信</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问 taosean 的个人博客">taosean</a></p>
+        <p><span>发布时间:</span>2018年12月03日 - 17时27分</p>
+        <p><span>最后更新:</span>2018年12月06日 - 16时30分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/" title="Windows 下利用共享内存实现进程间通信">http://yoursite.com/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/　　作者: taosean" title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2018/12/07/linux-install-setting-process/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Centos 系统下深度学习环境配置及 tensorflow 安装
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2018/11/26/Visual-Studio-Configuration/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Visual Studio 环境变量配置</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#两个-C-进程之间的通信"><span class="toc-number">1.</span> <span class="toc-text">两个 C++ 进程之间的通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-和-python-进程之间的通信"><span class="toc-number">2.</span> <span class="toc-text">C++ 和 python 进程之间的通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FileMapping-原理"><span class="toc-number">3.</span> <span class="toc-text">FileMapping 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-Mapping-代码"><span class="toc-number">4.</span> <span class="toc-text">File Mapping 代码</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+    <style>
+        .toc {
+            white-space: nowrap;
+            overflow-x: hidden;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $(".toc li a").mouseover(function() {
+                var title = $(this).attr('href');
+                $(this).attr("title", title);
+            });
+        })
+    </script>
+
+
+
+
+
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2018/12/07/linux-install-setting-process/" title="上一篇: Centos 系统下深度学习环境配置及 tensorflow 安装">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2018/11/26/Visual-Studio-Configuration/" title="下一篇: Visual Studio 环境变量配置">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/10/29/Packaging-Python/">打包 Python 工程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/22/Convert-Tensorflow-Model-to-Caffe/">将 Tensorflow 模型移植到 Caffe 上</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/04/Kalman-Filter/">卡尔曼滤波</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Heterogeneous-Computing/">(转载) 浅谈多节点 CPU+GPU 协同计算负载均衡性设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Cxx-Related/">一些 C++ 相关的概念和操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/14/Process-and-Thread/">进程和线程及相关概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/03/light-weight-CNN-operations/">轻量卷积神经网络的一些操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/31/Git-Usage/">Git的使用流程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/31/AlexyAB-Darknet/">AlexeyAB/Darknet 的使用经验总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/20/Build-opencv-with-GPU/">OpenCV 4.0.1 + CUDA 8.0 + Visual Studio 2015 + Win10</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/02/Pyinstaller-with-Scipy/">Pyinstaller with Scipy</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/25/optical-flow/">光流法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/covariance-and-covariance-matrix/">协方差及协方差矩阵</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/07/linux-install-setting-process/">Centos 系统下深度学习环境配置及 tensorflow 安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/">Windows 下利用共享内存实现进程间通信</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/Visual-Studio-Configuration/">Visual Studio 环境变量配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/15/camera-calibration/">相机成像原理和参数标定</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/14/tensorflow-1-x-cookbook/">tensorflow-1.x-cookbook 读书笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/13/ORB-Feature/">ORB 特征提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/06/Faster-RCNN-Python-layer/">Faster RCNN 中自定义 Python 层的作用理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/24/encoding-problem/">python 中关于字符的编码方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Convert-python-project-to-exe/">将包含 caffe 的 python 工程打包成一个 exe 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/Linux-caffe-path-setting/">Linux 下 Caffe 的路径设置问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/Caffe-install/">Windows 下 Caffe 安装及测试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/22/python-thread/">python 多线程模块 threading 及 多进程模块 multiprocessing</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/15/jupyter-add-kernel/">jupyter notebook 增加内核</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/vim/">vim</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Deformable-Convolutional-Networks/">Deformable Convolutional Networks 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/FPN/">FPN</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/25/Faster-R-CNN/">RPN 中的 loss 理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/20/Yolo-v2/">Yolo v2 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/19/Yolo/">Yolo v1 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/16/node-random-number-service/">使用 Node.js 生成随机数的服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/16/Webpage2Picture/">如何截取网页长屏</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2020 taosean
+            </div>
+            <div class="footer-right">
+                <a href="https://github.com/taosean" target="_blank">Github</a> of taosean
+                <!-- <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a> -->
+            </div>
+        </div>
+
+        
+
+
+        <!-- <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+
+    </div>
+</footer>
+
+    </div>
+
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+
+  </div>
+</body>
+</html>

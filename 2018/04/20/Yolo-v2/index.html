@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>Yolo v2 论文理解 | taosean&#39;s 学习之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文针对 Yolo v2 的一些处理方法和细节给出了自己的理解。不一定正确，如有错误请指正。">
+<meta name="keywords" content="目标检测,回归,Yolo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Yolo v2 论文理解">
+<meta property="og:url" content="http://yoursite.com/2018/04/20/Yolo-v2/index.html">
+<meta property="og:site_name" content="taosean&#39;s 学习之旅">
+<meta property="og:description" content="本文针对 Yolo v2 的一些处理方法和细节给出了自己的理解。不一定正确，如有错误请指正。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2018/04/20/Yolo-v2/pic1.png">
+<meta property="og:image" content="http://yoursite.com/2018/04/20/Yolo-v2/pic2.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/04/20/Yolo-v2/pic3.jpg">
+<meta property="og:image" content="http://yoursite.com/2018/04/20/Yolo-v2/pic4.png">
+<meta property="og:image" content="http://yoursite.com/2018/04/20/Yolo-v2/pic6.png">
+<meta property="og:image" content="http://yoursite.com/2018/04/20/Yolo-v2/pic5.png">
+<meta property="og:updated_time" content="2018-11-16T12:08:26.940Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Yolo v2 论文理解">
+<meta name="twitter:description" content="本文针对 Yolo v2 的一些处理方法和细节给出了自己的理解。不一定正确，如有错误请指正。">
+<meta name="twitter:image" content="http://yoursite.com/2018/04/20/Yolo-v2/pic1.png">
+  
+    <link rel="alternative" href="/atom.xml" title="taosean&#39;s 学习之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/avatar.jpg" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">taosean</a></h1>
+        </hgroup>
+        
+        <p class="header-subtitle"  style="color:#aaaaaa">亡命之徒</p><br>
+        
+        
+            <form>
+                <input type="text" class="st-default-search-input search" id="local-search-input" placeholder="标题搜索" autocomplete="off">
+            </form>
+            <div id="local-search-result"></div>
+        
+        
+            <script type="text/javascript">
+                (function() {
+                    'use strict';
+                    function getMatchData(keyword, data) {
+                        var matchData = [];
+                        for(var i =0;i<data.length;i++){
+                            if(data[i].title.toLowerCase().indexOf(keyword)>=0)
+                                matchData.push(data[i])
+                        }
+                        return matchData;
+                    }
+                    var $input = $('#local-search-input');
+                    var $resultContent = $('#local-search-result');
+                    $input.keyup(function(){
+                        $.ajax({
+                            url: '/search.json',
+                            dataType: "json",
+                            success: function( json ) {
+                                var str='<ul class=\"search-result-list\">';
+                                var keyword = $input.val().trim().toLowerCase();
+                                $resultContent.innerHTML = "";
+                                if ($input.val().trim().length <= 0) {
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                var results = getMatchData(keyword, json);
+                                if(results.length === 0){
+                                    $resultContent.empty();
+                                    $('#switch-area').show();
+                                    return;
+                                }
+                                for(var i =0; i<results.length; i++){
+                                    str += "<li><a href='"+ results[i].url +"' class='search-result-title'>"+ results[i].title +"</a></li>";
+                                }
+                                str += "</ul>";
+                                $resultContent.empty();
+                                $resultContent.append(str);
+                                $('#switch-area').hide();
+                            }
+                        });
+                    });
+                })();
+            </script>
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>外部链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                            <li><a  href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="https://github.com/taosean" title="github">github</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <a href="/tags/C/" style="font-size: 15px;">C++</a> <a href="/tags/CNN/" style="font-size: 10px;">CNN</a> <a href="/tags/CPU/" style="font-size: 12.5px;">CPU</a> <a href="/tags/Caffe/" style="font-size: 15px;">Caffe</a> <a href="/tags/Convolution/" style="font-size: 10px;">Convolution</a> <a href="/tags/Debug/" style="font-size: 10px;">Debug</a> <a href="/tags/FLOPs/" style="font-size: 10px;">FLOPs</a> <a href="/tags/Faster-R-CNN/" style="font-size: 12.5px;">Faster R-CNN</a> <a href="/tags/GPU/" style="font-size: 10px;">GPU</a> <a href="/tags/IPC/" style="font-size: 10px;">IPC</a> <a href="/tags/JavaScript/" style="font-size: 12.5px;">JavaScript</a> <a href="/tags/Kalman/" style="font-size: 10px;">Kalman</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Node-js/" style="font-size: 12.5px;">Node.js</a> <a href="/tags/ORB/" style="font-size: 10px;">ORB</a> <a href="/tags/PCA/" style="font-size: 10px;">PCA</a> <a href="/tags/PEX/" style="font-size: 10px;">PEX</a> <a href="/tags/Porting/" style="font-size: 10px;">Porting</a> <a href="/tags/Process/" style="font-size: 10px;">Process</a> <a href="/tags/Python/" style="font-size: 10px;">Python</a> <a href="/tags/Python-layer/" style="font-size: 10px;">Python layer</a> <a href="/tags/RPN/" style="font-size: 12.5px;">RPN</a> <a href="/tags/Release/" style="font-size: 10px;">Release</a> <a href="/tags/SE/" style="font-size: 10px;">SE</a> <a href="/tags/Tensorflow/" style="font-size: 10px;">Tensorflow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/WinAPI/" style="font-size: 10px;">WinAPI</a> <a href="/tags/Windows/" style="font-size: 12.5px;">Windows</a> <a href="/tags/Yolo/" style="font-size: 12.5px;">Yolo</a> <a href="/tags/anchor/" style="font-size: 12.5px;">anchor</a> <a href="/tags/caffe/" style="font-size: 10px;">caffe</a> <a href="/tags/calibration/" style="font-size: 10px;">calibration</a> <a href="/tags/camera/" style="font-size: 10px;">camera</a> <a href="/tags/cpu/" style="font-size: 10px;">cpu</a> <a href="/tags/cuda/" style="font-size: 10px;">cuda</a> <a href="/tags/darknet/" style="font-size: 10px;">darknet</a> <a href="/tags/deformable-RoI-pooling/" style="font-size: 10px;">deformable RoI pooling</a> <a href="/tags/deformable-convolution/" style="font-size: 10px;">deformable convolution</a> <a href="/tags/dependencies/" style="font-size: 10px;">dependencies</a> <a href="/tags/feature-extraction/" style="font-size: 10px;">feature extraction</a> <a href="/tags/file-mapping/" style="font-size: 10px;">file mapping</a> <a href="/tags/flatten/" style="font-size: 10px;">flatten</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/gpu/" style="font-size: 12.5px;">gpu</a> <a href="/tags/imaging/" style="font-size: 10px;">imaging</a> <a href="/tags/keypoint/" style="font-size: 10px;">keypoint</a> <a href="/tags/mobile/" style="font-size: 10px;">mobile</a> <a href="/tags/opencv/" style="font-size: 10px;">opencv</a> <a href="/tags/optical-flow/" style="font-size: 10px;">optical flow</a> <a href="/tags/padding/" style="font-size: 10px;">padding</a> <a href="/tags/process/" style="font-size: 10px;">process</a> <a href="/tags/pyinstaller/" style="font-size: 12.5px;">pyinstaller</a> <a href="/tags/python/" style="font-size: 17.5px;">python</a> <a href="/tags/scipy/" style="font-size: 10px;">scipy</a> <a href="/tags/shiv/" style="font-size: 10px;">shiv</a> <a href="/tags/shuffle/" style="font-size: 10px;">shuffle</a> <a href="/tags/thread/" style="font-size: 10px;">thread</a> <a href="/tags/tracking/" style="font-size: 10px;">tracking</a> <a href="/tags/unicode/" style="font-size: 10px;">unicode</a> <a href="/tags/utf-8/" style="font-size: 10px;">utf-8</a> <a href="/tags/version-control/" style="font-size: 10px;">version control</a> <a href="/tags/visual-studio/" style="font-size: 10px;">visual studio</a> <a href="/tags/vs/" style="font-size: 10px;">vs</a> <a href="/tags/xml/" style="font-size: 10px;">xml</a> <a href="/tags/yolo/" style="font-size: 10px;">yolo</a> <a href="/tags/yolov3/" style="font-size: 10px;">yolov3</a> <a href="/tags/中文/" style="font-size: 10px;">中文</a> <a href="/tags/主成分分析/" style="font-size: 10px;">主成分分析</a> <a href="/tags/依赖/" style="font-size: 10px;">依赖</a> <a href="/tags/协同计算/" style="font-size: 10px;">协同计算</a> <a href="/tags/协方差/" style="font-size: 10px;">协方差</a> <a href="/tags/协方差矩阵/" style="font-size: 10px;">协方差矩阵</a> <a href="/tags/单核/" style="font-size: 10px;">单核</a> <a href="/tags/卡尔曼/" style="font-size: 10px;">卡尔曼</a> <a href="/tags/卡尔曼滤波/" style="font-size: 10px;">卡尔曼滤波</a> <a href="/tags/发行/" style="font-size: 10px;">发行</a> <a href="/tags/回归/" style="font-size: 12.5px;">回归</a> <a href="/tags/图像匹配/" style="font-size: 10px;">图像匹配</a> <a href="/tags/图像检索/" style="font-size: 10px;">图像检索</a> <a href="/tags/多核/" style="font-size: 10px;">多核</a> <a href="/tags/安装/" style="font-size: 10px;">安装</a> <a href="/tags/异构/" style="font-size: 10px;">异构</a> <a href="/tags/成像原理/" style="font-size: 10px;">成像原理</a> <a href="/tags/截屏/" style="font-size: 10px;">截屏</a> <a href="/tags/打包/" style="font-size: 10px;">打包</a> <a href="/tags/日文/" style="font-size: 10px;">日文</a> <a href="/tags/权限/" style="font-size: 10px;">权限</a> <a href="/tags/深度学习/" style="font-size: 10px;">深度学习</a> <a href="/tags/特征提取/" style="font-size: 10px;">特征提取</a> <a href="/tags/环境变量/" style="font-size: 10px;">环境变量</a> <a href="/tags/目标检测/" style="font-size: 20px;">目标检测</a> <a href="/tags/相机/" style="font-size: 10px;">相机</a> <a href="/tags/移植/" style="font-size: 10px;">移植</a> <a href="/tags/线程/" style="font-size: 12.5px;">线程</a> <a href="/tags/编码/" style="font-size: 10px;">编码</a> <a href="/tags/网页/" style="font-size: 10px;">网页</a> <a href="/tags/调试/" style="font-size: 10px;">调试</a> <a href="/tags/负载均衡/" style="font-size: 10px;">负载均衡</a> <a href="/tags/进程/" style="font-size: 12.5px;">进程</a> <a href="/tags/进程池/" style="font-size: 10px;">进程池</a> <a href="/tags/进程通信/" style="font-size: 10px;">进程通信</a> <a href="/tags/阻塞/" style="font-size: 10px;">阻塞</a> <a href="/tags/非阻塞/" style="font-size: 10px;">非阻塞</a>
+                    </div>
+                </section>
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-outlinks">
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">csdn</a><br>
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">segmentfault</a><br>
+                    
+                      <a target="_blank"  class="main-nav-link switch-outlinks-link" href="/xxx">简书</a><br>
+                    
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱足球，爱图像</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">taosean</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/avatar.jpg" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">taosean</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">亡命之徒</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/taosean" title="github">github</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-Yolo-v2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2018/04/20/Yolo-v2/" class="article-date">
+      <time datetime="2018-04-20T07:48:19.000Z" itemprop="datePublished">2018-04-20</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Yolo v2 论文理解
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Yolo/">Yolo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/回归/">回归</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/目标检测/">目标检测</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>本文针对 Yolo v2 的一些处理方法和细节给出了自己的理解。不一定正确，如有错误请指正。<br><a id="more"></a><br>本文尝试了使用一系列的方法来提升检测效果。<br><br></p>
+<h2 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h2><h3 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h3><ul>
+<li>在所有卷积层后加 Batch Normalization。</li>
+<li>mAP 提高了2%。</li>
+</ul>
+<h3 id="High-Resolution-Classifier"><a href="#High-Resolution-Classifier" class="headerlink" title="High Resolution Classifier"></a>High Resolution Classifier</h3><ul>
+<li>Yolo v1 使用 224×224 的图像预训练分类器，并用来对448的图像进行检测。这意味着网络的卷积层要在适应新的分辨率的同时还要学习检测。</li>
+<li>Yolo v2 直接使用 448×448 的图像进行预训练。</li>
+<li>mAP提高了4%。</li>
+</ul>
+<h3 id="Convolutional-With-Anchor-Boxes"><a href="#Convolutional-With-Anchor-Boxes" class="headerlink" title="Convolutional With Anchor Boxes"></a>Convolutional With Anchor Boxes</h3><ul>
+<li>Yolo 通过在卷积层上加全连接层来直接预测bbox的坐标。而 Faster R-CNN 使用 RPN 网络来预测 bbox 相对于 anchor 的 offset 和 confidence。预测 offset 比直接预测坐标来得简单。</li>
+<li>Yolo v2 去除了全连接层，并减少了一个 Pooling 层。这样最后的 feature map 尺寸是输入的1/32。在这里，网络使用 416 尺寸而不是 448，因为作者想要最后的 feature map 尺寸为奇数。$416\div32=13$。这是因为作者观察发现，很多物体都在图像的中间，因此检测这些图像中间的物体时，只需用最中心的那个位置而不是偶数情况下的中心4个位置。(个人理解为：在这种情况下，那些在图像中心位置的物体的中心点都会落在这 $13\times 13$ 栅格的中心格子中)</li>
+<li>使用 anchor boxes 预测坐标的同时，Yolo v2 还对 conditional class probability 的预测机制和空间位置（栅格）做了解耦。<br>&emsp;&emsp;在Yolo v1 将输入图像划分为 $S×S$ 的栅格，每一个栅格预测 $B$ 个 bounding boxes，以及这些 bounding boxes 的 confidence scores。<br>&emsp;&emsp;每一个栅格还要预测 $C$ 个 conditional class probability（条件类别概率）：$Pr(Classi|Object)$。即在一个栅格包含一个 Object 的前提下，它属于某个类的概率。且每个栅格预测一组 ($C$个) 类概率，而不考虑框 $B$ 的数量。<br>&emsp;&emsp;Yolo v2 不再由栅格去预测条件类别概率，而由 Bounding boxes 去预测。在 Yolo v1 中每个栅格只有1组条件类别概率，而在 Yolo v2 中，因为每个栅格有 $B$ 个 bounding boxes，所以有 $B$ 组条件类别概率。<br>在 Yolo v1 中输出的维度为 $S\times S \times (B \times 5 + C )$，而 Yolo v2 为$S \times S \times (B \times (5 + C))$。如下图所示。</li>
+<li>使用了Anchor box 后，mAP 从 69.5% 降到了 69.2%，但是 recall 从 81% 增加到了 88%。</li>
+</ul>
+<p><hr><br> <img src="pic1.png" alt="v1 和 v2 输出维度对比"></p>
+<h3 id="Dimension-Clusters"><a href="#Dimension-Clusters" class="headerlink" title="Dimension Clusters"></a>Dimension Clusters</h3><p>&emsp;&emsp;采用 Anchor 机制后遇到两个遇到<font style="color:orange"> 两个问题 </font>，其中<font style="color:cyan"> 第一个 </font>为 anchor 尺寸的设置问题。Faster R-CNN 等网络的 anchor 的尺寸是人工选定的，虽然网络可以通过学习来调整预测框的尺寸，但是如果一开始就给一个较合适的 anchor 的话，网络学习起来会更加的容易。Yolo v2 通过 k-means 的方式来学习到 anchor 的尺寸分布情况。对训练集中的所有标定的框，即 GT box，根据他们的 (x,y,w,h) 的值进行 k-means 聚类。如果将用 (x,y,w,h) 来代表一个 GT box，并用4维向量的标准欧式距离来作为距离度量的话，大的框可能会比小的框产生更大的误差，比如 (1,1,2,2) 和 (2,2,4,4) 的欧式距离为$\sqrt{10}$，而 (2,2,4,4) 和 (4,4,8,8) 的欧式距离为 $2\sqrt{10}$，而如果采用IoU的度量方式，这两对框的距离相等都是3/4。而后一种情况所代表的两种框是前一种情况两种框尺寸的两倍。因此，可以看出，采用IoU的方式作为两个框之间的距离度量，可以避免框的尺寸带来的影响。<br>&emsp;&emsp;通过聚类，可以将所有的 (x,y,w,h) 聚为 k 类，最后得到 k 个类别中心，这 k 个类别中心就代表 k 个矩形框。论文中使用 Dimension Clusters 的结果如下图所示。<br><img src="pic2.jpg" alt="维度聚类-5类"></p>
+<p>在网上看到另一种说法</p>
+<blockquote>
+<p>算法过程（k-means）是: 将每个 bbox 的宽和高相对整张图片的比例 $(w_r,h_r)$ 进行聚类,得到 k 个anchor box.<br>算法实现代码可以参考: <a href="https://github.com/PaulChongPeng/darknet/blob/master/tools/k_means_yolo.py" target="_blank" rel="noopener">k_means_yolo.py</a><br>其实根据距离函数就可以看出，k-means 一定是对 (x,y,w,h) 进行聚类的（计算 IoU 需要用到 (x,y) ）。只不过最后不关注聚类中心的 (x,y) ，只关注聚类中心的 (w,h)。上面代码中的操作也证实了这一点。</p>
+</blockquote>
+<p>&emsp;&emsp;与手工挑选的相比，使用 Dimension Clusters 的方法效果更好。对比效果如下图所示。<br><img src="pic3.jpg" alt="使用维度聚类效果对比"><br>其中 Cluster SSE 表示使用 sum squared error 作为度量进行聚类，Cluster IoU 表示使用 IoU 作为度量进行聚类。Anchor boxes 为采取类似 Faster R-CNN 中的方法。</p>
+<h3 id="Direct-location-prediction"><a href="#Direct-location-prediction" class="headerlink" title="Direct location prediction"></a>Direct location prediction</h3><p>&emsp;&emsp;前面提到了两个问题，其中 <font color="cyan">第二个</font> 问题是：模型的不稳定性。不稳定性主要来源于预测框的(x,y)坐标。在 RPN 中，网络预测 $t_x$ 和 $t_y$ ，因此，框的中心(x,y)计算方式为:</p>
+<script type="math/tex; mode=display">\begin{cases} x = (t_x * w_a) + x_a\\
+    y = (t_y * h_a) + y_a\\
+   \end{cases}</script><p>在原论文中，$x_a$ 和 $y_a$ 前使用的是减号，估计是作者的笔误。其中，$w_a$ 和 $h_a$ 为 anchor 的宽和长。如果 $t_x&gt;0$，bounding box 会向右移动 anchor 宽的 $t_x$ 倍，如果 $t_x&lt;0$，bounding box 会向左移动 anchor 宽的 $t_x$ 倍。由公式可以看出，由于 $t_x$ 和 $t_y$ 没有限制（取值范围没有限制），因此最后得到的 $x$ 和 $y$ 可以落在图像上的任意一个位置，因此一个 anchor 可能检测一个离自己很远的物体，尽管这个物体应该由离其自身近的 anchor 来检测。<br>&emsp;&emsp;Yolo v2 不采用预测 offset 的方法，而是延续 Yolo v1 预测 bbox 相对每个 grid cell 左上角的坐标，确保每个 bbox 的中心落在 grid cell 内。作者使用 logistic 函数来约束预测值。<br>&emsp;&emsp;对网络的输出 feature map (13×13)，Yolo v2 对每一个 grid cell 预测 5 个 bbox (对应 5 个 anchor)，每个 bbox 由 5 维向量 $( t_x,t_y,t_w,t_h,t_o)$ 表示。因此，对 feature map 上的每一个位置来说，都会预测出一个 5×5 的向量。(要牢记 feature map 上的每一个位置都对应图像上的一个 grid cell )。如果这个 grid cell 的左上角距离图像左上角偏移为 $(c_x,c_y)$，anchor box 的宽高为 $p_w, p_h$，那么这个预测的 bounding box 的中心点为 $(b_x, b_y)$，宽高为 $(b_w, b_h)$。计算方式如下图:</p>
+<p><hr><br> <img src="pic4.png" alt="一个预测框的计算方式"><br> <hr><br> $\sigma(t_x)$ 是 bounding box 的中心相对栅格左上角的横坐标，$\sigma(t_y)$ 是纵坐标。$\sigma(t_o)$ 是 bounding box 的 confidence score。<br> 这样，就可以预测出 5 组 bbox.</p>
+<p><font color="green">个人理解: </font>由于预测的值是 $( t_x,t_y,t_w,t_h,t_o)$ 这 5 个数，且 $(b_x,b_y,b_w,b_h,confidence)$ 可以由上面的预测值计算出来，因此不确定最后的 GT 向量是用哪一个来计算 loss。<del>个人猜测是 $(b_x,b_y,b_w,b_h,confidence)$。因为这样与 Yolo v1 中的 loss 一致。因此有可能 5 个 GT 都是一样的，就像 Yolo v1 中的一样。</del></p>
+<p><center><font color="orange">---------------------------  损失计算理解更新  -----------------------------</font></center><br>通过阅读损失部分源码，感觉上面的猜测不正确。应该是使用 $(t_x,t_y,t_w,t_h,t_o)$ 这 5 个数进行损失计算的。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">delta_region_box</span><span class="params">(box truth, <span class="keyword">float</span> *x, <span class="keyword">float</span> *biases, <span class="keyword">int</span> n, <span class="keyword">int</span> index, <span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> w, <span class="keyword">int</span> h, <span class="keyword">float</span> *delta, <span class="keyword">float</span> scale, <span class="keyword">int</span> stride)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    box pred = get_region_box(x, biases, n, index, i, j, w, h, stride);</span><br><span class="line">    <span class="keyword">float</span> iou = box_iou(pred, truth);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里的 i,j 是对 cell 的索引，因此 i,j 的范围都是 [0,12] 的整数. w,h 都是 13，delta 存储 loss， x 是预测结果，stride=169.</span></span><br><span class="line">    <span class="comment">// n 是 [0,5] 的整数，是一个确定 cell 内 bbox 的索引。</span></span><br><span class="line">    <span class="keyword">float</span> tx = (truth.x*w - i); <span class="comment">// 这里跟论文中有一点不一样，这里的 tx 其实相当于论文中的$\sigma&#123;t_x&#125;$，这里的 i 就相当于论文中的 cx。ty同理。</span></span><br><span class="line">    <span class="keyword">float</span> ty = (truth.y*h - j);</span><br><span class="line">    <span class="keyword">float</span> tw = <span class="built_in">log</span>(truth.w*w / biases[<span class="number">2</span>*n]); <span class="comment">// biases 数组中存储的是 5 个 anchor 的长宽。</span></span><br><span class="line">    <span class="keyword">float</span> th = <span class="built_in">log</span>(truth.h*h / biases[<span class="number">2</span>*n + <span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    delta[index + <span class="number">0</span>*stride] = scale * (tx - x[index + <span class="number">0</span>*stride]);</span><br><span class="line">    delta[index + <span class="number">1</span>*stride] = scale * (ty - x[index + <span class="number">1</span>*stride]);</span><br><span class="line">    delta[index + <span class="number">2</span>*stride] = scale * (tw - x[index + <span class="number">2</span>*stride]);</span><br><span class="line">    delta[index + <span class="number">3</span>*stride] = scale * (th - x[index + <span class="number">3</span>*stride]);</span><br><span class="line">    <span class="keyword">return</span> iou;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从代码可以看出，计算每一个 bbox 的损失时，是将当前 bbox 所在 cell 对应的 GT box 的 $(x,y,w,h)$ 转换成 $(t_x,t_y,t_w,t_h)$ 后，再跟网络输出的预测值计算损失的。可以看出，针对同一 cell 内不同的 anchor 对应的预测框（一个 anchor 对应一个预测框），它们的 $(t_x,t_y)$ 真实值都是相等的，因为 $i,j$ 是 cell 的索引，所以对某一 cell 内的预测框来说，$i,j$ 都是相等的。但是 n 是 cell 内预测框，或者是 anchor 的索引，因此对每个预测框来说，他们的 $(t_w,t_h)$ 的真实值是不等的。（这里没有说一个 cell 是否只计算 responsable 的那个 bbox 的损失，需要查看别的地方的代码）</p>
+<p>Yolo v2 论文没有给出损失函数。网上找到的一个损失函数如下，不知正确与否。<br><img src="pic6.png" alt="Yolo v2 损失函数"></p>
+<h3 id="Fine-Grained-Features"><a href="#Fine-Grained-Features" class="headerlink" title="Fine-Grained Features"></a>Fine-Grained Features</h3><p>&emsp;&emsp;上述网络上的修改使 Yolo v2 最终在 13×13 的特征图上进行预测，虽然这足以胜任大尺度物体的检测，但是用上细粒度特征的话，这可能对小尺度的物体检测有帮助。Faster R-CNN 和 SSD 都在不同层次的特征图上产生区域建议（SSD 直接就可看得出来这一点）（Faster R-CNN 有吗？），获得了多尺度的适应性。这里使用了一种不同的方法，简单添加了一个转移层 ( passthrough layer )，这一层要把浅层特征图 （分辨率为 26×26，是底层分辨率4倍）连接到深层特征图（concat）。</p>
+<blockquote>
+<p>补充：关于 passthrough layer，具体来说就是特征重排（不涉及到参数学习），前面 26×26×512 的特征图使用按行和按列隔行采样的方法，就可以得到4个新的特征图，维度都是 13×13×512，然后做 concat 操作，得到 13×13×2048 的特征图，将其拼接到后面的层，相当于做了一次特征融合，有利于检测小目标。</p>
+</blockquote>
+<h3 id="Multi-Scale-Training"><a href="#Multi-Scale-Training" class="headerlink" title="Multi-Scale Training"></a>Multi-Scale Training</h3><p>&emsp;&emsp;为了使网络具有较强的尺寸鲁棒性，即对不同尺寸的输入都有较好的检测效果。Yolo v2 每迭代几个 epoch 后就会随机选择输入图像的尺寸。由于网络下采样率为32，因此尺寸都是32的倍数，从 ${320,352,…,608}$ 中随机选择。这样，网络不得不学着对不同分辨率的图像都要检测得很好。<br><br></p>
+<h2 id="Faster"><a href="#Faster" class="headerlink" title="Faster"></a>Faster</h2><p>为了速度，避免使用 VGG-16。提出了 Yolo v2 专用网络 Darknet-19。</p>
+<h3 id="Darknet-19"><a href="#Darknet-19" class="headerlink" title="Darknet-19"></a>Darknet-19</h3><p>特点：</p>
+<ol>
+<li>主要使用 3×3 卷积核</li>
+<li>每次 Pooling 后，通道数翻倍</li>
+<li>在 3×3 卷积之间使用 1×1 进行特征压缩表示</li>
+</ol>
+<p>网络参数如下图所示:<br><img src="pic5.png" alt="网络参数"><br>&emsp;&emsp;在进行检测时，将Darknet-19的全连接去掉，换上3个 3×3 的卷积层，每一个卷积层通道均为 1024，每一个 3×3 卷积后面都要接上一个 1×1 的卷积。最后的输出尺寸为 $13×13×(5×(5+20))=13×13×125$。在最后一个 3×3×512 层和倒数第二个卷积层之间加上了 passthrough layer.</p>
+<p><br></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a href="https://blog.csdn.net/hrsstudy/article/details/70767950" target="_blank" rel="noopener">https://blog.csdn.net/hrsstudy/article/details/70767950</a></li>
+<li><a href="https://blog.csdn.net/jesse_mx/article/details/53925356" target="_blank" rel="noopener">https://blog.csdn.net/jesse_mx/article/details/53925356</a></li>
+<li><a href="https://github.com/leetenki/YOLOv2/blob/master/YOLOv2.md" target="_blank" rel="noopener">https://github.com/leetenki/YOLOv2/blob/master/YOLOv2.md</a></li>
+</ol>
+
+      
+    </div>
+    
+  </div>
+  
+    <br><br>
+
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2018/04/20/Yolo-v2/">Yolo v2 论文理解</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问 taosean 的个人博客">taosean</a></p>
+        <p><span>发布时间:</span>2018年04月20日 - 15时48分</p>
+        <p><span>最后更新:</span>2018年11月16日 - 20时08分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/04/20/Yolo-v2/" title="Yolo v2 论文理解">http://yoursite.com/2018/04/20/Yolo-v2/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/04/20/Yolo-v2/　　作者: taosean" title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2018/04/25/Faster-R-CNN/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          RPN 中的 loss 理解
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2018/04/19/Yolo/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Yolo v1 论文理解</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Better"><span class="toc-number">1.</span> <span class="toc-text">Better</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Batch-Normalization"><span class="toc-number">1.1.</span> <span class="toc-text">Batch Normalization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#High-Resolution-Classifier"><span class="toc-number">1.2.</span> <span class="toc-text">High Resolution Classifier</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Convolutional-With-Anchor-Boxes"><span class="toc-number">1.3.</span> <span class="toc-text">Convolutional With Anchor Boxes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dimension-Clusters"><span class="toc-number">1.4.</span> <span class="toc-text">Dimension Clusters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Direct-location-prediction"><span class="toc-number">1.5.</span> <span class="toc-text">Direct location prediction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fine-Grained-Features"><span class="toc-number">1.6.</span> <span class="toc-text">Fine-Grained Features</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Multi-Scale-Training"><span class="toc-number">1.7.</span> <span class="toc-text">Multi-Scale Training</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Faster"><span class="toc-number">2.</span> <span class="toc-text">Faster</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Darknet-19"><span class="toc-number">2.1.</span> <span class="toc-text">Darknet-19</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文章"><span class="toc-number">3.</span> <span class="toc-text">参考文章</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+    <style>
+        .toc {
+            white-space: nowrap;
+            overflow-x: hidden;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $(".toc li a").mouseover(function() {
+                var title = $(this).attr('href');
+                $(this).attr("title", title);
+            });
+        })
+    </script>
+
+
+
+
+
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2018/04/25/Faster-R-CNN/" title="上一篇: RPN 中的 loss 理解">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2018/04/19/Yolo/" title="下一篇: Yolo v1 论文理解">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/10/29/Packaging-Python/">打包 Python 工程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/10/22/Convert-Tensorflow-Model-to-Caffe/">将 Tensorflow 模型移植到 Caffe 上</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/07/04/Kalman-Filter/">卡尔曼滤波</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Heterogeneous-Computing/">(转载) 浅谈多节点 CPU+GPU 协同计算负载均衡性设计</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/26/Cxx-Related/">一些 C++ 相关的概念和操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/14/Process-and-Thread/">进程和线程及相关概念</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/06/03/light-weight-CNN-operations/">轻量卷积神经网络的一些操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/31/Git-Usage/">Git的使用流程</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/31/AlexyAB-Darknet/">AlexeyAB/Darknet 的使用经验总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/05/20/Build-opencv-with-GPU/">OpenCV 4.0.1 + CUDA 8.0 + Visual Studio 2015 + Win10</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/04/02/Pyinstaller-with-Scipy/">Pyinstaller with Scipy</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/25/optical-flow/">光流法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/25/covariance-and-covariance-matrix/">协方差及协方差矩阵</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/07/linux-install-setting-process/">Centos 系统下深度学习环境配置及 tensorflow 安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/">Windows 下利用共享内存实现进程间通信</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/Visual-Studio-Configuration/">Visual Studio 环境变量配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/15/camera-calibration/">相机成像原理和参数标定</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/14/tensorflow-1-x-cookbook/">tensorflow-1.x-cookbook 读书笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/13/ORB-Feature/">ORB 特征提取</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/06/Faster-RCNN-Python-layer/">Faster RCNN 中自定义 Python 层的作用理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/24/encoding-problem/">python 中关于字符的编码方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/09/Convert-python-project-to-exe/">将包含 caffe 的 python 工程打包成一个 exe 文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/04/Linux-caffe-path-setting/">Linux 下 Caffe 的路径设置问题</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/27/Caffe-install/">Windows 下 Caffe 安装及测试</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/22/python-thread/">python 多线程模块 threading 及 多进程模块 multiprocessing</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/15/jupyter-add-kernel/">jupyter notebook 增加内核</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/08/vim/">vim</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/Deformable-Convolutional-Networks/">Deformable Convolutional Networks 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/07/FPN/">FPN</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/25/Faster-R-CNN/">RPN 中的 loss 理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/20/Yolo-v2/">Yolo v2 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/19/Yolo/">Yolo v1 论文理解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/16/node-random-number-service/">使用 Node.js 生成随机数的服务</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/16/Webpage2Picture/">如何截取网页长屏</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2020 taosean
+            </div>
+            <div class="footer-right">
+                <a href="https://github.com/taosean" target="_blank">Github</a> of taosean
+                <!-- <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a> -->
+            </div>
+        </div>
+
+        
+
+
+        <!-- <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script> -->
+
+
+    </div>
+</footer>
+
+    </div>
+
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+
+  </div>
+</body>
+</html>
