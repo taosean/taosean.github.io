@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/categories/index.html</loc>
+    
+    <lastmod>2020-10-16T03:00:48.290Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/tags/index.html</loc>
+    
+    <lastmod>2020-10-16T02:53:09.707Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
     
     <lastmod>2020-06-02T06:42:23.666Z</lastmod>
