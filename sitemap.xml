@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/about/index.html</loc>
+    
+    <lastmod>2020-10-16T09:39:59.309Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/2018/07/24/encoding-problem/</loc>
     
     <lastmod>2020-10-16T09:24:09.304Z</lastmod>
@@ -250,13 +257,6 @@
     <loc>https://taosean.github.io/tags/index.html</loc>
     
     <lastmod>2020-10-16T02:53:09.707Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/about/index.html</loc>
-    
-    <lastmod>2018-04-20T05:56:11.000Z</lastmod>
     
   </url>
   
