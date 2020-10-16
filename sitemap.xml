@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/2019/10/22/Convert-Tensorflow-Model-to-Caffe/</loc>
+    
+    <lastmod>2020-10-16T07:33:33.158Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/categories/index.html</loc>
     
     <lastmod>2020-10-16T03:00:48.290Z</lastmod>
@@ -54,13 +61,6 @@
     <loc>https://taosean.github.io/2019/06/03/light-weight-CNN-operations/</loc>
     
     <lastmod>2019-10-29T09:16:45.910Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/10/22/Convert-Tensorflow-Model-to-Caffe/</loc>
-    
-    <lastmod>2019-10-25T07:26:20.547Z</lastmod>
     
   </url>
   
