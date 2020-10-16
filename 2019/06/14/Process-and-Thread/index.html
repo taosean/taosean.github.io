@@ -1,37 +1,82 @@
 <!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="进程和线程及相关概念"><meta name="keywords" content="线程,进程,CPU,Process,Thread,阻塞,非阻塞,单核,多核"><meta name="author" content="taosean"><meta name="copyright" content="taosean"><title>进程和线程及相关概念 | taosean's 学习之旅</title><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="stylesheet" href="/css/index.css?version=1.8.2"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.8.2"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
-  localSearch: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
   copy: {
     success: '复制成功',
     error: '复制错误',
     noSupport: '浏览器不支持'
   },
   hexoVersion: '3.7.1'
-} </script></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一篇非常好的文章"><span class="toc-number">1.</span> <span class="toc-text">一篇非常好的文章</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">taosean</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/taosean">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">34</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">104</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://github.com/xiaolai">李笑来</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/top_img.png)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">taosean's 学习之旅</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a></span><span class="pull-right"></span></div><div id="post-info"><div id="post-title">进程和线程及相关概念</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-06-14</time></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>本文主要记录了进程，线程等相关内容。<br><a id="more"></a></p>
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">taosean</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/taosean">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">34</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">104</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://github.com/xiaolai">李笑来</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/top_img.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">taosean's 学习之旅</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">进程和线程及相关概念</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-06-14</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.6k</span><span class="post-meta__separator">|</span><span>阅读时长: 7 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>本文主要记录了进程，线程等相关内容。</p>
+<a id="more"></a>
 <blockquote>
-<p>抛开各种技术细节，从应用程序角度讲：<br>1、在单核计算机里，有一个资源是无法被多个程序并行使用的：CPU。<br>没有操作系统的情况下，一个程序一直独占着全部 CPU。<br>如果要有两个任务来共享同一个 CPU，程序员就需要仔细地为程序安排好运行计划—某时刻 CPU 和由程序 A 来独享，下一时刻 CPU 由程序 B 来独享,而这种安排计划后来成为 OS 的核心组件，被单独名命为 “<strong>scheduler</strong>”，即“<strong>调度器</strong>”，它关心的只是怎样把单个 CPU 的运行拆分成一段一段的“运行片”，轮流分给不同的程序去使用，而在宏观上，因为分配切换的速度极快，就制造出多程序并行在一个 CPU 上的假象。</p>
-<p>2、在单核计算机里，有一个资源可以被多个程序共用，然而会引出麻烦：<strong>内存</strong>。<br>在一个只有调度器，没有内存管理组件的操作系统上，程序员需要手工为每个程序安排运行的空间 — 程序A使用物理地址 <code>0x00-0xff</code>, 程序B使用物理地址<code>0x100-0x1ff</code>，等等。<br>然而这样做有个很大的问题：每个程序都要协调商量好怎样使用同一个内存上的不同空间，软件系统和硬件系统千差万别，使这种定制的方案没有可行性。<br>为了解决这个麻烦，计算机系统引入了“<strong>虚拟地址</strong>”的概念，从三方面入手来做：<br>2.1、硬件上，CPU 增加了一个专门的模块叫 MMU，负责转换虚拟地址和物理地址。<br>2.2、操作系统上，操作系统增加了另一个核心组件：<strong>memory management</strong>，即内存管理模块，它管理物理内存、虚拟内存相关的一系列事务。<br>2.3、应用程序上，发明了一个叫做【进程】的模型，（注意）每个进程都用【<strong>完全一样的</strong>】虚拟地址空间，然而经由操作系统和硬件MMU协作，映射到不同的物理地址空间上。不同的【进程】，都有各自独立的物理内存空间，不用一些特殊手段，是无法访问别的进程的物理内存的。</p>
+<p>抛开各种技术细节，从应用程序角度讲：<br>
+1、在单核计算机里，有一个资源是无法被多个程序并行使用的：CPU。<br>
+没有操作系统的情况下，一个程序一直独占着全部 CPU。<br>
+如果要有两个任务来共享同一个 CPU，程序员就需要仔细地为程序安排好运行计划–某时刻 CPU 和由程序 A 来独享，下一时刻 CPU 由程序 B 来独享,而这种安排计划后来成为 OS 的核心组件，被单独名命为 “<strong>scheduler</strong>”，即“<strong>调度器</strong>”，它关心的只是怎样把单个 CPU 的运行拆分成一段一段的“运行片”，轮流分给不同的程序去使用，而在宏观上，因为分配切换的速度极快，就制造出多程序并行在一个 CPU 上的假象。</p>
+</blockquote>
+<blockquote>
+<p>2、在单核计算机里，有一个资源可以被多个程序共用，然而会引出麻烦：<strong>内存</strong>。<br>
+在一个只有调度器，没有内存管理组件的操作系统上，程序员需要手工为每个程序安排运行的空间 – 程序A使用物理地址 <code>0x00-0xff</code>, 程序B使用物理地址<code>0x100-0x1ff</code>，等等。<br>
+然而这样做有个很大的问题：每个程序都要协调商量好怎样使用同一个内存上的不同空间，软件系统和硬件系统千差万别，使这种定制的方案没有可行性。<br>
+为了解决这个麻烦，计算机系统引入了“<strong>虚拟地址</strong>”的概念，从三方面入手来做：<br>
+2.1、硬件上，CPU 增加了一个专门的模块叫 MMU，负责转换虚拟地址和物理地址。<br>
+2.2、操作系统上，操作系统增加了另一个核心组件：<strong>memory management</strong>，即内存管理模块，它管理物理内存、虚拟内存相关的一系列事务。<br>
+2.3、应用程序上，发明了一个叫做【进程】的模型，（注意）每个进程都用【<strong>完全一样的</strong>】虚拟地址空间，然而经由操作系统和硬件MMU协作，映射到不同的物理地址空间上。不同的【进程】，都有各自独立的物理内存空间，不用一些特殊手段，是无法访问别的进程的物理内存的。</p>
+</blockquote>
+<blockquote>
 <p>3、现在，不同的应用程序，可以不关心底层的物理内存分配，也不关心 CPU 的协调共享了。然而还有一个问题存在：有一些程序，想要共享 CPU，【并且还要共享同样的物理内存】，这时候，一个叫【线程】的模型就出现了，它们被包裹在进程里面，在调度器的管理下共享 CPU，拥有同样的虚拟地址空间，同时也共享同一个物理地址空间，然而，它们无法越过包裹自己的进程，去访问别一个进程的物理地址空间。</p>
+</blockquote>
+<blockquote>
 <p>4、进程之间怎样共享同一个物理地址空间呢？不同的系统方法各异，符合 posix 规范的操作系统都提供了一个接口，叫 mmap，可以把一个物理地址空间映射到不同的进程中，由不同的进程来共享。</p>
-<p>5、PS：在有的操作系统里，进程不是调度单位（即不能被调度器使用），线程是最基本的调度单位，调度器只调度线程，不调度进程，比如 VxWorks<br><a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html#comment-270980" target="_blank" rel="noopener">来源</a></p>
 </blockquote>
-<p><br></p>
 <blockquote>
-<p>CPU+RAM+各种资源（比如显卡，光驱，键盘，GPS, 等等外设）构成我们的电脑，但是电脑的运行，实际就是 CPU 和相关寄存器以及 RAM 之间的事情。<br><strong>一个最最基础的事实</strong>：CPU 太快，太快，太快了，寄存器仅仅能够追的上他的脚步，RAM 和别的挂在各总线上的设备完全是望其项背。那当多个任务要执行的时候怎么办呢？轮流着来?或者谁优先级高谁来？不管怎么样的策略，一句话就是在 CPU 看来就是轮流着来。<br><strong>一个必须知道的事实</strong>：执行一段程序代码，实现一个功能的过程介绍 ，当得到 CPU 的时候，相关的资源必须也已经就位，就是显卡啊，GPS 啊什么的必须就位，然后 CPU 开始执行。这里除了 CPU 以外所有的就构成了这个程序的执行环境，也就是我们所定义的程序上下文。当这个程序执行完了，或者分配给他的 CPU 执行时间用完了，那它就要被切换出去，等待下一次 CPU 的临幸。在被切换出去的最后一步工作就是保存程序上下文，因为这个是下次他被 CPU 临幸的运行环境，必须保存。<br><strong>串联起来的事实</strong>：前面讲过在 CPU 看来所有的任务都是一个一个的轮流执行的，具体的轮流方法就是：先加载程序A的上下文，然后开始执行 A，保存程序 A 的上下文，调入下一个要执行的程序 B 的程序上下文，然后开始执行 B,保存程序 B 的上下文。。。。<br>========= 重要的东西出现了========<br>进程和线程就是这样的背景出来的，<strong>两个名词不过是对应的CPU时间段的描述，名词就是这样的功能</strong>。<br>进程就是包换上下文切换的程序执行时间总和 = CPU 加载上下文 + CPU 执行 + CPU 保存上下文<br><strong>线程是什么呢？</strong>进程的颗粒度太大，每次都要有上下的调入，保存，调出。如果我们把进程比喻为一个运行在电脑上的软件，那么一个软件的执行不可能是一条逻辑执行的，必定有多个分支和多个程序段，就好比要实现程序 A，实际分成 a，b，c 等多个块组合而成。那么这里具体的执行就可能变成：程序 A 得到 CPU =&gt; CPU 加载上下文，开始执行程序 A 的 a 小段，然后执行 A 的 b 小段，然后再执行 A 的 c 小段，最后 CPU 保存  A 的上下文。这里 a，b，c 的执行是共享了 A 的上下文，CPU 在执行的时候没有进行上下文切换的。这里的 a，b，c 就是线程，也就是说线程是共享了进程的上下文环境的更为细小的 CPU 时间段。到此全文结束，再一个总结：<strong>进程和线程都是一个时间段的描述，是 CPU 工作时间段的描述，不过是颗粒大小不同。</strong><br><a href="https://www.zhihu.com/question/25532384/answer/81152571" target="_blank" rel="noopener">来源</a></p>
+<p>5、PS：在有的操作系统里，进程不是调度单位（即不能被调度器使用），线程是最基本的调度单位，调度器只调度线程，不调度进程，比如 VxWorks<br>
+<a href="http://www.ruanyifeng.com/blog/2013/04/processes_and_threads.html#comment-270980" target="_blank" rel="noopener">来源</a></p>
 </blockquote>
-<p><br></p>
+<br>
+>CPU+RAM+各种资源（比如显卡，光驱，键盘，GPS, 等等外设）构成我们的电脑，但是电脑的运行，实际就是 CPU 和相关寄存器以及 RAM 之间的事情。
+**一个最最基础的事实**：CPU 太快，太快，太快了，寄存器仅仅能够追的上他的脚步，RAM 和别的挂在各总线上的设备完全是望其项背。那当多个任务要执行的时候怎么办呢？轮流着来?或者谁优先级高谁来？不管怎么样的策略，一句话就是在 CPU 看来就是轮流着来。
+**一个必须知道的事实**：执行一段程序代码，实现一个功能的过程介绍 ，当得到 CPU 的时候，相关的资源必须也已经就位，就是显卡啊，GPS 啊什么的必须就位，然后 CPU 开始执行。这里除了 CPU 以外所有的就构成了这个程序的执行环境，也就是我们所定义的程序上下文。当这个程序执行完了，或者分配给他的 CPU 执行时间用完了，那它就要被切换出去，等待下一次 CPU 的临幸。在被切换出去的最后一步工作就是保存程序上下文，因为这个是下次他被 CPU 临幸的运行环境，必须保存。
+**串联起来的事实**：前面讲过在 CPU 看来所有的任务都是一个一个的轮流执行的，具体的轮流方法就是：先加载程序A的上下文，然后开始执行 A，保存程序 A 的上下文，调入下一个要执行的程序 B 的程序上下文，然后开始执行 B,保存程序 B 的上下文。。。。
+========= 重要的东西出现了========
+进程和线程就是这样的背景出来的，**两个名词不过是对应的CPU时间段的描述，名词就是这样的功能**。
+进程就是包换上下文切换的程序执行时间总和 = CPU 加载上下文 + CPU 执行 + CPU 保存上下文
+**线程是什么呢？**进程的颗粒度太大，每次都要有上下的调入，保存，调出。如果我们把进程比喻为一个运行在电脑上的软件，那么一个软件的执行不可能是一条逻辑执行的，必定有多个分支和多个程序段，就好比要实现程序 A，实际分成 a，b，c 等多个块组合而成。那么这里具体的执行就可能变成：程序 A 得到 CPU => CPU 加载上下文，开始执行程序 A 的 a 小段，然后执行 A 的 b 小段，然后再执行 A 的 c 小段，最后 CPU 保存  A 的上下文。这里 a，b，c 的执行是共享了 A 的上下文，CPU 在执行的时候没有进行上下文切换的。这里的 a，b，c 就是线程，也就是说线程是共享了进程的上下文环境的更为细小的 CPU 时间段。到此全文结束，再一个总结：**进程和线程都是一个时间段的描述，是 CPU 工作时间段的描述，不过是颗粒大小不同。**
+[来源](https://www.zhihu.com/question/25532384/answer/81152571)
+<br>
+>一、 cpu个数、核数、线程数的关系
+cpu个数：是指物理上，也及硬件上的核心数；
+核数：是逻辑上的，简单理解为逻辑上模拟出的核心数；
+线程数：是同一时刻设备能并行执行的程序个数，线程数=cpu个数 * 核数【如果有超线程，再乘以超线程数】
 <blockquote>
-<p>一、 cpu个数、核数、线程数的关系<br>cpu个数：是指物理上，也及硬件上的核心数；<br>核数：是逻辑上的，简单理解为逻辑上模拟出的核心数；<br>线程数：是同一时刻设备能并行执行的程序个数，线程数=cpu个数 * 核数【如果有超线程，再乘以超线程数】</p>
-<p>二、 cpu线程数和Java多线程<br>首先明白几个概念：<br>(1) 单个cpu线程在同一时刻只能执行单一Java程序，也就是一个线程<br>(2) 单个线程同时只能在单个cpu线程中执行<br>(3) 线程是操作系统最小的调度单位，进程是资源（比如：内存）分配的最小单位<br>(4)Java中的所有线程在JVM进程中,CPU调度的是进程中的线程<br>(5)Java多线程并不是由于cpu线程数为多个才称为多线程，当Java线程数大于cpu线程数，操作系统使用时间片机制，采用线程调度算法，频繁的进行线程切换。</p>
-<p>a 那么java多进程，每个进程又多线程，cpu是如何调度的呢？<br>个人理解：操作系统并不是单纯均匀的分配cpu执行不同的进程，因为线程是调度的最小单位，所以会根据不同进程中的线程个数进行时间分片，均匀的执行每个线程，也就是说A进程中有10个线程，而B进程中有2个线程，那么cpu分给进程的执行时间理论上应该是5:1才合理。</p>
-<p>b cpu线程数和java线程数有直接关系吗？<br>个人理解：没有直接关系，正如上面所说，cpu采用分片机制执行线程，给每个线程划分很小的时间颗粒去执行，但是真正的项目中，一个程序要做很多的的操作，读写磁盘、数据逻辑处理、出于业务需求必要的休眠等等操作，当程序在进行I/O操作的时候，线程是阻塞的，线程由运行状态切换到等待状态，此时cpu会做上下文切换，以便处理其他的程序；当I/O操作完成后，cpu 会收到一个来自硬盘的中断信号，并进入中断处理例程，手头正在执行的线程因此被打断，回到 ready 队列。而先前因 I/O 而waiting 的线程随着 I/O 的完成也再次回到 就绪 队列，这时 cpu 可能会选择它来执行。</p>
-<p>c 如何确定程序线程数？<br>个人理解：如果所有的任务都是计算密集型的，则创建的多线程数 = 处理器核心数就可以了<br>如果io操作比较耗时，则根据具体情况调整线程数，此时 多线程数 = n*处理器核心数<br>一般情况程序线程数等于cpu线程数的两到三倍就能很好的利用cpu了，过多的程序线程数不但不会提高性能，反而还会因为线程间的频繁切换而受影响，具体需要根据线程处理的业务考略，不断调整线程数个数，确定当前系统最优的线程数。<br><a href="https://blog.csdn.net/wutongyuWxc/article/details/78732287" target="_blank" rel="noopener">原文</a></p>
+<p>二、 cpu线程数和Java多线程<br>
+首先明白几个概念：<br>
+(1) 单个cpu线程在同一时刻只能执行单一Java程序，也就是一个线程<br>
+(2) 单个线程同时只能在单个cpu线程中执行<br>
+(3) 线程是操作系统最小的调度单位，进程是资源（比如：内存）分配的最小单位<br>
+(4)Java中的所有线程在JVM进程中,CPU调度的是进程中的线程<br>
+(5)Java多线程并不是由于cpu线程数为多个才称为多线程，当Java线程数大于cpu线程数，操作系统使用时间片机制，采用线程调度算法，频繁的进行线程切换。</p>
 </blockquote>
-<p><br></p>
-<h3 id="一篇非常好的文章"><a href="#一篇非常好的文章" class="headerlink" title="一篇非常好的文章"></a>一篇非常好的文章</h3><blockquote>
-<p><a href="https://cloud.tencent.com/developer/article/1352974" target="_blank" rel="noopener">进程与线程，单核与多核</a></p>
+<blockquote>
+<p>a 那么java多进程，每个进程又多线程，cpu是如何调度的呢？<br>
+个人理解：操作系统并不是单纯均匀的分配cpu执行不同的进程，因为线程是调度的最小单位，所以会根据不同进程中的线程个数进行时间分片，均匀的执行每个线程，也就是说A进程中有10个线程，而B进程中有2个线程，那么cpu分给进程的执行时间理论上应该是5:1才合理。</p>
 </blockquote>
+<blockquote>
+<p>b cpu线程数和java线程数有直接关系吗？<br>
+个人理解：没有直接关系，正如上面所说，cpu采用分片机制执行线程，给每个线程划分很小的时间颗粒去执行，但是真正的项目中，一个程序要做很多的的操作，读写磁盘、数据逻辑处理、出于业务需求必要的休眠等等操作，当程序在进行I/O操作的时候，线程是阻塞的，线程由运行状态切换到等待状态，此时cpu会做上下文切换，以便处理其他的程序；当I/O操作完成后，cpu 会收到一个来自硬盘的中断信号，并进入中断处理例程，手头正在执行的线程因此被打断，回到 ready 队列。而先前因 I/O 而waiting 的线程随着 I/O 的完成也再次回到 就绪 队列，这时 cpu 可能会选择它来执行。</p>
+</blockquote>
+<blockquote>
+<p>c 如何确定程序线程数？<br>
+个人理解：如果所有的任务都是计算密集型的，则创建的多线程数 = 处理器核心数就可以了<br>
+如果io操作比较耗时，则根据具体情况调整线程数，此时 多线程数 = n*处理器核心数<br>
+一般情况程序线程数等于cpu线程数的两到三倍就能很好的利用cpu了，过多的程序线程数不但不会提高性能，反而还会因为线程间的频繁切换而受影响，具体需要根据线程处理的业务考略，不断调整线程数个数，确定当前系统最优的线程数。<br>
+<a href="https://blog.csdn.net/wutongyuWxc/article/details/78732287" target="_blank" rel="noopener">原文</a></p>
+</blockquote>
+<br>
+### 一篇非常好的文章
+>[进程与线程，单核与多核](https://cloud.tencent.com/developer/article/1352974)
 </div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">taosean</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://taosean.github.io/2019/06/14/Process-and-Thread/">https://taosean.github.io/2019/06/14/Process-and-Thread/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://taosean.github.io">taosean's 学习之旅</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/线程/">线程</a><a class="post-meta__tags" href="/tags/进程/">进程</a><a class="post-meta__tags" href="/tags/CPU/">CPU</a><a class="post-meta__tags" href="/tags/Process/">Process</a><a class="post-meta__tags" href="/tags/Thread/">Thread</a><a class="post-meta__tags" href="/tags/阻塞/">阻塞</a><a class="post-meta__tags" href="/tags/非阻塞/">非阻塞</a><a class="post-meta__tags" href="/tags/单核/">单核</a><a class="post-meta__tags" href="/tags/多核/">多核</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2019/06/26/Cxx-Related/"><i class="fa fa-chevron-left">  </i><span>一些 C++ 相关的概念和操作</span></a></div><div class="next-post pull-right"><a href="/2019/06/03/light-weight-CNN-operations/"><span>轻量卷积神经网络的一些操作</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
   clientID: '9738353720f54c04f11e',
   clientSecret: '1511bb92984c25bbde5236ba58e4673d4ff5f92e',
@@ -41,8 +86,9 @@
   id: md5(decodeURI(location.pathname)),
   language: 'zh-CN'
 })
-gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/top_img.png)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2020 By taosean</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.8.2"></script><script src="/js/fancybox.js?version=1.8.2"></script><script src="/js/sidebar.js?version=1.8.2"></script><script src="/js/copy.js?version=1.8.2"></script><script src="/js/fireworks.js?version=1.8.2"></script><script src="/js/transition.js?version=1.8.2"></script><script src="/js/scroll.js?version=1.8.2"></script><script src="/js/head.js?version=1.8.2"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/top_img.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2020 By taosean</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.8.2"></script><script src="/js/fancybox.js?version=1.8.2"></script><script src="/js/sidebar.js?version=1.8.2"></script><script src="/js/copy.js?version=1.8.2"></script><script src="/js/fireworks.js?version=1.8.2"></script><script src="/js/transition.js?version=1.8.2"></script><script src="/js/scroll.js?version=1.8.2"></script><script src="/js/head.js?version=1.8.2"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
   $('#nav').addClass('is-mobile')
   $('footer').addClass('is-mobile')
   $('#top-container').addClass('is-mobile')
-}</script></body></html>
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
