@@ -2,9 +2,240 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/2018/07/24/encoding-problem/</loc>
+    
+    <lastmod>2020-10-16T09:24:09.304Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/02/25/optical-flow/</loc>
+    
+    <lastmod>2020-10-16T09:19:54.660Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/06/03/light-weight-CNN-operations/</loc>
+    
+    <lastmod>2020-10-16T09:16:25.735Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/04/19/Yolo/</loc>
+    
+    <lastmod>2020-10-16T09:12:44.611Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
+    
+    <lastmod>2020-10-16T09:06:00.481Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/04/16/Webpage2Picture/</loc>
+    
+    <lastmod>2020-10-16T08:52:56.446Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/06/14/Process-and-Thread/</loc>
+    
+    <lastmod>2020-10-16T08:52:29.745Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/04/16/node-random-number-service/</loc>
+    
+    <lastmod>2020-10-16T08:52:09.622Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/07/04/Kalman-Filter/</loc>
+    
+    <lastmod>2020-10-16T08:51:21.913Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/06/26/Heterogeneous-Computing/</loc>
+    
+    <lastmod>2020-10-16T08:51:09.202Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/05/31/Git-Usage/</loc>
+    
+    <lastmod>2020-10-16T08:50:55.996Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/04/26/FPN/</loc>
+    
+    <lastmod>2020-10-16T08:50:37.252Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
+    
+    <lastmod>2020-10-16T08:50:10.839Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/06/26/Cxx-Related/</loc>
+    
+    <lastmod>2020-10-16T08:49:48.483Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/2019/10/22/Convert-Tensorflow-Model-to-Caffe/</loc>
     
-    <lastmod>2020-10-16T07:33:33.158Z</lastmod>
+    <lastmod>2020-10-16T08:49:35.786Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/07/09/Convert-python-project-to-exe/</loc>
+    
+    <lastmod>2020-10-16T08:49:24.669Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/05/20/Build-opencv-with-GPU/</loc>
+    
+    <lastmod>2020-10-16T08:49:14.112Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/05/07/Deformable-Convolutional-Networks/</loc>
+    
+    <lastmod>2020-10-16T08:48:14.691Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/05/08/vim/</loc>
+    
+    <lastmod>2020-10-16T08:46:57.849Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/05/15/jupyter-add-kernel/</loc>
+    
+    <lastmod>2020-10-16T08:46:37.212Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/05/22/python-thread/</loc>
+    
+    <lastmod>2020-10-16T08:45:37.873Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/06/27/Caffe-install/</loc>
+    
+    <lastmod>2020-10-16T08:44:28.364Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/07/04/Linux-caffe-path-setting/</loc>
+    
+    <lastmod>2020-10-16T08:42:56.578Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
+    
+    <lastmod>2020-10-16T08:37:54.147Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/11/13/ORB-Feature/</loc>
+    
+    <lastmod>2020-10-16T08:37:16.281Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/11/14/tensorflow-1-x-cookbook/</loc>
+    
+    <lastmod>2020-10-16T08:35:47.400Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/11/15/camera-calibration/</loc>
+    
+    <lastmod>2020-10-16T08:30:29.899Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/11/26/Visual-Studio-Configuration/</loc>
+    
+    <lastmod>2020-10-16T08:29:09.081Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/</loc>
+    
+    <lastmod>2020-10-16T08:25:58.212Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/12/07/linux-install-setting-process/</loc>
+    
+    <lastmod>2020-10-16T08:24:08.801Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/01/25/covariance-and-covariance-matrix/</loc>
+    
+    <lastmod>2020-10-16T08:23:26.031Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/04/02/Pyinstaller-with-Scipy/</loc>
+    
+    <lastmod>2020-10-16T08:20:40.205Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/05/31/AlexyAB-Darknet/</loc>
+    
+    <lastmod>2020-10-16T08:17:35.734Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/10/29/Packaging-Python/</loc>
+    
+    <lastmod>2020-10-16T07:54:17.490Z</lastmod>
     
   </url>
   
@@ -19,237 +250,6 @@
     <loc>https://taosean.github.io/tags/index.html</loc>
     
     <lastmod>2020-10-16T02:53:09.707Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
-    
-    <lastmod>2020-06-02T06:42:23.666Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/07/09/Convert-python-project-to-exe/</loc>
-    
-    <lastmod>2020-02-11T05:36:08.947Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/06/27/Caffe-install/</loc>
-    
-    <lastmod>2020-02-11T03:49:13.139Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/10/29/Packaging-Python/</loc>
-    
-    <lastmod>2019-10-29T09:23:01.215Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/06/14/Process-and-Thread/</loc>
-    
-    <lastmod>2019-10-29T09:22:28.378Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/06/03/light-weight-CNN-operations/</loc>
-    
-    <lastmod>2019-10-29T09:16:45.910Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/05/31/AlexyAB-Darknet/</loc>
-    
-    <lastmod>2019-07-04T05:47:40.516Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/07/04/Kalman-Filter/</loc>
-    
-    <lastmod>2019-07-04T05:44:32.581Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/06/26/Heterogeneous-Computing/</loc>
-    
-    <lastmod>2019-06-26T09:28:14.688Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/06/26/Cxx-Related/</loc>
-    
-    <lastmod>2019-06-26T08:25:09.415Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/05/31/Git-Usage/</loc>
-    
-    <lastmod>2019-06-20T05:03:40.701Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/02/25/optical-flow/</loc>
-    
-    <lastmod>2019-06-03T09:23:53.191Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/11/26/Visual-Studio-Configuration/</loc>
-    
-    <lastmod>2019-05-31T06:58:15.289Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/05/20/Build-opencv-with-GPU/</loc>
-    
-    <lastmod>2019-05-23T09:03:26.642Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/05/07/FPN/</loc>
-    
-    <lastmod>2019-04-28T06:23:54.077Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/04/02/Pyinstaller-with-Scipy/</loc>
-    
-    <lastmod>2019-04-02T11:27:33.560Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/12/07/linux-install-setting-process/</loc>
-    
-    <lastmod>2019-03-05T12:49:31.821Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/01/25/covariance-and-covariance-matrix/</loc>
-    
-    <lastmod>2019-01-25T02:53:16.089Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/05/22/python-thread/</loc>
-    
-    <lastmod>2019-01-04T06:29:59.596Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/</loc>
-    
-    <lastmod>2018-12-06T08:30:16.835Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
-    
-    <lastmod>2018-11-19T10:46:53.478Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
-    
-    <lastmod>2018-11-16T12:08:26.940Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/04/19/Yolo/</loc>
-    
-    <lastmod>2018-11-16T08:43:20.662Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/11/15/camera-calibration/</loc>
-    
-    <lastmod>2018-11-16T03:10:41.845Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/05/08/vim/</loc>
-    
-    <lastmod>2018-11-16T03:09:45.894Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/11/14/tensorflow-1-x-cookbook/</loc>
-    
-    <lastmod>2018-11-14T05:29:08.835Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/11/13/ORB-Feature/</loc>
-    
-    <lastmod>2018-11-13T06:31:52.026Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/05/07/Deformable-Convolutional-Networks/</loc>
-    
-    <lastmod>2018-11-03T06:27:59.089Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/07/24/encoding-problem/</loc>
-    
-    <lastmod>2018-07-25T09:58:08.119Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/07/04/Linux-caffe-path-setting/</loc>
-    
-    <lastmod>2018-07-04T02:52:16.797Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/05/15/jupyter-add-kernel/</loc>
-    
-    <lastmod>2018-05-15T07:26:51.001Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/04/16/Webpage2Picture/</loc>
-    
-    <lastmod>2018-04-26T13:57:18.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/04/16/node-random-number-service/</loc>
-    
-    <lastmod>2018-04-26T13:56:05.000Z</lastmod>
     
   </url>
   

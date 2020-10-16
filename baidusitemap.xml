@@ -4,24 +4,26 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2019/10/22/Convert-Tensorflow-Model-to-Caffe/</loc>
-    <lastmod>2020-10-16T07:33:33.158Z</lastmod>
+    <loc>https://taosean.github.io/2018/07/24/encoding-problem/</loc>
+    <lastmod>2020-10-16T09:24:09.304Z</lastmod>
     <data>
         <display>
-        <title>将 Tensorflow 模型移植到 Caffe 上</title>
-        <pubTime>2019-10-22T07:32:49.000Z</pubTime>
+        <title>python 中关于字符的编码方式</title>
+        <pubTime>2018-07-24T03:13:49.000Z</pubTime>
         
-        <tag>Caffe</tag>
+        <tag>python</tag>
          
-        <tag>Tensorflow</tag>
+        <tag>编码</tag>
          
-        <tag>Porting</tag>
+        <tag>unicode</tag>
          
-        <tag>移植</tag>
+        <tag>utf-8</tag>
          
-        <tag>padding</tag>
+        <tag>中文</tag>
          
-        <tag>flatten</tag>
+        <tag>日文</tag>
+         
+        <tag>xml</tag>
          
          
            
@@ -30,23 +32,17 @@
     </url>
 
     
-    
-    
   <url>
-    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
-    <lastmod>2020-06-02T06:42:23.666Z</lastmod>
+    <loc>https://taosean.github.io/2019/02/25/optical-flow/</loc>
+    <lastmod>2020-10-16T09:19:54.660Z</lastmod>
     <data>
         <display>
-        <title>RPN 中的 loss 理解</title>
-        <pubTime>2018-04-25T07:31:04.000Z</pubTime>
+        <title>光流法</title>
+        <pubTime>2019-02-25T08:34:14.000Z</pubTime>
         
         <tag>目标检测</tag>
          
-        <tag>Faster R-CNN</tag>
-         
-        <tag>RPN</tag>
-         
-        <tag>anchor</tag>
+        <tag>optical flow</tag>
          
          
            
@@ -56,20 +52,24 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2018/07/09/Convert-python-project-to-exe/</loc>
-    <lastmod>2020-02-11T05:36:08.947Z</lastmod>
+    <loc>https://taosean.github.io/2019/06/03/light-weight-CNN-operations/</loc>
+    <lastmod>2020-10-16T09:16:25.735Z</lastmod>
     <data>
         <display>
-        <title>将包含 caffe 的 python 工程打包成一个 exe 文件</title>
-        <pubTime>2018-07-09T08:40:39.000Z</pubTime>
+        <title>轻量卷积神经网络的一些操作</title>
+        <pubTime>2019-06-03T09:33:04.000Z</pubTime>
         
-        <tag>python</tag>
+        <tag>CNN</tag>
          
-        <tag>pyinstaller</tag>
+        <tag>Convolution</tag>
          
-        <tag>打包</tag>
+        <tag>FLOPs</tag>
          
-        <tag>caffe</tag>
+        <tag>mobile</tag>
+         
+        <tag>shuffle</tag>
+         
+        <tag>SE</tag>
          
          
            
@@ -79,20 +79,18 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2018/06/27/Caffe-install/</loc>
-    <lastmod>2020-02-11T03:49:13.139Z</lastmod>
+    <loc>https://taosean.github.io/2018/04/19/Yolo/</loc>
+    <lastmod>2020-10-16T09:12:44.611Z</lastmod>
     <data>
         <display>
-        <title>Windows 下 Caffe 安装及测试</title>
-        <pubTime>2018-06-27T09:49:09.000Z</pubTime>
+        <title>Yolo v1 论文理解</title>
+        <pubTime>2018-04-19T06:48:59.000Z</pubTime>
         
-        <tag>Caffe</tag>
+        <tag>目标检测</tag>
          
-        <tag>安装</tag>
+        <tag>回归</tag>
          
-        <tag>深度学习</tag>
-         
-        <tag>Windows</tag>
+        <tag>Yolo</tag>
          
          
            
@@ -102,22 +100,41 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2019/10/29/Packaging-Python/</loc>
-    <lastmod>2019-10-29T09:23:01.215Z</lastmod>
+    <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
+    <lastmod>2020-10-16T09:06:00.481Z</lastmod>
     <data>
         <display>
-        <title>打包 Python 工程</title>
-        <pubTime>2019-10-29T09:00:59.000Z</pubTime>
+        <title>Yolo v2 论文理解</title>
+        <pubTime>2018-04-20T07:48:19.000Z</pubTime>
         
-        <tag>PEX</tag>
+        <tag>目标检测</tag>
          
-        <tag>shiv</tag>
+        <tag>回归</tag>
          
-        <tag>dependencies</tag>
+        <tag>Yolo</tag>
          
-        <tag>依赖</tag>
          
-        <tag>python</tag>
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/04/16/Webpage2Picture/</loc>
+    <lastmod>2020-10-16T08:52:56.446Z</lastmod>
+    <data>
+        <display>
+        <title>如何截取网页长屏</title>
+        <pubTime>2018-04-16T06:16:26.000Z</pubTime>
+        
+        <tag>Node.js</tag>
+         
+        <tag>JavaScript</tag>
+         
+        <tag>网页</tag>
+         
+        <tag>截屏</tag>
          
          
            
@@ -128,7 +145,7 @@
     
   <url>
     <loc>https://taosean.github.io/2019/06/14/Process-and-Thread/</loc>
-    <lastmod>2019-10-29T09:22:28.378Z</lastmod>
+    <lastmod>2020-10-16T08:52:29.745Z</lastmod>
     <data>
         <display>
         <title>进程和线程及相关概念</title>
@@ -160,49 +177,16 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2019/06/03/light-weight-CNN-operations/</loc>
-    <lastmod>2019-10-29T09:16:45.910Z</lastmod>
+    <loc>https://taosean.github.io/2018/04/16/node-random-number-service/</loc>
+    <lastmod>2020-10-16T08:52:09.622Z</lastmod>
     <data>
         <display>
-        <title>轻量卷积神经网络的一些操作</title>
-        <pubTime>2019-06-03T09:33:04.000Z</pubTime>
+        <title>使用 Node.js 生成随机数的服务</title>
+        <pubTime>2018-04-16T10:09:11.000Z</pubTime>
         
-        <tag>CNN</tag>
+        <tag>Node.js</tag>
          
-        <tag>Convolution</tag>
-         
-        <tag>FLOPs</tag>
-         
-        <tag>mobile</tag>
-         
-        <tag>shuffle</tag>
-         
-        <tag>SE</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2019/05/31/AlexyAB-Darknet/</loc>
-    <lastmod>2019-07-04T05:47:40.516Z</lastmod>
-    <data>
-        <display>
-        <title>AlexeyAB/Darknet 的使用经验总结</title>
-        <pubTime>2019-05-31T06:11:29.000Z</pubTime>
-        
-        <tag>gpu</tag>
-         
-        <tag>yolo</tag>
-         
-        <tag>yolov3</tag>
-         
-        <tag>darknet</tag>
-         
-        <tag>cpu</tag>
+        <tag>JavaScript</tag>
          
          
            
@@ -213,7 +197,7 @@
     
   <url>
     <loc>https://taosean.github.io/2019/07/04/Kalman-Filter/</loc>
-    <lastmod>2019-07-04T05:44:32.581Z</lastmod>
+    <lastmod>2020-10-16T08:51:21.913Z</lastmod>
     <data>
         <display>
         <title>卡尔曼滤波</title>
@@ -236,7 +220,7 @@
     
   <url>
     <loc>https://taosean.github.io/2019/06/26/Heterogeneous-Computing/</loc>
-    <lastmod>2019-06-26T09:28:14.688Z</lastmod>
+    <lastmod>2020-10-16T08:51:09.202Z</lastmod>
     <data>
         <display>
         <title>(转载) 浅谈多节点 CPU+GPU 协同计算负载均衡性设计</title>
@@ -260,25 +244,8 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2019/06/26/Cxx-Related/</loc>
-    <lastmod>2019-06-26T08:25:09.415Z</lastmod>
-    <data>
-        <display>
-        <title>一些 C++ 相关的概念和操作</title>
-        <pubTime>2019-06-26T06:27:22.000Z</pubTime>
-        
-        <tag>C++</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://taosean.github.io/2019/05/31/Git-Usage/</loc>
-    <lastmod>2019-06-20T05:03:40.701Z</lastmod>
+    <lastmod>2020-10-16T08:50:55.996Z</lastmod>
     <data>
         <display>
         <title>Git的使用流程</title>
@@ -298,16 +265,345 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2019/02/25/optical-flow/</loc>
-    <lastmod>2019-06-03T09:23:53.191Z</lastmod>
+    <loc>https://taosean.github.io/2018/04/26/FPN/</loc>
+    <lastmod>2020-10-16T08:50:37.252Z</lastmod>
     <data>
         <display>
-        <title>光流法</title>
-        <pubTime>2019-02-25T08:34:14.000Z</pubTime>
+        <title>FPN 论文理解</title>
+        <pubTime>2018-04-26T03:06:00.000Z</pubTime>
         
         <tag>目标检测</tag>
          
-        <tag>optical flow</tag>
+        <tag>Faster R-CNN</tag>
+         
+        <tag>FPN</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
+    <lastmod>2020-10-16T08:50:10.839Z</lastmod>
+    <data>
+        <display>
+        <title>RPN 中的 loss 理解</title>
+        <pubTime>2018-04-25T07:31:04.000Z</pubTime>
+        
+        <tag>目标检测</tag>
+         
+        <tag>Faster R-CNN</tag>
+         
+        <tag>RPN</tag>
+         
+        <tag>anchor</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2019/06/26/Cxx-Related/</loc>
+    <lastmod>2020-10-16T08:49:48.483Z</lastmod>
+    <data>
+        <display>
+        <title>一些 C++ 相关的概念和操作</title>
+        <pubTime>2019-06-26T06:27:22.000Z</pubTime>
+        
+        <tag>C++</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2019/10/22/Convert-Tensorflow-Model-to-Caffe/</loc>
+    <lastmod>2020-10-16T08:49:35.786Z</lastmod>
+    <data>
+        <display>
+        <title>将 Tensorflow 模型移植到 Caffe 上</title>
+        <pubTime>2019-10-22T07:32:49.000Z</pubTime>
+        
+        <tag>Caffe</tag>
+         
+        <tag>Tensorflow</tag>
+         
+        <tag>Porting</tag>
+         
+        <tag>移植</tag>
+         
+        <tag>padding</tag>
+         
+        <tag>flatten</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/07/09/Convert-python-project-to-exe/</loc>
+    <lastmod>2020-10-16T08:49:24.669Z</lastmod>
+    <data>
+        <display>
+        <title>将包含 caffe 的 python 工程打包成一个 exe 文件</title>
+        <pubTime>2018-07-09T08:40:39.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>pyinstaller</tag>
+         
+        <tag>打包</tag>
+         
+        <tag>caffe</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2019/05/20/Build-opencv-with-GPU/</loc>
+    <lastmod>2020-10-16T08:49:14.112Z</lastmod>
+    <data>
+        <display>
+        <title>OpenCV 4.0.1 + CUDA 8.0 + Visual Studio 2015 + Win10</title>
+        <pubTime>2019-05-20T06:19:41.000Z</pubTime>
+        
+        <tag>opencv</tag>
+         
+        <tag>vs</tag>
+         
+        <tag>cuda</tag>
+         
+        <tag>gpu</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/05/07/Deformable-Convolutional-Networks/</loc>
+    <lastmod>2020-10-16T08:48:14.691Z</lastmod>
+    <data>
+        <display>
+        <title>Deformable Convolutional Networks 论文理解</title>
+        <pubTime>2018-05-07T05:08:00.000Z</pubTime>
+        
+        <tag>目标检测</tag>
+         
+        <tag>deformable convolution</tag>
+         
+        <tag>deformable RoI pooling</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/05/08/vim/</loc>
+    <lastmod>2020-10-16T08:46:57.849Z</lastmod>
+    <data>
+        <display>
+        <title>vim</title>
+        <pubTime>2018-05-08T07:51:28.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/05/15/jupyter-add-kernel/</loc>
+    <lastmod>2020-10-16T08:46:37.212Z</lastmod>
+    <data>
+        <display>
+        <title>jupyter notebook 增加内核</title>
+        <pubTime>2018-05-15T07:19:27.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/05/22/python-thread/</loc>
+    <lastmod>2020-10-16T08:45:37.873Z</lastmod>
+    <data>
+        <display>
+        <title>python 多线程模块 threading 及 多进程模块 multiprocessing</title>
+        <pubTime>2018-05-22T07:28:57.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>thread</tag>
+         
+        <tag>process</tag>
+         
+        <tag>线程</tag>
+         
+        <tag>进程</tag>
+         
+        <tag>进程池</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/06/27/Caffe-install/</loc>
+    <lastmod>2020-10-16T08:44:28.364Z</lastmod>
+    <data>
+        <display>
+        <title>Windows 下 Caffe 安装及测试</title>
+        <pubTime>2018-06-27T09:49:09.000Z</pubTime>
+        
+        <tag>Caffe</tag>
+         
+        <tag>安装</tag>
+         
+        <tag>深度学习</tag>
+         
+        <tag>Windows</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/07/04/Linux-caffe-path-setting/</loc>
+    <lastmod>2020-10-16T08:42:56.578Z</lastmod>
+    <data>
+        <display>
+        <title>Linux 下 Caffe 的路径设置问题</title>
+        <pubTime>2018-07-04T02:26:39.000Z</pubTime>
+        
+        <tag>Linux</tag>
+         
+        <tag>Caffe</tag>
+         
+        <tag>权限</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
+    <lastmod>2020-10-16T08:37:54.147Z</lastmod>
+    <data>
+        <display>
+        <title>Faster RCNN 中自定义 Python 层的作用理解</title>
+        <pubTime>2018-11-06T07:08:17.000Z</pubTime>
+        
+        <tag>目标检测</tag>
+         
+        <tag>Faster R-CNN</tag>
+         
+        <tag>RPN</tag>
+         
+        <tag>anchor</tag>
+         
+        <tag>Python layer</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/11/13/ORB-Feature/</loc>
+    <lastmod>2020-10-16T08:37:16.281Z</lastmod>
+    <data>
+        <display>
+        <title>ORB 特征提取</title>
+        <pubTime>2018-11-13T03:15:01.000Z</pubTime>
+        
+        <tag>特征提取</tag>
+         
+        <tag>图像检索</tag>
+         
+        <tag>图像匹配</tag>
+         
+        <tag>feature extraction</tag>
+         
+        <tag>ORB</tag>
+         
+        <tag>keypoint</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/11/14/tensorflow-1-x-cookbook/</loc>
+    <lastmod>2020-10-16T08:35:47.400Z</lastmod>
+    <data>
+        <display>
+        <title>tensorflow-1.x-cookbook 读书笔记</title>
+        <pubTime>2018-11-14T02:02:04.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/11/15/camera-calibration/</loc>
+    <lastmod>2020-10-16T08:30:29.899Z</lastmod>
+    <data>
+        <display>
+        <title>相机成像原理和参数标定</title>
+        <pubTime>2018-11-15T06:38:10.000Z</pubTime>
+        
+        <tag>camera</tag>
+         
+        <tag>calibration</tag>
+         
+        <tag>imaging</tag>
+         
+        <tag>相机</tag>
+         
+        <tag>成像原理</tag>
          
          
            
@@ -318,7 +614,7 @@
     
   <url>
     <loc>https://taosean.github.io/2018/11/26/Visual-Studio-Configuration/</loc>
-    <lastmod>2019-05-31T06:58:15.289Z</lastmod>
+    <lastmod>2020-10-16T08:29:09.081Z</lastmod>
     <data>
         <display>
         <title>Visual Studio 环境变量配置</title>
@@ -346,130 +642,8 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2019/05/20/Build-opencv-with-GPU/</loc>
-    <lastmod>2019-05-23T09:03:26.642Z</lastmod>
-    <data>
-        <display>
-        <title>OpenCV 4.0.1 + CUDA 8.0 + Visual Studio 2015 + Win10</title>
-        <pubTime>2019-05-20T06:19:41.000Z</pubTime>
-        
-        <tag>opencv</tag>
-         
-        <tag>vs</tag>
-         
-        <tag>cuda</tag>
-         
-        <tag>gpu</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/05/07/FPN/</loc>
-    <lastmod>2019-04-28T06:23:54.077Z</lastmod>
-    <data>
-        <display>
-        <title></title>
-        <pubTime>2018-05-07T04:37:41.096Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2019/04/02/Pyinstaller-with-Scipy/</loc>
-    <lastmod>2019-04-02T11:27:33.560Z</lastmod>
-    <data>
-        <display>
-        <title>Pyinstaller with Scipy</title>
-        <pubTime>2019-04-02T06:54:17.000Z</pubTime>
-        
-        <tag>pyinstaller</tag>
-         
-        <tag>scipy</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/12/07/linux-install-setting-process/</loc>
-    <lastmod>2019-03-05T12:49:31.821Z</lastmod>
-    <data>
-        <display>
-        <title>Centos 系统下深度学习环境配置及 tensorflow 安装</title>
-        <pubTime>2018-12-07T08:15:27.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2019/01/25/covariance-and-covariance-matrix/</loc>
-    <lastmod>2019-01-25T02:53:16.089Z</lastmod>
-    <data>
-        <display>
-        <title>协方差及协方差矩阵</title>
-        <pubTime>2019-01-25T02:49:16.000Z</pubTime>
-        
-        <tag>协方差</tag>
-         
-        <tag>协方差矩阵</tag>
-         
-        <tag>PCA</tag>
-         
-        <tag>主成分分析</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/05/22/python-thread/</loc>
-    <lastmod>2019-01-04T06:29:59.596Z</lastmod>
-    <data>
-        <display>
-        <title>python 多线程模块 threading 及 多进程模块 multiprocessing</title>
-        <pubTime>2018-05-22T07:28:57.000Z</pubTime>
-        
-        <tag>python</tag>
-         
-        <tag>thread</tag>
-         
-        <tag>process</tag>
-         
-        <tag>线程</tag>
-         
-        <tag>进程</tag>
-         
-        <tag>进程池</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://taosean.github.io/2018/12/03/Inter-Process-Communication-by-Shared-Memory-on-Windows/</loc>
-    <lastmod>2018-12-06T08:30:16.835Z</lastmod>
+    <lastmod>2020-10-16T08:25:58.212Z</lastmod>
     <data>
         <display>
         <title>Windows 下利用共享内存实现进程间通信</title>
@@ -497,104 +671,12 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
-    <lastmod>2018-11-19T10:46:53.478Z</lastmod>
+    <loc>https://taosean.github.io/2018/12/07/linux-install-setting-process/</loc>
+    <lastmod>2020-10-16T08:24:08.801Z</lastmod>
     <data>
         <display>
-        <title>Faster RCNN 中自定义 Python 层的作用理解</title>
-        <pubTime>2018-11-06T07:08:17.000Z</pubTime>
-        
-        <tag>目标检测</tag>
-         
-        <tag>Faster R-CNN</tag>
-         
-        <tag>RPN</tag>
-         
-        <tag>anchor</tag>
-         
-        <tag>Python layer</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
-    <lastmod>2018-11-16T12:08:26.940Z</lastmod>
-    <data>
-        <display>
-        <title>Yolo v2 论文理解</title>
-        <pubTime>2018-04-20T07:48:19.000Z</pubTime>
-        
-        <tag>目标检测</tag>
-         
-        <tag>回归</tag>
-         
-        <tag>Yolo</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/04/19/Yolo/</loc>
-    <lastmod>2018-11-16T08:43:20.662Z</lastmod>
-    <data>
-        <display>
-        <title>Yolo v1 论文理解</title>
-        <pubTime>2018-04-19T06:48:59.000Z</pubTime>
-        
-        <tag>目标检测</tag>
-         
-        <tag>回归</tag>
-         
-        <tag>Yolo</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/11/15/camera-calibration/</loc>
-    <lastmod>2018-11-16T03:10:41.845Z</lastmod>
-    <data>
-        <display>
-        <title>相机成像原理和参数标定</title>
-        <pubTime>2018-11-15T06:38:10.000Z</pubTime>
-        
-        <tag>camera</tag>
-         
-        <tag>calibration</tag>
-         
-        <tag>imaging</tag>
-         
-        <tag>相机</tag>
-         
-        <tag>成像原理</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/05/08/vim/</loc>
-    <lastmod>2018-11-16T03:09:45.894Z</lastmod>
-    <data>
-        <display>
-        <title>vim</title>
-        <pubTime>2018-05-08T07:51:28.000Z</pubTime>
+        <title>Centos 系统下深度学习环境配置及 tensorflow 安装</title>
+        <pubTime>2018-12-07T08:15:27.000Z</pubTime>
         
          
            
@@ -604,39 +686,20 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2018/11/14/tensorflow-1-x-cookbook/</loc>
-    <lastmod>2018-11-14T05:29:08.835Z</lastmod>
+    <loc>https://taosean.github.io/2019/01/25/covariance-and-covariance-matrix/</loc>
+    <lastmod>2020-10-16T08:23:26.031Z</lastmod>
     <data>
         <display>
-        <title>tensorflow-1.x-cookbook 读书笔记</title>
-        <pubTime>2018-11-14T02:02:04.000Z</pubTime>
+        <title>协方差及协方差矩阵</title>
+        <pubTime>2019-01-25T02:49:16.000Z</pubTime>
         
+        <tag>协方差</tag>
          
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/11/13/ORB-Feature/</loc>
-    <lastmod>2018-11-13T06:31:52.026Z</lastmod>
-    <data>
-        <display>
-        <title>ORB 特征提取</title>
-        <pubTime>2018-11-13T03:15:01.000Z</pubTime>
-        
-        <tag>特征提取</tag>
+        <tag>协方差矩阵</tag>
          
-        <tag>图像检索</tag>
+        <tag>PCA</tag>
          
-        <tag>图像匹配</tag>
-         
-        <tag>feature extraction</tag>
-         
-        <tag>ORB</tag>
-         
-        <tag>keypoint</tag>
+        <tag>主成分分析</tag>
          
          
            
@@ -646,18 +709,16 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2018/05/07/Deformable-Convolutional-Networks/</loc>
-    <lastmod>2018-11-03T06:27:59.089Z</lastmod>
+    <loc>https://taosean.github.io/2019/04/02/Pyinstaller-with-Scipy/</loc>
+    <lastmod>2020-10-16T08:20:40.205Z</lastmod>
     <data>
         <display>
-        <title>Deformable Convolutional Networks 论文理解</title>
-        <pubTime>2018-05-07T05:08:00.000Z</pubTime>
+        <title>Pyinstaller with Scipy</title>
+        <pubTime>2019-04-02T06:54:17.000Z</pubTime>
         
-        <tag>目标检测</tag>
+        <tag>pyinstaller</tag>
          
-        <tag>deformable convolution</tag>
-         
-        <tag>deformable RoI pooling</tag>
+        <tag>scipy</tag>
          
          
            
@@ -667,27 +728,48 @@
 
     
   <url>
-    <loc>https://taosean.github.io/2018/07/24/encoding-problem/</loc>
-    <lastmod>2018-07-25T09:58:08.119Z</lastmod>
+    <loc>https://taosean.github.io/2019/05/31/AlexyAB-Darknet/</loc>
+    <lastmod>2020-10-16T08:17:35.734Z</lastmod>
     <data>
         <display>
-        <title>python 中关于字符的编码方式</title>
-        <pubTime>2018-07-24T03:13:49.000Z</pubTime>
+        <title>AlexeyAB/Darknet 的使用经验总结</title>
+        <pubTime>2019-05-31T06:11:29.000Z</pubTime>
         
+        <tag>gpu</tag>
+         
+        <tag>yolo</tag>
+         
+        <tag>yolov3</tag>
+         
+        <tag>darknet</tag>
+         
+        <tag>cpu</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2019/10/29/Packaging-Python/</loc>
+    <lastmod>2020-10-16T07:54:17.490Z</lastmod>
+    <data>
+        <display>
+        <title>打包 Python 工程</title>
+        <pubTime>2019-10-29T09:00:59.000Z</pubTime>
+        
+        <tag>PEX</tag>
+         
+        <tag>shiv</tag>
+         
+        <tag>dependencies</tag>
+         
+        <tag>依赖</tag>
+         
         <tag>python</tag>
          
-        <tag>编码</tag>
-         
-        <tag>unicode</tag>
-         
-        <tag>utf-8</tag>
-         
-        <tag>中文</tag>
-         
-        <tag>日文</tag>
-         
-        <tag>xml</tag>
-         
          
            
         </display>
@@ -695,82 +777,6 @@
     </url>
 
     
-  <url>
-    <loc>https://taosean.github.io/2018/07/04/Linux-caffe-path-setting/</loc>
-    <lastmod>2018-07-04T02:52:16.797Z</lastmod>
-    <data>
-        <display>
-        <title>Linux 下 Caffe 的路径设置问题</title>
-        <pubTime>2018-07-04T02:26:39.000Z</pubTime>
-        
-        <tag>Linux</tag>
-         
-        <tag>Caffe</tag>
-         
-        <tag>权限</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
-  <url>
-    <loc>https://taosean.github.io/2018/05/15/jupyter-add-kernel/</loc>
-    <lastmod>2018-05-15T07:26:51.001Z</lastmod>
-    <data>
-        <display>
-        <title>jupyter notebook 增加内核</title>
-        <pubTime>2018-05-15T07:19:27.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/04/16/Webpage2Picture/</loc>
-    <lastmod>2018-04-26T13:57:18.000Z</lastmod>
-    <data>
-        <display>
-        <title>如何截取网页长屏</title>
-        <pubTime>2018-04-16T06:16:26.000Z</pubTime>
-        
-        <tag>Node.js</tag>
-         
-        <tag>JavaScript</tag>
-         
-        <tag>网页</tag>
-         
-        <tag>截屏</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/04/16/node-random-number-service/</loc>
-    <lastmod>2018-04-26T13:56:05.000Z</lastmod>
-    <data>
-        <display>
-        <title>使用 Node.js 生成随机数的服务</title>
-        <pubTime>2018-04-16T10:09:11.000Z</pubTime>
-        
-        <tag>Node.js</tag>
-         
-        <tag>JavaScript</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
     
 </urlset>
