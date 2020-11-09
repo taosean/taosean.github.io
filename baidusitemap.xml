@@ -3,6 +3,50 @@
 
 
     
+  <url>
+    <loc>https://taosean.github.io/2020/11/05/Understanding-Non-local/</loc>
+    <lastmod>2020-11-09T07:43:04.004Z</lastmod>
+    <data>
+        <display>
+        <title>理解 Non-local</title>
+        <pubTime>2020-11-05T09:06:59.000Z</pubTime>
+        
+        <tag>Non-local</tag>
+         
+        <tag>attention</tag>
+         
+        <tag>Transformer</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
+    <lastmod>2020-11-05T09:30:19.982Z</lastmod>
+    <data>
+        <display>
+        <title>RPN 中的 loss 理解</title>
+        <pubTime>2018-04-25T07:31:04.000Z</pubTime>
+        
+        <tag>目标检测</tag>
+         
+        <tag>Faster R-CNN</tag>
+         
+        <tag>RPN</tag>
+         
+        <tag>anchor</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>https://taosean.github.io/2018/07/24/encoding-problem/</loc>
@@ -278,29 +322,6 @@
         <tag>Faster R-CNN</tag>
          
         <tag>FPN</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
-    <lastmod>2020-10-16T08:50:10.839Z</lastmod>
-    <data>
-        <display>
-        <title>RPN 中的 loss 理解</title>
-        <pubTime>2018-04-25T07:31:04.000Z</pubTime>
-        
-        <tag>目标检测</tag>
-         
-        <tag>Faster R-CNN</tag>
-         
-        <tag>RPN</tag>
-         
-        <tag>anchor</tag>
          
          
            

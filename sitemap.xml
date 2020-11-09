@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/2020/11/05/Understanding-Non-local/</loc>
+    
+    <lastmod>2020-11-09T07:43:04.004Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
+    
+    <lastmod>2020-11-05T09:30:19.982Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/about/index.html</loc>
     
     <lastmod>2020-10-16T09:39:59.309Z</lastmod>
@@ -89,13 +103,6 @@
     <loc>https://taosean.github.io/2018/04/26/FPN/</loc>
     
     <lastmod>2020-10-16T08:50:37.252Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/04/25/Faster-R-CNN/</loc>
-    
-    <lastmod>2020-10-16T08:50:10.839Z</lastmod>
     
   </url>
   
