@@ -2,9 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
+    
+    <lastmod>2021-03-16T07:50:30.455Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/08/Hungarian-algorithm/</loc>
+    
+    <lastmod>2021-03-12T08:32:42.192Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/01/05/Process-and-Thread-1/</loc>
+    
+    <lastmod>2021-01-06T03:21:02.047Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2020/12/10/OS/</loc>
+    
+    <lastmod>2020-12-10T12:24:22.161Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/06/26/Heterogeneous-Computing/</loc>
+    
+    <lastmod>2020-12-10T12:08:35.631Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/2020/11/05/Understanding-Non-local/</loc>
     
-    <lastmod>2020-11-10T10:47:07.560Z</lastmod>
+    <lastmod>2020-12-10T11:35:58.355Z</lastmod>
     
   </url>
   
@@ -82,13 +117,6 @@
     <loc>https://taosean.github.io/2019/07/04/Kalman-Filter/</loc>
     
     <lastmod>2020-10-16T08:51:21.913Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/06/26/Heterogeneous-Computing/</loc>
-    
-    <lastmod>2020-10-16T08:51:09.202Z</lastmod>
     
   </url>
   
@@ -173,13 +201,6 @@
     <loc>https://taosean.github.io/2018/07/04/Linux-caffe-path-setting/</loc>
     
     <lastmod>2020-10-16T08:42:56.578Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
-    
-    <lastmod>2020-10-16T08:37:54.147Z</lastmod>
     
   </url>
   
