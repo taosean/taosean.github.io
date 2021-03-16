@@ -37,9 +37,9 @@
       
         <tags>
             
-            <tag> 线程 </tag>
-            
             <tag> 进程 </tag>
+            
+            <tag> 线程 </tag>
             
             <tag> Process </tag>
             
@@ -233,11 +233,11 @@
       
         <tags>
             
-            <tag> 线程 </tag>
+            <tag> CPU </tag>
             
             <tag> 进程 </tag>
             
-            <tag> CPU </tag>
+            <tag> 线程 </tag>
             
             <tag> Process </tag>
             
@@ -716,13 +716,13 @@
             
             <tag> python </tag>
             
-            <tag> thread </tag>
-            
-            <tag> process </tag>
+            <tag> 进程 </tag>
             
             <tag> 线程 </tag>
             
-            <tag> 进程 </tag>
+            <tag> thread </tag>
+            
+            <tag> process </tag>
             
             <tag> 进程池 </tag>
             
