@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
+    <loc>https://taosean.github.io/2021/03/18/Location-and-scale-in-CNN/</loc>
     
-    <lastmod>2021-03-16T07:50:30.455Z</lastmod>
+    <lastmod>2021-03-18T12:54:26.997Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/18/Image-and-Filtering/</loc>
+    
+    <lastmod>2021-03-18T12:07:28.727Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://taosean.github.io/2021/03/08/Hungarian-algorithm/</loc>
     
-    <lastmod>2021-03-12T08:32:42.192Z</lastmod>
+    <lastmod>2021-03-16T13:09:07.992Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2018/11/06/Faster-RCNN-Python-layer/</loc>
+    
+    <lastmod>2021-03-16T07:50:30.455Z</lastmod>
     
   </url>
   
