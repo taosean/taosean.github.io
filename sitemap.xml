@@ -2,9 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
+    
+    <lastmod>2021-03-25T13:47:26.714Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2019/07/04/Kalman-Filter/</loc>
+    
+    <lastmod>2021-03-25T07:51:58.867Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/2021/03/18/Location-and-scale-in-CNN/</loc>
     
-    <lastmod>2021-03-18T13:19:18.503Z</lastmod>
+    <lastmod>2021-03-24T09:24:50.098Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/19/CNN-generalize-poorly/</loc>
+    
+    <lastmod>2021-03-24T06:20:59.734Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/19/Make-CNN-shift-invariant-again/</loc>
+    
+    <lastmod>2021-03-22T07:11:09.045Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/19/Position-information-CNN-encode/</loc>
+    
+    <lastmod>2021-03-19T07:07:18.471Z</lastmod>
     
   </url>
   
@@ -100,13 +135,6 @@
   </url>
   
   <url>
-    <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
-    
-    <lastmod>2020-10-16T09:06:00.481Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://taosean.github.io/2018/04/16/Webpage2Picture/</loc>
     
     <lastmod>2020-10-16T08:52:56.446Z</lastmod>
@@ -124,13 +152,6 @@
     <loc>https://taosean.github.io/2018/04/16/node-random-number-service/</loc>
     
     <lastmod>2020-10-16T08:52:09.622Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2019/07/04/Kalman-Filter/</loc>
-    
-    <lastmod>2020-10-16T08:51:21.913Z</lastmod>
     
   </url>
   

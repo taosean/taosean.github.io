@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Making Convolutional Networks Shift-Invariant Again"><meta name="keywords" content=""><meta name="author" content="taosean"><meta name="copyright" content="taosean"><title>Making Convolutional Networks Shift-Invariant Again | taosean's 学习之旅</title><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '3.7.1'
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-abstract"><span class="toc-number">1.</span> <span class="toc-text"> 0. Abstract</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-introduction"><span class="toc-number">2.</span> <span class="toc-text"> 1. Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-related-work"><span class="toc-number">3.</span> <span class="toc-text"> 2. Related Work</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-methods"><span class="toc-number">4.</span> <span class="toc-text"> 3. Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#31-preliminaries"><span class="toc-number">4.1.</span> <span class="toc-text"> 3.1. Preliminaries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-anti-aliasing-to-improve-shift-equivariance"><span class="toc-number">4.2.</span> <span class="toc-text"> 3.2 Anti-aliasing to improve shift-equivariance</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-experiments"><span class="toc-number">5.</span> <span class="toc-text"> 4. Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#41-testbeds"><span class="toc-number">5.1.</span> <span class="toc-text"> 4.1. Testbeds</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-shift-invarianceequivariance-metrics"><span class="toc-number">5.2.</span> <span class="toc-text"> 4.2. Shift-Invariance/Equivariance Metrics</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#43-internal-shift-equivariance"><span class="toc-number">5.3.</span> <span class="toc-text"> 4.3. Internal shift-equivariance</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">taosean</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/taosean">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">43</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">128</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://github.com/xiaolai">李笑来</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/top_img.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">taosean's 学习之旅</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/about">关于</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Making Convolutional Networks Shift-Invariant Again</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-03-19</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.3k</span><span class="post-meta__separator">|</span><span>阅读时长: 4 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>本文讨论了关于下采样所带来的平移等变性被破坏的情况，并提出通过整合经典的抗锯齿操作来提升网络的平移等变性，进而提升平移不变性。(在后面的层中，平移不变性等于平移等变性)</p>
+<br>
+<a id="more"></a>
+<blockquote>
+<p>这文章通篇证明了一件事：<strong>CNN 下采样导致的混叠会降低性能</strong>(之前也有文章说过)，我们建议在下采样之前加低通滤波。<br>
+文章的工作量很大，尤其是在很多应用方向都做了实验，说明了<strong>移不变的CNN可以在相关方向获得更好的性能</strong>。<br>
+<a href="https://www.zhihu.com/question/329025043/answer/720840077" target="_blank" rel="noopener"><font color="purple">2019 年 ICML 有哪些糟糕的论文？ - SuperMHP的回答 - </font></a></p>
+</blockquote>
+<br>
+<blockquote>
+<p>先解释两个概念 平移不变性：指的是输入平移一定距离，最终的结果不变，分类里面就是分类的概率结果是不变的。 平移同变性：指的是输入平移一定距离，其对应的 feature 也做同样的平移。 本文主要是针对特征的平移同变性去解决问题，而<strong>实际上实现了特征的平移同变形，后面接的是 fc 层，最后一层的平移不变性是等价于平移同变性的，所以实现了特征的平移同变性就是实现了整个网络输出的平移不变性</strong>。例如，vgg 网络的最后两层是 fc 层和 softmax，显然 fc 层的 spatial dim 只有唯一一个元素(高维向量)，所以平移不变性和平移等变性在这一层是等价的。<br>
+<a href="https://my.oschina.net/u/4357035/blog/3313711" target="_blank" rel="noopener"><font color="purple"> [论文理解] Making Convolutional Networks Shift-Invariant Again</font></a></p>
+</blockquote>
+<br>
+<h1 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract"></a> 0. Abstract</h1>
+<ol>
+<li>现代 CNN 没有移不变性，输入的很小的平移都可能造成输出的剧烈变化。</li>
+<li>Pooling 和步长大于1的卷积等下采样手段，忽略了采样定理。
+<blockquote>
+<p>个人理解这句话的意思是：pooling 和 strided-convolution 后的结果，不满足奈奎斯特采样定理，即输入频率较高，采样频率太低，造成信息损失很大。</p>
+</blockquote>
+</li>
+<li>不能简单地在网络结构中插入低通滤波。</li>
+</ol>
+<br>
+<h1 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1. Introduction</h1>
+<ol>
+<li>在对信号下采样前，对信号进行低通滤波来抗锯齿是教科书式的操作。</li>
+<li>否则，高频分量会混叠进低频分量。（因为不满足采样定理）</li>
+<li>早期网络采用的 average pooling 是一种形式的模糊后下采样。</li>
+<li>经过观察，我们把 max pooling 分成 max 和 pooling 两步。</li>
+<li>有一种担忧是，过度使用滤波会造成严重的信息损失，降低性能。</li>
+<li>本文具体操作
+<ol>
+<li>整合经典的抗锯齿操作来提高深度网络的<strong>平移等变性</strong>。</li>
+<li>在不同网络结构上测试了 max pooling，average pooling, 带步长卷积 等下采样操作，并在不同任务上进行了测试。</li>
+<li>发现增加了抗锯齿操作后，accuracy 不降反升，且泛化性能也更好了。</li>
+</ol>
+</li>
+</ol>
+<br>
+<h1 id="2-related-work"><a class="markdownIt-Anchor" href="#2-related-work"></a> 2. Related Work</h1>
+<ol>
+<li>近来很多工作涉及了旋转，光照和尺度的不变性，这里我们专注于平移不变性。</li>
+<li>Simioncelli 等人的工作认为，进行下采样时，严格意义的平移等变性 (shift-equivariance) 是不成立的。
+<ol>
+<li>当特征被 densely extracted 时，平移等变性是可被恢复的。(意思是采样频率够高？)</li>
+<li>深度网络也可以通过去除 stride 来达到 dense 的效果，但这会使计算量剧增，不合适。</li>
+<li>因此，本文研究通过<strong>在下采样之前进行模糊</strong>的方法来提高平移等变性。</li>
+</ol>
+</li>
+<li>早期网络是使用 average pooling 的，但是后来由于 max pooling 的效果更好，因此 max pooling 更流行。</li>
+</ol>
+<br>
+<h1 id="3-methods"><a class="markdownIt-Anchor" href="#3-methods"></a> 3. Methods</h1>
+<h2 id="31-preliminaries"><a class="markdownIt-Anchor" href="#31-preliminaries"></a> 3.1. Preliminaries</h2>
+<ol>
+<li>N-周期 平移不变性/等变性</li>
+<li>环状卷积和平移来获取边界的内容。</li>
+</ol>
+<br>
+<h2 id="32-anti-aliasing-to-improve-shift-equivariance"><a class="markdownIt-Anchor" href="#32-anti-aliasing-to-improve-shift-equivariance"></a> 3.2 Anti-aliasing to improve shift-equivariance</h2>
+<ol>
+<li>传统的降低空间分辨率的方法都会打破平移等变性。</li>
+<li>将 max pooling 拆解为 max 和 pooling 两步操作。
+<ol>
+<li>max 保留了 平移等变性。</li>
+<li>后续 pooling 破坏了平移等变性。</li>
+</ol>
+</li>
+<li>提出
+<ol>
+<li>MaxPool -&gt; MaxBlurPool</li>
+<li>StridedConv -&gt; ConvBlurPool</li>
+<li>AveragePool -&gt; BlurPool</li>
+</ol>
+</li>
+</ol>
+<br>
+<h1 id="4-experiments"><a class="markdownIt-Anchor" href="#4-experiments"></a> 4. Experiments</h1>
+<h2 id="41-testbeds"><a class="markdownIt-Anchor" href="#41-testbeds"></a> 4.1. Testbeds</h2>
+<ul>
+<li>CIFAR Classification</li>
+<li>ImageNet Classification</li>
+<li>Conditional Image Generation</li>
+</ul>
+<br>
+<h2 id="42-shift-invarianceequivariance-metrics"><a class="markdownIt-Anchor" href="#42-shift-invarianceequivariance-metrics"></a> 4.2. Shift-Invariance/Equivariance Metrics</h2>
+<p>理想情况下，输入的偏移会导致特征图的相同偏移。评价指标为：</p>
+<ul>
+<li><strong>Internal feature distance.</strong>: <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mo stretchy="false">(</mo><mi>S</mi><mi>h</mi><mi>i</mi><mi>f</mi><msub><mi>t</mi><mrow><mi>Δ</mi><mi>h</mi><mo separator="true">,</mo><mi>Δ</mi><mi>w</mi></mrow></msub><mo stretchy="false">(</mo><mover accent="true"><mi>F</mi><mo stretchy="true">~</mo></mover><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mover accent="true"><mi>F</mi><mo stretchy="true">~</mo></mover><mo stretchy="false">(</mo><mi>S</mi><mi>h</mi><mi>i</mi><mi>f</mi><msub><mi>t</mi><mrow><mi>Δ</mi><mi>h</mi><mo separator="true">,</mo><mi>Δ</mi><mi>w</mi></mrow></msub><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it d(Shift_{\Delta{h},\Delta{w}}(\widetilde{F}(X)),  \widetilde{F}(Shift_{\Delta{h},\Delta{w}}(X)))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.229438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathit">d</span><span class="mopen">(</span><span class="mord mathit">S</span><span class="mord mathit">h</span><span class="mord mathit">i</span><span class="mord mathit">f</span><span class="mord"><span class="mord mathit">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathit mtight">Δ</span><span class="mord mtight"><span class="mord mathit mtight">h</span></span><span class="mpunct mtight">,</span><span class="mord mathit mtight">Δ</span><span class="mord mtight"><span class="mord mathit mtight">w</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.94333em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit">F</span></span></span><span class="svg-align" style="top:-3.6833299999999998em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.26em;"><svg width="100%" height="0.26em" viewbox="0 0 600 260" preserveaspectratio="none"><path d="M200 55.538c-77 0-168 73.953-177 73.953-3 0-7
+-2.175-9-5.437L2 97c-1-2-2-4-2-6 0-4 2-7 5-9l20-12C116 12 171 0 207 0c86 0
+ 114 68 191 68 78 0 168-68 177-68 4 0 7 2 9 5l12 19c1 2.175 2 4.35 2 6.525 0
+ 4.35-2 7.613-5 9.788l-19 13.05c-92 63.077-116.937 75.308-183 76.128
+-68.267.847-113-73.952-191-73.952z"/></svg></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">X</span><span class="mclose">)</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.94333em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathit">F</span></span></span><span class="svg-align" style="top:-3.6833299999999998em;"><span class="pstrut" style="height:3em;"></span><span style="height:0.26em;"><svg width="100%" height="0.26em" viewbox="0 0 600 260" preserveaspectratio="none"><path d="M200 55.538c-77 0-168 73.953-177 73.953-3 0-7
+-2.175-9-5.437L2 97c-1-2-2-4-2-6 0-4 2-7 5-9l20-12C116 12 171 0 207 0c86 0
+ 114 68 191 68 78 0 168-68 177-68 4 0 7 2 9 5l12 19c1 2.175 2 4.35 2 6.525 0
+ 4.35-2 7.613-5 9.788l-19 13.05c-92 63.077-116.937 75.308-183 76.128
+-68.267.847-113-73.952-191-73.952z"/></svg></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">S</span><span class="mord mathit">h</span><span class="mord mathit">i</span><span class="mord mathit">f</span><span class="mord"><span class="mord mathit">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathit mtight">Δ</span><span class="mord mtight"><span class="mord mathit mtight">h</span></span><span class="mpunct mtight">,</span><span class="mord mathit mtight">Δ</span><span class="mord mtight"><span class="mord mathit mtight">w</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">X</span><span class="mclose">)</span><span class="mclose">)</span><span class="mclose">)</span></span></span></span></span></li>
+<li><strong>Classification consistency</strong>: 同一张图做两种平移，输出同样结果的频率。</li>
+<li><strong>Generation stability.</strong></li>
+</ul>
+<br>
+<h2 id="43-internal-shift-equivariance"><a class="markdownIt-Anchor" href="#43-internal-shift-equivariance"></a> 4.3. Internal shift-equivariance</h2>
+<p><img src="heatmap.png" alt="与完美平移不变性的偏差"></p>
+<ul>
+<li>内部特征距离被看作偏移量和层数的函数。</li>
+<li>在第一次下采样 <code>max1</code> 前的所有层，都是平移等变的，一旦发生下采样 <code>pool1</code>，平移等变性就被破坏了。</li>
+<li>但是，如 <code>pool1</code> 中的 stippling pattern 所示，N-周期的平移不变性仍然成立，且每下采样一次，N 翻番一次。</li>
+<li>heatmap 中的每个像素代表一个偏移 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Δ</mi><mi>h</mi><mo separator="true">,</mo><mi>Δ</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">\it \Delta{h}, \Delta{w}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathit">Δ</span><span class="mord"><span class="mord mathit">h</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">Δ</span><span class="mord"><span class="mord mathit">w</span></span></span></span></span></span></li>
+<li>在 pool5, 分类器和 softmax 层中，等变性和不变性是一个东西，因为特征没有空间维度。</li>
+</ul>
+<hr>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">taosean</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://taosean.github.io/2021/03/19/Make-CNN-shift-invariant-again/">https://taosean.github.io/2021/03/19/Make-CNN-shift-invariant-again/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://taosean.github.io">taosean's 学习之旅</a>！</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="next-post pull-right"><a href="/2021/03/19/Position-information-CNN-encode/"><span>How much Position Information Do Convolutional Neural Networks Encode?</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '9738353720f54c04f11e',
+  clientSecret: '1511bb92984c25bbde5236ba58e4673d4ff5f92e',
+  repo: 'taosean.github.io',
+  owner: 'taosean',
+  admin: 'taosean',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/top_img.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2021 By taosean</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

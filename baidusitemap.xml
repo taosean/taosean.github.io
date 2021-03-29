@@ -4,8 +4,56 @@
 
     
   <url>
+    <loc>https://taosean.github.io//2018/04/20/Yolo-v2/</loc>
+    <lastmod>2021-03-25T13:47:26.714Z</lastmod>
+    <data>
+        <display>
+        <title>Yolo v2 论文理解 （以及部分 yolo v3）</title>
+        <pubTime>2018-04-20T07:48:19.000Z</pubTime>
+        
+        <tag>目标检测</tag>
+         
+        <tag>回归</tag>
+         
+        <tag>Yolo</tag>
+         
+        <tag>yolov3</tag>
+         
+        <tag>yolov2</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2019/07/04/Kalman-Filter/</loc>
+    <lastmod>2021-03-25T07:51:58.867Z</lastmod>
+    <data>
+        <display>
+        <title>卡尔曼滤波</title>
+        <pubTime>2019-07-04T05:29:47.000Z</pubTime>
+        
+        <tag>Kalman</tag>
+         
+        <tag>tracking</tag>
+         
+        <tag>卡尔曼</tag>
+         
+        <tag>卡尔曼滤波</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://taosean.github.io//2021/03/18/Location-and-scale-in-CNN/</loc>
-    <lastmod>2021-03-18T13:19:18.503Z</lastmod>
+    <lastmod>2021-03-24T09:24:50.098Z</lastmod>
     <data>
         <display>
         <title>【转载】谈谈CNN中的位置和尺度问题</title>
@@ -18,6 +66,63 @@
         <tag>translation invariance</tag>
          
         <tag>translation equivalence</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2021/03/19/CNN-generalize-poorly/</loc>
+    <lastmod>2021-03-24T06:20:59.734Z</lastmod>
+    <data>
+        <display>
+        <title>Why do deep convolutional networks generalize so poorly to small image transformations</title>
+        <pubTime>2021-03-19T05:50:18.000Z</pubTime>
+        
+        <tag>generalize</tag>
+         
+        <tag>transformation</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2021/03/19/Make-CNN-shift-invariant-again/</loc>
+    <lastmod>2021-03-22T07:11:09.045Z</lastmod>
+    <data>
+        <display>
+        <title>Making Convolutional Networks Shift-Invariant Again</title>
+        <pubTime>2021-03-19T09:37:02.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2021/03/19/Position-information-CNN-encode/</loc>
+    <lastmod>2021-03-19T07:07:18.471Z</lastmod>
+    <data>
+        <display>
+        <title>How much Position Information Do Convolutional Neural Networks Encode?</title>
+        <pubTime>2021-03-19T07:03:19.000Z</pubTime>
+        
+        <tag>position</tag>
+         
+        <tag>CNN</tag>
+         
+        <tag>zero padding</tag>
+         
+        <tag>CoordConv</tag>
          
          
            
@@ -306,27 +411,6 @@
 
     
   <url>
-    <loc>https://taosean.github.io//2018/04/20/Yolo-v2/</loc>
-    <lastmod>2020-10-16T09:06:00.481Z</lastmod>
-    <data>
-        <display>
-        <title>Yolo v2 论文理解</title>
-        <pubTime>2018-04-20T07:48:19.000Z</pubTime>
-        
-        <tag>目标检测</tag>
-         
-        <tag>回归</tag>
-         
-        <tag>Yolo</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>https://taosean.github.io//2018/04/16/Webpage2Picture/</loc>
     <lastmod>2020-10-16T08:52:56.446Z</lastmod>
     <data>
@@ -393,29 +477,6 @@
         <tag>Node.js</tag>
          
         <tag>JavaScript</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io//2019/07/04/Kalman-Filter/</loc>
-    <lastmod>2020-10-16T08:51:21.913Z</lastmod>
-    <data>
-        <display>
-        <title>卡尔曼滤波</title>
-        <pubTime>2019-07-04T05:29:47.000Z</pubTime>
-        
-        <tag>Kalman</tag>
-         
-        <tag>tracking</tag>
-         
-        <tag>卡尔曼</tag>
-         
-        <tag>卡尔曼滤波</tag>
          
          
            
