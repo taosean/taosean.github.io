@@ -4,6 +4,29 @@
 
     
   <url>
+    <loc>https://taosean.github.io//2021/03/18/Location-and-scale-in-CNN/</loc>
+    <lastmod>2021-03-29T01:54:26.773Z</lastmod>
+    <data>
+        <display>
+        <title>【转载】谈谈CNN中的位置和尺度问题</title>
+        <pubTime>2021-03-18T12:10:01.000Z</pubTime>
+        
+        <tag>平移不变性</tag>
+         
+        <tag>平移等变性</tag>
+         
+        <tag>translation invariance</tag>
+         
+        <tag>translation equivalence</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://taosean.github.io//2018/04/20/Yolo-v2/</loc>
     <lastmod>2021-03-25T13:47:26.714Z</lastmod>
     <data>
@@ -43,29 +66,6 @@
         <tag>卡尔曼</tag>
          
         <tag>卡尔曼滤波</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io//2021/03/18/Location-and-scale-in-CNN/</loc>
-    <lastmod>2021-03-24T09:24:50.098Z</lastmod>
-    <data>
-        <display>
-        <title>【转载】谈谈CNN中的位置和尺度问题</title>
-        <pubTime>2021-03-18T12:10:01.000Z</pubTime>
-        
-        <tag>平移不变性</tag>
-         
-        <tag>平移等变性</tag>
-         
-        <tag>translation invariance</tag>
-         
-        <tag>translation equivalence</tag>
          
          
            

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/2021/03/18/Location-and-scale-in-CNN/</loc>
+    
+    <lastmod>2021-03-29T01:54:26.773Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
     
     <lastmod>2021-03-25T13:47:26.714Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://taosean.github.io/2019/07/04/Kalman-Filter/</loc>
     
     <lastmod>2021-03-25T07:51:58.867Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2021/03/18/Location-and-scale-in-CNN/</loc>
-    
-    <lastmod>2021-03-24T09:24:50.098Z</lastmod>
     
   </url>
   

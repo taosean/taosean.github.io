@@ -10,10 +10,8 @@
   hexoVersion: '3.7.1'
 } </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-cnn是否存在平移和尺度的不变性和相等性"><span class="toc-number">1.</span> <span class="toc-text"> 1. CNN是否存在平移和尺度的不变性和相等性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-不变性和相等性的定义"><span class="toc-number">1.1.</span> <span class="toc-text"> 1.1 不变性和相等性的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-cnn网络的执行过程"><span class="toc-number">1.2.</span> <span class="toc-text"> 1.2 CNN网络的执行过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-cnn网络潜在问题与改进"><span class="toc-number">1.3.</span> <span class="toc-text"> 1.3 CNN网络潜在问题与改进</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-cnn对于位置和深度信息的预测"><span class="toc-number">2.</span> <span class="toc-text"> 2. CNN对于位置和深度信息的预测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#21-cnn如何获取目标的位置信息"><span class="toc-number">2.1.</span> <span class="toc-text"> 2.1 CNN如何获取目标的位置信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-cnn如何预测目标的深度信息"><span class="toc-number">2.2.</span> <span class="toc-text"> 2.2 CNN如何预测目标的深度信息</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2020318更新"><span class="toc-number">3.</span> <span class="toc-text"> 2020.3.18更新</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">taosean</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/taosean">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">43</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">128</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://github.com/xiaolai">李笑来</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/top_img.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">taosean's 学习之旅</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/about">关于</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">【转载】谈谈CNN中的位置和尺度问题</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-03-18</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">5.5k</span><span class="post-meta__separator">|</span><span>阅读时长: 17 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>在知乎上看到一篇关于 CNN 的平移不变性和平移等变性以及 CNN 对位置和深度信息预测的文章，觉得很有收获，因此转载在这里。里面也会穿插自己的理解。</p>
 <a id="more"></a>
-<br>
 <p><strong>提示：</strong><br>
 转载文章中与不变性同时提到的 相等性（equivalence）其实是作者的错误，在图像中，一般同时出现的是 不变性(invariance) 和 等变性(equivariance)。而不是这里所说的相等性(equivalence)。</p>
-<br>
 <p><strong>个人总结:</strong></p>
 <blockquote>
 <ul>
@@ -69,9 +67,7 @@
 <p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>m</mi><mo stretchy="false">[</mo><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo>=</mo><mi>F</mi><mo stretchy="false">[</mo><mi>t</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi>s</mi><mi>f</mi><mi>o</mi><mi>r</mi><mi>m</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">transform[F(x)]=F[transform(x)]
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">m</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mopen">[</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord mathdefault">s</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">m</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></span></p>
 <p>不过如果我们只考虑输出对于输入不变性和相等性的情况，则会难以理解，因为我们更多地是想象着特征层面的映射，比如：</p>
-<br>
 <p><img src="invariance-equivalence.jpg" alt="不变性和等变性"></p>
-<br>
 <p>那么特征层面对于输出的影响我们可能考虑得比较少，但是却实质存在，比如目标在图像中的平移和尺度等变换，<strong>在目标检测任务中，必须要使得网络具有相关的变换相等性，由此捕捉目标的位置和形状变化</strong>。<strong>而在图像分类、目标识别、行人重识别等任务中，又必须使得网络具有相关变换的不变性</strong>。这两点也是目标检测和行人检索领域中一个经典的矛盾问题，目前好像还没有特别好的解决，更多地是分阶段地执行不同的任务，防止特征共用。比如：经典的两阶段目标检测任务中，第一阶段是粗检测和前景背景分类，第二阶段是精修和具体类别分类，有一定的偏重。行人检索算法则大多是先检测后识别的策略。当然除了不变性和相等性的问题，还存在类内差异的问题，比如不同的人对于检测而言都是行人类别，对于识别而言则是不同的人，这对于特征提取也存在挑战。</p>
 <blockquote>
 <p><font color="orange">这部分观点应该是来自 DCNv2 </font></p>
@@ -79,49 +75,30 @@
 <br>
 <h2 id="12-cnn网络的执行过程"><a class="markdownIt-Anchor" href="#12-cnn网络的执行过程"></a> 1.2 CNN网络的执行过程</h2>
 <p>我记得我几年前第一次接触到深度学习的时候，对于全连接和 CNN 的局部连接形式，都有平移、尺度不变性的说法。对于全连接网络，由于下一层的每个节点都会与上一层进行连接：</p>
-<br>
 <p><img src="fc.jpg" alt="全连接网络"></p>
-<br>
 <p>因此无论输入发生了平移、尺度等什么变换，只要其属性没变，全连接网络更能捕捉其中的不变性。而对于卷积神经网络，我们都知道两个特点：局部连接和权值共享。</p>
-<br>
 <p><img src="cnn.jpg" alt="卷积神经网络和全连接网络对比"></p>
-<br>
 <p>对于局部连接，因为全连接参数太多，容易造成过拟合，并且图像领域更多地关注局部细节信息，所以局部连接方式有效。至于权值共享，也有减少参数的作用，很像图像处理中的滤波器。我们早期对于其不变性的理解更多是遵循一个宏观的感受，即由于卷积核的移位滤波，上一层的特征到下一层的特征相对位置 <strong>宏观不变</strong>，直到最后输出，类似于全连接的效果，从而获得不变性。</p>
 <br>
 <h2 id="13-cnn网络潜在问题与改进"><a class="markdownIt-Anchor" href="#13-cnn网络潜在问题与改进"></a> 1.3 CNN网络潜在问题与改进</h2>
 <p>正因为我刚说的宏观不变，使得输入在经过多次卷积、池化之后，微观/细节的变化累积放大，从而失去了这种不变性，接下来我会结合两篇论文进行介绍。</p>
-<br>
 <p>第一个是为了解决 CNN 平移不变性对抗性攻击的一篇 ICML2019 论文《<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/1904.11486.pdf%3Ffbclid%3DIwAR1VRPIrctulC6EhTAhKFjIFrlx_JjKR09JnESzLELUnlTL40iOT5tYwotA" target="_blank" rel="noopener">Making Convolutional Networks Shift-Invariant Again</a>》。这篇文章主要讨论了CNN网络中的降采样对于平移不变性的影响：</p>
-<br>
 <p><img src="window1.jpg" alt=""></p>
-<br>
 <p>上图是对于一个窗户分别采用从<code>0~7</code>的平移量，其特征图与不平移的差异，可以明显看到，特征图出现了波动。相应地，上半部分是利用 pix2pix 生成的图像，我们可以看到随着平移量的增大，窗户中的竖直线从两根变成了一根。<font color="red"> <strong>这一点就表明传统的 CNN 网络并不具有平移不变性。</strong></font></p>
-<br>
 <p>首先，作者做了这样一个小实验，即采用 max pooling 对一维向量<code>[0011001100]</code>进行池化，由此得到向量<code>[01010]</code>：</p>
-<br>
 <p><img src="experiment.jpg" alt="小实验"></p>
-<br>
 <p>接着，如果将输入向右平移一个单位，则得到向量<code>[111111]</code>：</p>
-<br>
 <p><img src="res.jpg" alt="小实验结果"></p>
-<br>
 <p>很明显，<strong>平移相等性和不变性都丢失了</strong>。接着作者做了进一步实验，利用余弦距离来刻画平移相等性，采用 VGG 网络对 Cifar 数据集进行试验：</p>
-<br>
 <p><img src="experiment2.jpg" alt=""></p>
-<br>
 <p>其中颜色越深说明差异越大，可以看到每次 max pooling 都增加了特征的差异性，不过作者将 max 和 pool 操作分开了，为了区分取最大值和降采样的影响：</p>
-<br>
 <p><img src="maxpooling.jpg" alt=""></p>
-<br>
-<p>很明显，<strong>降采样对于平移相等性的影响更大</strong>，而 CNN 中涉及到降采样的操作有：池化（max pooling 和 average pooling）和带步长的卷积（strided convolution）。对此作者提出了一种名为 <strong>Anti_aliasing</strong> 方法，中文叫做抗锯齿处理。传统信号处理领域中对于抗锯齿的技术，一般要么增大采样频率，但由于图像处理任务一般都需要降采样，这一点不适合。要么采用图像模糊（bluring）技术，<font color="orange"><em>根据 Nyquist 采样理论，是给定采样频率，通过降低原始信号的频率来使得信号能够被重构出来</em> </font>，如下图所示。对模糊化处理和未处理的原图像进行下采样，得到图中底部的两张图，模糊化处理的原图像下采样的图像还能看出一些轮廓，而未处理的原图像下采样的图像就显得更加混乱。<br>
-<br></p>
+<p>很明显，<strong>降采样对于平移相等性的影响更大</strong>，而 CNN 中涉及到降采样的操作有：池化（max pooling 和 average pooling）和带步长的卷积（strided convolution）。对此作者提出了一种名为 <strong>Anti_aliasing</strong> 方法，中文叫做抗锯齿处理。传统信号处理领域中对于抗锯齿的技术，一般要么增大采样频率，但由于图像处理任务一般都需要降采样，这一点不适合。要么采用图像模糊（bluring）技术，<font color="orange"><em>根据 Nyquist 采样理论，是给定采样频率，通过降低原始信号的频率来使得信号能够被重构出来</em> </font>，如下图所示。对模糊化处理和未处理的原图像进行下采样，得到图中底部的两张图，模糊化处理的原图像下采样的图像还能看出一些轮廓，而未处理的原图像下采样的图像就显得更加混乱。</p>
 <blockquote>
 <p><font color="orange"><strong>对橙色部分的理解：</strong></font> 在信号处理中，根据 奈奎斯特 采样定理，如果采样频率大于信号最大频率的两倍，则原始信号能够被完全恢复出来。在这里，pooling 就是一种下采样的过程，当其参数固定后，相当于其采样频率也是固定的。在原图中，有很多边缘等细节，属于高频内容。因此，如果直接对其进行 pooling，也就是下采样，则采样频率无法达到原图最大频率的两倍，从而无法恢复出原图内容。这时，可以逆向思维，通过降低原图的频率，则相对地提高了 pooling 的采样频率。因此，先对原图进行一次低通滤波，也就是模糊处理，来降低它的频率，这样，经过 pooling 下采样后的图像就相对原图下采样的结果可理解了很多。<br>
 关于图像滤波的内容，可以参考 <a href="//2021/03/18/Image-and-Filtering/" title="这篇文章">这篇文章</a></p>
 </blockquote>
-<br>
-<p><img src="blur.jpg" alt="原图下采样和模糊后图像下采样对比"><br>
-<br></p>
+<p><img src="blur.jpg" alt="原图下采样和模糊后图像下采样对比"></p>
 <p>作者就是采用了模糊的方式，提出了三种不同的 blur kernel：</p>
 <ul>
 <li>Rectangle-2：<code>[1, 1]</code>，类似于均值池化和最近邻插值；</li>
@@ -129,21 +106,14 @@
 <li>Binomial-5：<code>[1, 4, 6, 4, 1]</code>，这个被用在拉普拉斯金字塔中。</li>
 </ul>
 <p>每个核都需要归一化，即除以核内所有元素之和，然后加入到降采样过程，即在降采样之前使用 blur kernel 进行卷积滤波：</p>
-<br>
 <p><img src="aa.jpg" alt=""></p>
-<br>
 <p>可以看到其效果很不错：</p>
-<br>
 <p><img src="res1.jpg" alt="实验效果"></p>
-<br>
 <p><img src="table1.jpg" alt="实验结果"></p>
-<br>
 <p>代码和模型见：<a href="https://richzhang.github.io/antialiased-cnns/" target="_blank" rel="noopener">https://richzhang.github.io/antialiased-cnns/</a>或者<a href="https://github.com/adobe/antialiased-cnns" target="_blank" rel="noopener">https://github.com/adobe/antialiased-cnns</a></p>
 <br>
-<p>第二篇是同年发表在 JMLR 的一篇论文《<a href="https://link.zhihu.com/?target=http%3A//www.jmlr.org/papers/volume20/19-519/19-519.pdf" target="_blank" rel="noopener">Why do deep convolutional networks generalize so poorly to small image transformations?</a>》。作者首先给出了几组示例，分别表示了平移、尺度以及轻微图像差异对网络预测分类置信度的影响：</p>
-<br>
+<p><strong>第二篇</strong>是同年发表在 JMLR 的一篇论文《<a href="https://link.zhihu.com/?target=http%3A//www.jmlr.org/papers/volume20/19-519/19-519.pdf" target="_blank" rel="noopener">Why do deep convolutional networks generalize so poorly to small image transformations?</a>》。作者首先给出了几组示例，分别表示了平移、尺度以及轻微图像差异对网络预测分类置信度的影响：</p>
 <p><img src="transformation.jpg" alt="平移、尺度和轻微图像差异对预测分类置信度的影响"></p>
-<br>
 <p>作者认为 CNN 忽视了采样定理，这一点之前 Simoncelli 等人已经在论文 Shiftable multiscale transforms 中验证了二次采样在平移不变性上的失败，他们在文中说：</p>
 <blockquote>
 <p>我们不能简单地把系统中的平移不变性寄希望于卷积和二次采样，输入信号的平移不意味着变换系数的简单平移，除非这个平移是每个二次采样因子的倍数。</p>
@@ -166,127 +136,73 @@
 <h1 id="2-cnn对于位置和深度信息的预测"><a class="markdownIt-Anchor" href="#2-cnn对于位置和深度信息的预测"></a> 2. CNN对于位置和深度信息的预测</h1>
 <h2 id="21-cnn如何获取目标的位置信息"><a class="markdownIt-Anchor" href="#21-cnn如何获取目标的位置信息"></a> 2.1 CNN如何获取目标的位置信息</h2>
 <p>最早接触神经网络和深度学习相关任务时，我的感觉就是这类算法本质是做的分类任务，比如图像分割是对前景背景的分类和具体类别分类，识别任务就是类间类内的区分任务。其中图像分割任务就利用了 CNN 中的部分相等性，那么对于目标检测任务中的目标位置回归是怎么获取的呢？我们可以知道的是同样是对目标位置的搜索，在单目标跟踪任务中，存在有置信图：</p>
-<br>
 <p><img src="confmap.png" alt="置信图"></p>
-<br>
 <p>但是置信图本质上是对区域进行搜索得到的，因此可以近似为对多个子区域的识别过程，所以单目标跟踪中的目标定位也可以用分类的理解，但是目标检测则不好用分类来理解了。</p>
-<br>
 <p>接下来我们思考一个问题，我们所设计的网络究竟包含了哪些信息？图像特征、网络结构（卷积核大小、padding）。从上一章我们可以知道，网络可以学习到一定的相等性：</p>
-<br>
 <p><img src="vgg16.jpg" alt=""></p>
-<br>
 <p>因此，通过不断地训练，<font color="orange"><em>网络在最后的特征输出中是可以通过对应的特征数值和区域大小，结合一定的倍数（降采样大小）估计目标尺度的</em>。</font>但是对于目标的位置，我们人眼对于目标位置的判定是通过坐标系的，即目标距离图像的边缘距离，但是网络是如何了解这一信息的呢？</p>
-<br>
 <blockquote>
 <p><font color="orange">对橙色部分的理解:</font>对一个物体的检测包括两个部分，位置(x,y)和尺度(w,h)，这里所说的，就是如何从网络的输出特征中计算得到目标的尺度的。这里认为，通过 对应的特征数值（即找到激活区域）和 区域大小 （激活区域的大小），结合一定的倍数 (feature map 相对于原图降采样的倍数)，可以估计出目标在原图的尺度。</p>
 </blockquote>
 <br>
 <p>《How much Position Information Do Convolutional Neural Networks Encode?》这篇文章做出了回答。</p>
-<br>
-作者首先做了一组实验：
-<br>
+<p>作者首先做了一组实验：</p>
 <p><img src="hvg.jpg" alt=""></p>
-<br>
 <p>对于不同的输入图像，采用多种 mask 扰动，H、V、G 分别代表水平、竖直和高斯等分布，用这种方式生成多种 groundtruth，对于这点我们可能对单目标跟踪中以目标中心为均值的高斯分布比较熟悉。结果发现：</p>
-<br>
 <p><img src="hvg2.jpg" alt=""></p>
-<br>
 <p>GT 是三种分布生成的 groundtruth，PosENet 是作者提出的网络，没有 padding。我们可以看到 PosENet 并没有得到位置分布信息，而是保持了相等性。而存在 padding 的 VGG 和 ResNet 则都预测出了位置分布。由此可见 padding 对于位置的作用，也对上一章的内容作了补充，padding 对于平移不变性和相等性也有影响。</p>
-<br>
-不过这里我们可能不好理解，我做了个小测试，不过不一定是这么做的，仅仅方便我理解：
-<br>
+<p>不过这里我们可能不好理解，我做了个小测试，不过不一定是这么做的，仅仅方便我理解：</p>
 <p><img src="equation.svg" alt=""></p>
-<br>
 <p>上面是两个不同位置“目标”的卷积结果，可以看到，从输出结果得不到什么位置反映，如果加入 padding：</p>
-<br>
 <p><img src="equation2.svg" alt=""></p>
-<br>
 <p>首先我们可以知道的是，加入了 zero-padding 之后，目标边缘相对中心的输出更小了，其次目标距离图像边缘距离越远，其特征映射中出现<code>0</code>的次数越多。所以我猜网络就是在训练过程中让 padding 和这个相对的关系对应上了，如果没有 padding，目标距离边缘越远，同样出现<code>0</code>的次数也会越多，但问题在于无法跟 padding 造成的边缘数值小，中心数值大的特殊分布相比。当然，以上仅仅是我个人的理解，为了帮助我加深印象罢了。也有人说加入了 padding 影响了 CNN 的平移相等性，从而使得 CNN 学到了位置信息，但这个不大好解释。</p>
-<br>
-不过有关 padding 的问题，在 CVPR2019 的一片单目标跟踪算法 SiamRPN++ 中也做了探讨。其出发点在于为何 Siamese 网络无法扩展为大型网络，其原因就在于 padding 影响了平移相等性，从而让目标位置的分布发生了偏移。所以作者通过对目标中心的随机扰动，使得网络克服自身的偏移：
-<br>
+<p>不过有关 padding 的问题，在 CVPR2019 的一片单目标跟踪算法 SiamRPN++ 中也做了探讨。其出发点在于为何 Siamese 网络无法扩展为大型网络，其原因就在于 padding 影响了平移相等性，从而让目标位置的分布发生了偏移。所以作者通过对目标中心的随机扰动，使得网络克服自身的偏移：</p>
 <p><img src="shift.jpg" alt=" "></p>
-<br>
 <p>也有一些研究探索了如何让 CNN 结合绝对位置信息，比较出名的应该是当前很热门的 SOLO 单阶段实例分割算法。SOLO 的出发点很简单，我们都知道语义分割只需要分割出不同类别的目标，而实例分割对于同一类别的个体还需要区分。但是显而易见，同一类别的目标只要位置和形状不同则可以区分。因此 SOLO 就是将位置和形状（用尺寸简化）信息结合进来。具体而言，就是将输入系统的图像统一划分为 S\timesS 的网格，如果对象的中心落入网格单元，那么这个网格单元就负责预测语义类别以及分割该对象实例。</p>
-<br>
 <p><img src="solo.jpg" alt="SOLO"></p>
-<br>
 <p>特别地，SOLO 算法中采用 CoordConv 策略（代码：<a href="https://github.com/uber-research/coordconv" target="_blank" rel="noopener">https://github.com/uber-research/coordconv</a>），该算法将每个特征区域的坐标信息结合进来，从而让网络显示地学会记忆特征的绝对位置信息。SOLO 通过这个策略提升了 <code>3.6AP</code>，并且论证只需要一层提供该信息即可达到稳定的提升。</p>
-<br>
 <p><img src="coordconv.jpg" alt="CoordConv引入了每个像素的绝对坐标"></p>
-<br>
 <br>
 <h2 id="22-cnn如何预测目标的深度信息"><a class="markdownIt-Anchor" href="#22-cnn如何预测目标的深度信息"></a> 2.2 CNN如何预测目标的深度信息</h2>
 <p>深度估计也是一个类似的问题，不同的是，图像中并没有包含深度信息，但是网络是如何获取深度信息的呢。How Do Neural Networks See Depth in Single Images?这篇文章给出了回答，关于这篇文章 NaiyanWang 老师已经在博客里讨论过，我这里也就再整理下。</p>
-<br>
 <p><img src="camera.jpg" alt=""></p>
-<br>
 <p>我们可以看到，物体的绝对深度与相机位姿有着很大关系，那么 CNN 如何学习到这种需要几何先验的绝对信息的呢？作者做了这样一个实验：</p>
-<br>
 <p><img src="depth.jpg" alt=""></p>
-<br>
 <p>上图中作者做了三组实验：同时变化目标位置和尺寸、只变化位置以及只变化尺寸，我们从上面的定性结果好像看不出什么问题，下面是定量的结果：</p>
-<br>
 <p><img src="ana.jpg" alt="定量分析结果"></p>
-<br>
 <p>可以发现，尺度对于深度信息的预测没有什么影响，也就是说<font color="red"><strong>CNN网络是通过目标纵坐标来估计深度的</strong></font>，所以说网络实际上是在过拟合训练集，从中学习到一些固定场景下的深度和相对位置的对应关系。</p>
-<br>
-作者又讨论了相机运动对于深度预测的影响，既然深度与目标纵坐标有关系，那么 pitch 角的影响应该很大：
-<br>
+<p>作者又讨论了相机运动对于深度预测的影响，既然深度与目标纵坐标有关系，那么 pitch 角的影响应该很大：</p>
 <p><img src="pitch.jpg" alt="pitch俯仰角的影响较大"></p>
-<br>
 <p>可以发现，<strong>pitch的确影响比较大</strong>，相对的, roll 的影响就比较小了：</p>
-<br>
 <p><img src="roll.jpg" alt="roll翻滚角的影响较小"></p>
-<br>
 <p>最后作者还讨论了颜色和纹理对深度估计的影响：</p>
-<br>
 <p><img src="texture.jpg" alt="颜色和纹理对深度估计的影响"></p>
-<br>
 <p>可以发现，<strong>仅仅是改变目标的颜色纹理，深度估计的效果也会下降</strong>，可将CNN网络在训练时有多“偷懒”，不知道如果将上述实验变成数据增强的手段的话会让深度估计网络失效还是变强。</p>
 <br>
 <h1 id="2020318更新"><a class="markdownIt-Anchor" href="#2020318更新"></a> 2020.3.18更新</h1>
 <p>昨天碰巧看到一篇 CVPR2020 的文章《On Translation Invariance in CNNs: Convolutional Layers can Exploit Absolute Spatial Location》，其中也提到了 CNN 中的平移不变性问题和绝对位置信息编码问题，其切入点是 CNN 中的边界问题。</p>
 <p>作者首先以三种卷积方式为例，full/same/valid，各自的区别在于 padding 的大小，具体方式我就不细说了，给个示意图：</p>
-<br>
 <p><img src="padding.jpg" alt=""></p>
-<br>
-<br>
 <p><img src="1dpadding.jpg" alt=""></p>
-<br>
 <p>其中红色部分表示 padding，绿色部分表示边界区域。很明显，<code>valid</code>模式下卷积核最右边的<code>1</code>永远无法作用于绿色部分的<code>1</code>，<code>same</code>模式下的卷积核最右边 <code>1</code>永远无法作用于绿色部分的<code>1</code> 。作者以 <code>zero-padding</code> 和<code>circular-padding</code> 两种模式做了一个例子说明：</p>
 <br>
 <p><img src="compare.jpg" alt=""></p>
-<br>
 <p>可以看到 Class-1 中前两个例子都没有检测到<code>1</code>，<code>valid</code> 和 <code>same+zero-padding</code> 模式对于待卷积区域的绝对位置比较敏感。紧接着作者又分析了每个位置被卷积的次数：</p>
-<br>
 <p><img src="equation3.svg" alt=""></p>
-<br>
 <p>由此引出距离图像边界多远时某一固定像素可以被检测到这一问题，于是作者通过给图片四周添加不同大小的黑色边界进行试验：</p>
-<br>
 <p><img src="border.jpg" alt=""></p>
-<br>
 <p>有意思的是，<strong>增加了黑色边界之后分类的准确率都出现了明显的下滑，只不过不同的训练策略和不同的 backbone 的抗干扰能力不同罢了。</strong></p>
-<br>
 <p><img src="border_result.jpg" alt=""></p>
-<br>
 <p>为了定量分析各个卷积策略对于边界的处理区别，建了一个分类数据集，特殊点都分布在边界：</p>
-<br>
 <p><img src="dataset.jpg" alt=""></p>
-<br>
 <p>结果差别很大：</p>
-<br>
 <p><img src="res2.jpg" alt=""></p>
-<br>
 <p>可以发现，跟之前的观察结果一样，前两种策略的泛化能力很差，而基于 <code>Circular padding</code> 和 <code>full convolution</code> 的模式效果最好。接着作者为了降低边界的影响，采用了前文介绍卷积平移不变性里面提到的 <code>blur pooling+Tri3</code> 卷积核。然后对比 S<code>-conv+circular padding</code> 和 <code>F-conv</code> 两种策略对于不同的图像对角平移的鲁棒性：</p>
-<br>
 <p><img src="ana2.jpg" alt=""></p>
-<br>
-<br>
 <p><img src="res3.jpg" alt=""></p>
-<br>
 <p>结果显示 <strong>Full conv 模式效果更好</strong>，在后续实验中还说明了其有助于降低过拟合风险，对于小数据集更有效。</p>
 <p>代码即将开源 <a href="https://link.zhihu.com/?target=https%3A//github.com/oskyhn/CNNs-Without-Borders" target="_blank" rel="noopener">https://link.zhihu.com/?target=https%3A//github.com/oskyhn/CNNs-Without-Borders</a></p>
+<hr>
 </div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">taosean</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://taosean.github.io/2021/03/18/Location-and-scale-in-CNN/">https://taosean.github.io/2021/03/18/Location-and-scale-in-CNN/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://taosean.github.io">taosean's 学习之旅</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/平移不变性/">平移不变性</a><a class="post-meta__tags" href="/tags/平移等变性/">平移等变性</a><a class="post-meta__tags" href="/tags/translation-invariance/">translation invariance</a><a class="post-meta__tags" href="/tags/translation-equivalence/">translation equivalence</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2021/03/19/CNN-generalize-poorly/"><i class="fa fa-chevron-left">  </i><span>Why do deep convolutional networks generalize so poorly to small image transformations</span></a></div><div class="next-post pull-right"><a href="/2021/03/18/Image-and-Filtering/"><span>【转载】图像与滤波</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
   clientID: '9738353720f54c04f11e',
   clientSecret: '1511bb92984c25bbde5236ba58e4673d4ff5f92e',
