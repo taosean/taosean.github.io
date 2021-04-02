@@ -2,16 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://taosean.github.io/2021/03/30/Activation-functions/</loc>
+    
+    <lastmod>2021-04-01T07:27:47.178Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/29/YOLOv4/</loc>
+    
+    <lastmod>2021-04-01T07:10:01.484Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/30/IoU-variants/</loc>
+    
+    <lastmod>2021-03-30T11:38:37.081Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://taosean.github.io/2021/03/18/Location-and-scale-in-CNN/</loc>
     
-    <lastmod>2021-03-29T01:54:26.773Z</lastmod>
+    <lastmod>2021-03-30T07:14:52.715Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://taosean.github.io/2018/04/20/Yolo-v2/</loc>
     
-    <lastmod>2021-03-25T13:47:26.714Z</lastmod>
+    <lastmod>2021-03-29T02:53:25.786Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://taosean.github.io/2021/03/19/Position-information-CNN-encode/</loc>
+    
+    <lastmod>2021-03-29T02:03:38.525Z</lastmod>
     
   </url>
   
@@ -33,13 +61,6 @@
     <loc>https://taosean.github.io/2021/03/19/Make-CNN-shift-invariant-again/</loc>
     
     <lastmod>2021-03-22T07:11:09.045Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://taosean.github.io/2021/03/19/Position-information-CNN-encode/</loc>
-    
-    <lastmod>2021-03-19T07:07:18.471Z</lastmod>
     
   </url>
   

@@ -4,8 +4,75 @@
 
     
   <url>
+    <loc>https://taosean.github.io//2021/03/30/Activation-functions/</loc>
+    <lastmod>2021-04-01T07:27:47.178Z</lastmod>
+    <data>
+        <display>
+        <title>激活函数详解</title>
+        <pubTime>2021-03-30T06:59:36.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2021/03/29/YOLOv4/</loc>
+    <lastmod>2021-04-01T07:10:01.484Z</lastmod>
+    <data>
+        <display>
+        <title>YOLOv4</title>
+        <pubTime>2021-03-29T07:33:05.000Z</pubTime>
+        
+        <tag>目标检测</tag>
+         
+        <tag>yolo</tag>
+         
+        <tag>CSP</tag>
+         
+        <tag>CutMix</tag>
+         
+        <tag>数据增强</tag>
+         
+        <tag>DropBlock</tag>
+         
+        <tag>GIoU</tag>
+         
+        <tag>DIoU</tag>
+         
+        <tag>CIoU</tag>
+         
+        <tag>SPP</tag>
+         
+        <tag>PAN</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2021/03/30/IoU-variants/</loc>
+    <lastmod>2021-03-30T11:38:37.081Z</lastmod>
+    <data>
+        <display>
+        <title>IoU variants</title>
+        <pubTime>2021-03-30T11:38:37.000Z</pubTime>
+        
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://taosean.github.io//2021/03/18/Location-and-scale-in-CNN/</loc>
-    <lastmod>2021-03-29T01:54:26.773Z</lastmod>
+    <lastmod>2021-03-30T07:14:52.715Z</lastmod>
     <data>
         <display>
         <title>【转载】谈谈CNN中的位置和尺度问题</title>
@@ -28,7 +95,7 @@
     
   <url>
     <loc>https://taosean.github.io//2018/04/20/Yolo-v2/</loc>
-    <lastmod>2021-03-25T13:47:26.714Z</lastmod>
+    <lastmod>2021-03-29T02:53:25.786Z</lastmod>
     <data>
         <display>
         <title>Yolo v2 论文理解 （以及部分 yolo v3）</title>
@@ -43,6 +110,29 @@
         <tag>yolov3</tag>
          
         <tag>yolov2</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2021/03/19/Position-information-CNN-encode/</loc>
+    <lastmod>2021-03-29T02:03:38.525Z</lastmod>
+    <data>
+        <display>
+        <title>How much Position Information Do Convolutional Neural Networks Encode?</title>
+        <pubTime>2021-03-19T07:03:19.000Z</pubTime>
+        
+        <tag>position</tag>
+         
+        <tag>CNN</tag>
+         
+        <tag>zero padding</tag>
+         
+        <tag>CoordConv</tag>
          
          
            
@@ -101,29 +191,6 @@
         <title>Making Convolutional Networks Shift-Invariant Again</title>
         <pubTime>2021-03-19T09:37:02.000Z</pubTime>
         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://taosean.github.io//2021/03/19/Position-information-CNN-encode/</loc>
-    <lastmod>2021-03-19T07:07:18.471Z</lastmod>
-    <data>
-        <display>
-        <title>How much Position Information Do Convolutional Neural Networks Encode?</title>
-        <pubTime>2021-03-19T07:03:19.000Z</pubTime>
-        
-        <tag>position</tag>
-         
-        <tag>CNN</tag>
-         
-        <tag>zero padding</tag>
-         
-        <tag>CoordConv</tag>
-         
          
            
         </display>
