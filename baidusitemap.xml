@@ -4,6 +4,54 @@
 
     
   <url>
+    <loc>https://taosean.github.io//2021/04/19/SVD/</loc>
+    <lastmod>2021-04-20T07:58:59.359Z</lastmod>
+    <data>
+        <display>
+        <title>【转载】矩阵之芯 SVD：奇异值分解及其几何解释</title>
+        <pubTime>2021-04-19T08:21:35.000Z</pubTime>
+        
+        <tag>矩阵分解</tag>
+         
+        <tag>奇异矩阵</tag>
+         
+        <tag>特征值</tag>
+         
+        <tag>特征向量</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://taosean.github.io//2021/04/15/Gaussian-Distribution/</loc>
+    <lastmod>2021-04-19T02:54:31.997Z</lastmod>
+    <data>
+        <display>
+        <title>多元高斯分布推导及二维高斯分布的图像</title>
+        <pubTime>2021-04-15T08:08:15.000Z</pubTime>
+        
+        <tag>Gaussian</tag>
+         
+        <tag>Distribution</tag>
+         
+        <tag>高斯分布</tag>
+         
+        <tag>正态分布</tag>
+         
+        <tag>概率</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://taosean.github.io//2021/03/30/Activation-functions/</loc>
     <lastmod>2021-04-01T07:27:47.178Z</lastmod>
     <data>
@@ -32,6 +80,10 @@
          
         <tag>CSP</tag>
          
+        <tag>SPP</tag>
+         
+        <tag>PAN</tag>
+         
         <tag>CutMix</tag>
          
         <tag>数据增强</tag>
@@ -43,10 +95,6 @@
         <tag>DIoU</tag>
          
         <tag>CIoU</tag>
-         
-        <tag>SPP</tag>
-         
-        <tag>PAN</tag>
          
          
            
