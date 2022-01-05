@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="CPU体系架构Q&amp;A"><meta name="keywords" content="CPU,x86,ARM,MIPS,指令集,编译器,操作系统"><meta name="author" content="taosean"><meta name="copyright" content="taosean"><title>CPU体系架构Q&amp;A | taosean's 学习之旅</title><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '3.7.1'
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么linux可以同时兼容x86和arm一个操作系统不是只能对应特定的硬件系统吗"><span class="toc-number">1.</span> <span class="toc-text"> 为什么Linux可以同时兼容x86和ARM，一个操作系统不是只能对应特定的硬件系统吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#answer-1"><span class="toc-number">1.1.</span> <span class="toc-text"> Answer 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#answer-2"><span class="toc-number">1.2.</span> <span class="toc-text"> Answer 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#answer-3"><span class="toc-number">1.3.</span> <span class="toc-text"> Answer 3</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单片机-cpu-指令集和操作系统的关系"><span class="toc-number">2.</span> <span class="toc-text"> 单片机、CPU、指令集和操作系统的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#首先讨论各种单片机与操作系统的关系"><span class="toc-number">2.1.</span> <span class="toc-text"> 首先讨论各种单片机与操作系统的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cpu与指令集的关系"><span class="toc-number">2.2.</span> <span class="toc-text"> cpu与指令集的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指令集与操作系统的关系"><span class="toc-number">2.3.</span> <span class="toc-text"> 指令集与操作系统的关系</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算机最底层的编译器在哪编译器需要知道cpu的架构吗"><span class="toc-number">3.</span> <span class="toc-text"> 计算机最底层的编译器在哪？编译器需要知道CPU的架构吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#answer-1-2"><span class="toc-number">3.1.</span> <span class="toc-text"> Answer 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#answer-2-2"><span class="toc-number">3.2.</span> <span class="toc-text"> Answer 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#answer-3-2"><span class="toc-number">3.3.</span> <span class="toc-text"> Answer 3</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">taosean</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/taosean">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">57</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">188</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://github.com/xiaolai">李笑来</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/top_img.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">taosean's 学习之旅</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/about">关于</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">CPU体系架构Q&amp;A</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-05-30</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">4.4k</span><span class="post-meta__separator">|</span><span>阅读时长: 13 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>关于 CPU 体系架构和不同架构的区别产生了疑问。因此收集了一些本人感到有用的问答，摘录如下。</p>
+<a id="more"></a>
+<h2 id="为什么linux可以同时兼容x86和arm一个操作系统不是只能对应特定的硬件系统吗"><a class="markdownIt-Anchor" href="#为什么linux可以同时兼容x86和arm一个操作系统不是只能对应特定的硬件系统吗"></a> <a href="https://www.zhihu.com/question/438787373" target="_blank" rel="noopener">为什么Linux可以同时兼容x86和ARM，一个操作系统不是只能对应特定的硬件系统吗？</a></h2>
+<h3 id="answer-1"><a class="markdownIt-Anchor" href="#answer-1"></a> Answer 1</h3>
+<p>在你要讨论Linux内核能做什么的时候，你至少要搞清楚“运行时”和“编译时”两个不同概念。一个操作系统内核的代码可以支持很多体系结构和硬件，但是并不是说这些支持都能同时编译并使用。</p>
+<p>在Linux内核中，和体系结构相关的代码在 <code>arch/</code> 目录下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[xxxx@xxxx linux]$ ls arch/</span><br><span class="line">alpha  arc  arm  arm64  c6x  csky  h8300  hexagon  ia64  Kconfig  m68k  microblaze  mips  nds32  nios2  openrisc  parisc  powerpc  riscv  s390  sh  sparc  um  x86  xtensa</span><br></pre></td></tr></table></figure>
+<p>基本上每一个目录代表一种体系结构，或者可以说代表它支持的一系列 CPU，比如 x86 目录就是你日常常用的Intel/amd CPU 使用的代码，mips 就是给 mips 的 cpu 用的，还有 powerpc,  s390,  sparc，arm, arm64 等等(我都附上了相关文档链接)，这些都是当前的 Linux 支持的体系结构。</p>
+<p>但是这是静态的代码，不是运行时的。运行时你只能选针对一个体系结构编译、加载、运行，如果你想跑在另一个体系结构上，就要重新针对另一个体系结构重新编译内核。</p>
+<p>所以编译内核之前最首要的就是决定你要针对哪个体系结构进行编译，默认会针对你当前所用的 CPU 所属体系结构进行编译，当然你还可以通过指定 ARCH 来进行编译交叉，比如要针对 arm64 进行编译配置，可以使用（当然如果是交叉编译的话你还需要交叉编译的工具链 CROSS_COMPILE）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make ARCH=arm64 menuconfig</span><br></pre></td></tr></table></figure>
+<p><img src="make_arm.jpg" alt="编译 ARM 架构"></p>
+<p>需要针对powerpc体系结构进行编译的时候可以：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make ARCH=powerpc menuconfig</span><br></pre></td></tr></table></figure>
+<p><img src="make_power.jpg" alt="编译 Power 架构"></p>
+<p>同时针对不同的体系结构你还可以进一步选择更具体的配置，比如：</p>
+<p><img src="make_power_2.jpg" alt="详细配置"></p>
+<p>比如：</p>
+<p><img src="make_more.jpg" alt="详细配置"></p>
+<p>这些都还只是编译前的配置，也就是选择要编译什么，配置之后则进行编译，编译成功后得到特定运行环境的内核（及其驱动），将内核（及其）驱动放在对应的硬件上加载运行即可。</p>
+<p>所以返回来看你的问题：</p>
+<blockquote>
+<p>为什么 linux 可以同时兼容 x86 和 arm？</p>
+</blockquote>
+<p>因为 Linux 的代码中有针对不同 x86 和 arm 体系结构的 CPU 的代码，可以针对性的编译出运行在 x86 或 arm 上的内核（及其驱动）。</p>
+<blockquote>
+<p>一个操作系统不是只能对应特定的硬件系统吗？</p>
+</blockquote>
+<p>一个面向某一体系结构编译出来的内核，只能用于这一特定体系结构，同时所携带的驱动集合不同也将决定其所支持的外设的不同。</p>
+<h3 id="answer-2"><a class="markdownIt-Anchor" href="#answer-2"></a> Answer 2</h3>
+<p>我以前跟你一样，觉得一个操作系统只能支持一种指令集。我觉得很大的原因是微软和 intel 的 wintel 联盟太强大了，基本上垄断了 PC,让很多人误以为一个操作系统只能支持一种指令集。</p>
+<p>后来学了相关知识才理清它们之间的关系。</p>
+<p>简单来说，操作系统是为了方便应用开发者开发，封装了硬件提供比较好用的接口（一般是 C 语言）给应用开发者。如果没有操作系统，应用开发者就需要直接面对硬件编程。举例来说，你的应用程序要进行读写磁盘操作，如果直接裸机开发，你不仅要熟悉你的业务知识，还要了解磁盘的基本原理（如何读写），要解决保存文件可能会引起冲突（不能覆盖已有的文件），还有解决写数据时系统奔溃只写了一半怎么办（异常处理）。。。</p>
+<p>但是仔细一想，以上所说的磁盘操作对很多任务来说都是一致，只要读写磁盘都要进行这些操作，所以聪明的程序员就把一些基础的操作封装起来做成文件系统提供给应用程序员调用。同理其他硬件也是一样可以封装，针对不同类型的硬件封装抽象成不同的子系统，多个子系统就组成了内核，内核加上一些常用的软件就构成了操作系统。对于应用程序员来说读写文件只需要调用操作 read()、write()函数就可以了，而不需要管不同磁盘之间的微小差异，大大地简化了操作，解放了生产力！</p>
+<p>我们知道了操作系统到底是怎么一回事，那么理解一个操作系统为什么能支持不同指令集了就比较容易了。指令集必须依托硬件，按照上述所说的思路，操作系统就可以把不同指令集的硬件抽象出来提供<strong>同一个接口</strong>给应用开发者使用，就达到兼容了！</p>
+<p>那操作系统是如何抽象的呢？</p>
+<p>简单来说，就是把不同架构的硬件可以共用部分抽象出来，不同的地方分别放到特定目录下。编译的时候只需要按照你要编译的平台编译需要的源码就好了！</p>
+<p><img src="kernel.jpg" alt="kernel是不同架构可以共用的部分"></p>
+<p><img src="arch.jpg" alt="不同指令集特有的源码"></p>
+<h3 id="answer-3"><a class="markdownIt-Anchor" href="#answer-3"></a> Answer 3</h3>
+<p>操作系统内部一般可以分为两部分：</p>
+<ul>
+<li>跟具体 CPU 硬件平台相关的部分</li>
+<li>和 CPU 无关的部分</li>
+</ul>
+<p>早期的 Linux，确实只支持 X86，后来开始不断支持新的平台，只需要添加跟 CPU 相关的那部分代码就可以了。在最新的 Linux 内核中，在 <code>ARCH/</code> 目录下面，你会发现很多的文件夹</p>
+<ul>
+<li>X86</li>
+<li>ARM</li>
+<li>MIPS</li>
+<li>RISC-V</li>
+</ul>
+<p>在一个文件夹，代表 Linux 内核支持的 CPU 平台。</p>
+<p>内核在编译时，并不是将所有的内核源码都编译，而是根据你的配置 ARCH=arm，或 ARCH=mips，只会将 ARCH 目录下对应的平台编译进内核。</p>
+<p>所以，现在已经很清楚了:</p>
+<ul>
+<li>操作系统源码是支持不同的 CPU 的</li>
+<li>但是要编译在某个平台上运行的镜像，要使用<strong>专门的编译器</strong>，编译具体的 ARCH 下面的代码，编译后生成的镜像就只能在对应的 CPU 平台上运行了。</li>
+</ul>
+<h2 id="单片机-cpu-指令集和操作系统的关系"><a class="markdownIt-Anchor" href="#单片机-cpu-指令集和操作系统的关系"></a> <a href="https://www.huaweicloud.com/articles/988f00d5ca52db678cd917f322a85272.html" target="_blank" rel="noopener">单片机、CPU、指令集和操作系统的关系</a></h2>
+<h3 id="首先讨论各种单片机与操作系统的关系"><a class="markdownIt-Anchor" href="#首先讨论各种单片机与操作系统的关系"></a> 首先讨论各种单片机与操作系统的关系</h3>
+<p>说到单片机，大家第一时间想到的应该是 51 单片机，对吧。不错，更高级一点的 AVR，把他称为单片机，我们也还觉得可以接受。那么再高级一点的 ARM7，8086，80386，Core i3，Athlon 等等我们更习惯称他们为 CPU，因为学习计算机原理的时候都是这么叫的，但按照单片机的定义，他们也是归属于单片机。这也不怪大家，中国的教育都是这样，只注重告诉你是什么，而不告诉你他们之间的联系。上述几种单片机或者芯片（如果你还是觉得把 core i3 叫做单片机你不习惯的话）在原理上都是一样，即都是有 <strong>运算器</strong>，<strong>控制器</strong>，<strong>寄存器</strong>构成的，不同之处在于它们的硬件电路实现不同，个数不同，功耗不同，计算能力不同，但都提供相同的基本功能。OK，终于让 cpu 找到了组织，那么就介绍<strong>为什么有的单片机要操作系统，有的在我们学习的过程中压根就跟操作系统不挨边</strong>。</p>
+<p>51/AVR 单片机  在学习他们的时候，都是先介绍它们有哪些资源–有几个寄存器，有几个时钟等，然后就是怎么用汇编，用 C 或者是 C 与汇编混合编程。这里我们用的语言都是可以直接操作硬件资源的，因此我们可以自己决定什么时候使用哪个寄存器，什么时候将寄存器内容写到辅存储器中。</p>
+<p>ARM 单片机 在学习它的时候，我们可以给他搭载操作系统，如 MicroC/OS，iOS X, Android 或者其他定制的Linux 操作系统，但有时我们也经常不让它搭载操作系统，而是直接像使用 51 单片机那样来操作它。</p>
+<p>Core i3 / Athlon 单片机（或者 CPU，如果你还是不喜欢用单片机来形容这么牛逼的硬件） 你几乎没有听说过身边谁会在这种单片机上开发应用（如果有，一定要引荐我认识一下哦）。因为在这种单片机上开发的应用有一个很牛逼的名字–操作系统！ 由于这种单片机提供的资源太多，能干的活太多，我们需要有一个专门的程序来负责管理它，从而避免对相同的功能重复开发。这样我们就可以从对硬件编程中解放出来，更专注于应用层面的开发。<strong>从某种意义上来说，操作系统也就是一个应用程序而已，只不过他有点特别。</strong></p>
+<p>一般这种情况下，打个比方会比较好–单车和汽车。单车很简单，我们对它的构成及零部件也很熟悉，链条掉了，我们也完全能够应付。这就好比 51 单片机，资源不多，我们完全能够 hold 住。相较而言，汽车则复杂很多，有减速系统，刹车系统，电子系统，空调系统等等，但是我们并不需要清楚他们的硬件工作原理，我们之需要知道按那个开关，踩那个踏板就好了。这就好比单片机上的操作系统，它不需要我们清楚硬件的构造，想要实现功能，直接调用系统提供的 API 就可以了。 在我们双脚不停的蹬着踏板，自行车就前进这个动作中，我们是清楚的知道这其中各个部件的运行原理过程的；但如果你是踏着油门，汽车就跑起来，我觉得大部分人都不了解其中涉及到了哪些部件，以及各个部件的原理的。但这不妨碍我们使用，不是吗。</p>
+<h3 id="cpu与指令集的关系"><a class="markdownIt-Anchor" href="#cpu与指令集的关系"></a> cpu与指令集的关系</h3>
+<p>CPU 依靠指令来计算和控制系统，<strong>每款 CPU 在设计时就规定了一些列与其硬件电路相配合的指令系统，或者说某款CPU 的硬件设计其实就是针对某个指令集的一种硬件实现</strong>。指令集也就是所谓的目标代码（或称为机器代码，是可以直接在 CPU 上运行的代码）可以看作是要求 CPU 对外提供的功能，某款 CPU 的设计肯定是朝着某个指令集来的。所以，不同的 CPU 架构，也表示这他的指令集要么较之前的指令集有所拓展或者就是实现了一种全新的指令集。<strong>指令集中的一条指令，就是让 CPU 完成一系列的动作，而该动作的完成则表明了某种运算的完成。一个功能可能需要一条或几条指令来实现。比如汇编的 MOV 或者 LD 语句就可能对应着几条 CPU 指令。</strong></p>
+<p>下面介绍几种常见的 CPU 架构与指令集的对应关系（所谓架构是指硬件电路的实现）：</p>
+<p>intel X86 架构 CPU 可能实现了多个指令集 x86，x86-64，MMX，SSE，SSE2，SSE3，SSSE3，而这些指令集中的指令让 CPU 完成的动作都比较复杂，所以也称为 CISC</p>
+<p>AMD amd6 4架构的 CPU 兼容了 x86 指令集还拓增了3D-Now!指令集，用于加强对 3D 显示的支持。</p>
+<p>ARM ARMv1~ARMv7 架构的 CPU 实现了 Thumb 指令集和 ARM 指令集。这些指令集中的一条指令让 CPU 完成的动作都比较简单，所以也称为 RISC 指令集</p>
+<h3 id="指令集与操作系统的关系"><a class="markdownIt-Anchor" href="#指令集与操作系统的关系"></a> 指令集与操作系统的关系</h3>
+<p>这里要重新提及一下之前讲到的两个概念：<strong>指令集–就是机器代码；操作系统–就是应用程序</strong></p>
+<p>首先我们要知道计算机之父冯-诺伊曼说计算机只能运行在二进制上。所以不论是操作系统还是普通的应用程序最终都得转化到二进制代码才能够被 CPU 所处理。而用高级语言编写的普通应用程序都必须经过编译器编译后成为二进制代码（指令）才能运行。而<strong>不同的 CPU 所实现的指令集不同，所以不同的指令集对应的编译器也不尽相同，编译器不同，相同的高级语言程序经过编译后所得到的二进制代码也不同。</strong> 这就引出了 <strong>“移植”</strong> 和 <strong>“跨平台”</strong> 两个概念。OK，重新捋一下： <code>CPU 架构-指令集-编译器-程序</code> 环环相扣，紧密联系。所以你就会听到说Windows 操作系统只能够运行在 X86 架构的 CPU 上，不能运行在 Power 或 ARM 上，因为指令集不同，又所以就有了 “Wintel” 联盟。所以你也可以看到**有的编译器是有硬件厂家提供的，比如 Intel 就提供 C 和 C++ 的编译器，这样编译出来的程序就能更好的利用硬件的性能。**那为什么又会听到 linux 可以运行在不同架构的 CPU 上呢？那是因为 linux 是开源的，因此就可以将它移植到不同的 CPU 平台上，然后在用相应的编译器编译，就得到了可以在该 CPU 上运行的二进制代码了。而 Windows 是封闭的，得不到源代码，而 MS 自己又没有移植到别的 CPU 平台上的打算，所以当然就只能在 X86 上运行了。（BTW，X86 也是性能最好的 CPU 之一，而 Windows 对性能要求较高，所以 MS 当然也就不愿意移植了）</p>
+<h2 id="计算机最底层的编译器在哪编译器需要知道cpu的架构吗"><a class="markdownIt-Anchor" href="#计算机最底层的编译器在哪编译器需要知道cpu的架构吗"></a> <a href="https://www.zhihu.com/question/38342272" target="_blank" rel="noopener">计算机最底层的编译器在哪？编译器需要知道CPU的架构吗？</a></h2>
+<h3 id="answer-1-2"><a class="markdownIt-Anchor" href="#answer-1-2"></a> Answer 1</h3>
+<p>编译器当然需要知道目标机器的 CPU 架构。事实上，有一种东西叫<strong>交叉编译</strong>，比如我可以在我的 x64 电脑上编译 arm64 的 android(AOSP)，也可以编译 mips 的 openwrt，重点是<strong>编译的时候精确指定需要的指令集，这样才能生成正确的目标二进制</strong>。例如有个工具叫做 crosstool-ng，可用于生成交叉编译工具链。ct-ng 实际上是对 gcc 工具链的包装，如果想要手动做这件事情，基本步骤是，下载 binutils 源码编译，下载 gcc 的各个依赖的源码以及 gcc 本体的源码，编译 gcc。在 configure binutils 的时候需要正确指定运行平台，在 configure gcc 的时候需要指定运行平台和目标平台，比如，我可以在我的 x64 电脑上生成一套 gcc 工具链，这套工具链可以运行在 armv7 的 cpu 中，用于生成 mips 的代码。</p>
+<p>总而言之，**编译的目标指令集是可以定义的，在编译的时候目标平台指令集是确定的，只不过绝大多数情况下我们遇到的编译器都是运行于 x64 的编译器且生成 x64 的目标代码。**其实编译时还有个很重要的东西是目标平台的运行库，例如 windows 的系统提供的 c 运行环境和 linux 的就很不一样，编译器在编译的时候由于要帮你的程序链接到正确的库上，也是需要知道运行库的环境的，例如 printf 要调用哪里。再具体一点来说，编译器需要知道标准的头文件(如 stdio.h)的位置以及运行库(.so .lib .dylib)的位置和目标操作系统上的链接方式。</p>
+<h3 id="answer-2-2"><a class="markdownIt-Anchor" href="#answer-2-2"></a> Answer 2</h3>
+<p>编译器运行在什么架构上是一回事；而用此编译器生成何种架构的代码是另外一回事情。</p>
+<p>例如，可以用运行于 x86 架构上的编译器 arm-gcc 生成运行于 arm 架构上的代码；用运行于 x86 架构上的编译器 mips-gcc 生成运行于 mips 架构上的代码。就 gcc 而言，生成不同架构的代码有不同的编译器。</p>
+<h3 id="answer-3-2"><a class="markdownIt-Anchor" href="#answer-3-2"></a> Answer 3</h3>
+<p>你把编译器泛化了。编译器最终只是你运行的一个程序，它被生成时就指定了只支持为某个架构的生成程序。因此，不同架构使用的编译器就不相同。比如：x86, x64, aarch64 架构的 GCC 就不一样。</p>
+<p>为了提升效率，现在编译器都会分为前端和后端。前端会将 C/C++ 等源代码生成统一的<strong>中间代码</strong>，后端将相同的中间代码编译为不同目标架构下的<strong>汇编代码</strong>，交给这些架构下的汇编器进行汇编，生成<strong>机器码</strong>。这样，可以尽可能模块化，复用前端和后端。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">taosean</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://taosean.github.io/2021/05/30/CPU-Architecture/">https://taosean.github.io/2021/05/30/CPU-Architecture/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://taosean.github.io">taosean's 学习之旅</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CPU/">CPU</a><a class="post-meta__tags" href="/tags/x86/">x86</a><a class="post-meta__tags" href="/tags/ARM/">ARM</a><a class="post-meta__tags" href="/tags/MIPS/">MIPS</a><a class="post-meta__tags" href="/tags/指令集/">指令集</a><a class="post-meta__tags" href="/tags/编译器/">编译器</a><a class="post-meta__tags" href="/tags/操作系统/">操作系统</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2021/12/11/Face-Recognition/"><i class="fa fa-chevron-left">  </i><span>人脸识别</span></a></div><div class="next-post pull-right"><a href="/2021/05/18/Camera-Distortion/"><span>镜头畸变</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '9738353720f54c04f11e',
+  clientSecret: '1511bb92984c25bbde5236ba58e4673d4ff5f92e',
+  repo: 'taosean.github.io',
+  owner: 'taosean',
+  admin: 'taosean',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/top_img.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2022 By taosean</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

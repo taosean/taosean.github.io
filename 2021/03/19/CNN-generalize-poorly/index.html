@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Why do deep convolutional networks generalize so poorly to small image transformations"><meta name="keywords" content="generalize,transformation"><meta name="author" content="taosean"><meta name="copyright" content="taosean"><title>Why do deep convolutional networks generalize so poorly to small image transformations | taosean's 学习之旅</title><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '3.7.1'
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-abstract"><span class="toc-number">1.</span> <span class="toc-text"> 0. Abstract</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-introduction"><span class="toc-number">2.</span> <span class="toc-text"> 1. Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-quantifying-the-lack-of-invariance-in-modern-cnns"><span class="toc-number">3.</span> <span class="toc-text"> 2. Quantifying the lack of invariance in modern CNNs</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-ignoring-the-sampling-theorem"><span class="toc-number">4.</span> <span class="toc-text"> 3. Ignoring the Sampling Theorem</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-why-dont-modern-cnns-learn-to-be-invariant-from-data-augmentation"><span class="toc-number">5.</span> <span class="toc-text"> 4. Why don’t modern CNNs learn to be invariant from data augmentation?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-possible-solutions"><span class="toc-number">6.</span> <span class="toc-text"> 5. Possible Solutions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#51-antialiasing"><span class="toc-number">6.1.</span> <span class="toc-text"> 5.1 Antialiasing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#52-increased-data-augmentation"><span class="toc-number">6.2.</span> <span class="toc-text"> 5.2 Increased Data Augmentation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-reducing-subsampling"><span class="toc-number">6.3.</span> <span class="toc-text"> 5.3 Reducing subsampling</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考文章"><span class="toc-number">7.</span> <span class="toc-text"> 参考文章</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">taosean</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/taosean">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">57</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">188</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://github.com/xiaolai">李笑来</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/top_img.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">taosean's 学习之旅</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/about">关于</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Why do deep convolutional networks generalize so poorly to small image transformations</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-03-19</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">3k</span><span class="post-meta__separator">|</span><span>阅读时长: 9 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>本文主要记录了关于论文 Why do deep convolutional networks generalize so poorly to small image transformations 所表达的内容。</p>
+<a id="more"></a>
+<blockquote>
+<p>这篇文章实在是太难读了，看着非常不舒服！</p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.zhihu.com/question/301522740/answer/531606623" target="_blank" rel="noopener"><font color="purple">既然cnn对图像具有平移不变性，那么利用 图像平移（shift）进行数据增强来训练cnn会有效果吗？ - Hengkai Guo的回答 - 知乎</font></a></p>
+<p>首先，解释一下什么是CNN的<strong>平移不变性</strong>。简单来说，平移不变性（translation invariant）指的是CNN对于同一张图及其平移后的版本，都能输出同样的结果。这对于图像分类（image classification）问题来说肯定是最理想的，因为对于一个物体的平移并不应该改变它的类别。而对于其它问题，比如物体检测（detection）、物体分割（segmentation）来说，这个性质则不应该有，原因是当输入发生平移时，输出也应该相应地进行平移。这种性质又称为<strong>平移等价性</strong>（translation equivalence）。这两个概念是比较混淆的，但确实是两个不同的东西（敲黑板）。</p>
+<p>那么，平移不变性是从哪里来的呢？一般来说，一个 CNN 的性质，要么是从它本身使用的<strong>结构</strong>得到的，要么是从它在数据集中学到的<strong>参数</strong>得到的。前者的简单例子是加了 sigmoid 层的网络的输出范围自然变成了<code>0</code>到<code>1</code>之间，后者的例子则是 CNN 在 ImageNet 上训练之后就有了能分类图像的能力且特征也具有一定的泛化性。</p>
+<p>CNN 比较常见的层有卷积层、池化层（max 或者 mean）、全连接层，其中池化层又包括普通池化层和用在全连接层之前的全局池化层（global pooling）。按照市面上最常见的观点，CNN 本身结构中卷积+池化就具有平移不变性。本人并不同意这个观点，下面具体分析一下。</p>
+<p>先来分析单层的情况。</p>
+<p>(1) 卷积层：在信号处理中，卷积（以及相关）的性质包含了平移等价性。对于共享权值的卷积层来说，只在平移量为 stride 的整数倍时平移等价性才严格成立。而仅仅在卷积核比较均匀而且输入也有很多均匀区域的时候才有比较弱的平移不变性，因为此时微小的移动对于输出改变比较少。</p>
+<p>(2) 池化层：普通池化层中，均值池化等价于固定卷积核的卷积层，因此性质也相同；最大值池化也类似，但取最大值的操作使其相对于均值带有更强的平移不变性。全局池化层将整个输入变成 <code>1x1</code> 大小的输出，忽略了特征的位置信息，当前面的输入具有平移等价性的时候具有比较强的平移不变性。</p>
+<p>(3) 全连接层：全连接层这两个性质都没有，因为没有在不同位置共享权值，特征在不同位置对于输出的贡献变化很大。因此，从单层来看，只有全局池化有一定的平移不变性，其它都比较弱甚至没有。</p>
+<p>如果把这些层串起来，那么在使用全连接层的时候整个CNN的结构一般不具有平移不变性。就算用了全局池化层，由于前面叠加的多层卷积层的累计效应，最后的平移不变性也很弱，只有当<strong>位移是整个网络的降采样倍数的整数倍</strong>才存在，概率很低。因此，能用于分类的平移不变性主要来源于参数。因为卷积层的平移等价性，这种平移不变性主要是由最后的全连接层来学习，而对于没有全连接层的网络更难有这种性质。</p>
+<p>参数的学习需要数据，由于数据中平移的分布一般都比较不均匀，引入平移的数据增强（augmentation）肯定是必要的。那有人会问，为什么好像没看到有这个增强方式？其实裁切（crop）就是一种平移的数据增强方式，因为不同裁切方式对应的patch之间的变换就是平移。而且这种方式相比于平移更加自然，没有周围的黑边padding，因此更加常用。</p>
+<p>总结起来，就是 <strong>CNN 的平移不变性主要是通过数据学习来的</strong>，结构只能带来非常弱的平移不变性，而学习又依赖于数据增强中的裁切，裁切相当于一种更好的图像平移。</p>
+<p>最后再说点题外话。正是因为池化本身带有弱的平移不变性，且会损失一些信息，在对平移需要等价性的一些任务里（比如检测、分割）会经常用 stride 为 <code>2</code> 的卷积层来替代池化层。而在很多分类任务中，为了学习到一些全局特征，常常会在网络的最后使用全局池化或者金字塔池化的方式来消除平移的影响。</p>
+</blockquote>
+<br>
+<h1 id="0-abstract"><a class="markdownIt-Anchor" href="#0-abstract"></a> 0. Abstract</h1>
+<ul>
+<li>以前以为 CNN 对小的图像变形具有不变性（结构或者数据增强的原因），但事实并非如此。</li>
+<li>讨论了两种解决办法：
+<ul>
+<li>Anti-alisaing</li>
+<li>增加数据增强</li>
+</ul>
+</li>
+<li>数据增强不会带来不变性，因为 CNN 只会学到对与数据集中非常相似的图的不变性。</li>
+<li>结果表明，在保留高频信息的情况下，确保网络对小的变换的不变性的问题仍然没有得到解决。</li>
+</ul>
+<br>
+<h1 id="1-introduction"><a class="markdownIt-Anchor" href="#1-introduction"></a> 1. Introduction</h1>
+<ul>
+<li>机器学习方法的 <font color="purple" size="3"> <strong>归纳偏置</strong> </font> 是其成功的关键。</li>
+<li>很显然，NN 中架构的选取对归纳偏置有重大影响。</li>
+<li>归纳偏置的另一个来源是数据增强。</li>
+<li>感觉，所谓归纳偏置，就是<strong>从现实生活中观察到的现象中归纳出一定的规则（heuristics） ，选择出更符合现实规则的模型。</strong></li>
+<li>归纳偏置的一个来源就是<strong>网络的结构设计</strong>，卷积，池化的设计方式本身就引入了归纳偏置。比如卷积的局部链接和权值共享。</li>
+<li>归纳偏置的另一个来源就是<strong>数据增强</strong>。通过剪切等变换处理过的图片就是告诉网络，发生了这些变换的图片依旧是与之前同一类别。</li>
+</ul>
+<br>
+<h1 id="2-quantifying-the-lack-of-invariance-in-modern-cnns"><a class="markdownIt-Anchor" href="#2-quantifying-the-lack-of-invariance-in-modern-cnns"></a> 2. Quantifying the lack of invariance in modern CNNs</h1>
+<p>基础实验：<br>
+从ImageNet测试集中随机选取一张图片，用四种方式对图片进行一个像素的扰动，测量网络的敏感程度。</p>
+<ul>
+<li>敏感程度的测量使用两种方法：
+<ul>
+<li>P(Top-1 change): 一像素扰动后网络top-1预测发生改变的概率。
+<ul>
+<li>它对网络最后一层输出的任何单调性变形都具有不变性。</li>
+</ul>
+</li>
+<li>mean absolute change: 最高类别（即在两帧的第一帧中具有最高概率的类别）在发生一像素扰动后，网络计算出的概率的平均绝对变化。
+<ul>
+<li>这个 metric 的作用是排除 top-1 预测的变化是由最可能类别和此可能类别之间的微小差别造成的可能性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>四种方式：
+<ul>
+<li>在图像中随机截取一个框再 resize 到 224x224。再进行一个像素的对角线平移</li>
+<li>embedding: 保持长宽比降采样到短边尺寸为 <code>100</code>，再随机嵌入到 224x224 图像中的随机位置，空余用黑色像素填充。再进行一个像素平移</li>
+<li>类似第二种方法，但是用图像修复算法补全空余部分。</li>
+<li>类似第二种方法，增大被嵌入图像一个像素单位。</li>
+<li>优劣势：
+<ul>
+<li>第一种方法可能导致重要信息丢失，平移后边缘信息会有区别。</li>
+<li>第二种方法虽然保留了所有信息，但是可能引入非典型边界像素。</li>
+</ul>
+</li>
+<li>带来的细微变化都是人类无法感知到的、可辨识度没有变化</li>
+<li>景观变化是人类难以感知的，但模型预测类别变化的概率可以达到 <code>30%</code>，故此前论文中关于CNN缺乏不变性的报告不是偶然而是有着很高的出现频率。</li>
+</ul>
+</li>
+<li>对于此结果的质疑可以是这些变换的图像在训练集中没有见过。引出两个对不变性的定义
+<ul>
+<li>完全不变性：对任何模式以及其变换的形式输出相同的结果</li>
+<li>部分不变性：在某种模式或与其类似的模式在训练集中出现的前提下，输出相同的结果。</li>
+</ul>
+</li>
+<li>实验结果指明 CNN 并不具有完全不变性。</li>
+</ul>
+<br>
+<h1 id="3-ignoring-the-sampling-theorem"><a class="markdownIt-Anchor" href="#3-ignoring-the-sampling-theorem"></a> 3. Ignoring the Sampling Theorem</h1>
+<ul>
+<li>Stride 永远是 1 的 CNN 是平移不变的.</li>
+<li>如果对任何<code>x</code>来说，检测器在<code>x</code>位置的输出都可以被下采样网格中的响应线性插值恢复的话，那么下采样参数为<code>s</code>的特征检测器<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">r(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span>可以被称为 shiftable.</li>
+<li>VGG16 网络，表征向量似乎是跟随物体一起偏移的，包括最后一层。即使随后一层不是简单的原来响应的偏移，但是似乎是保留了这张图的全局和。</li>
+</ul>
+<p><img src="vgg.png" alt="vgg"></p>
+<ul>
+<li>当基于早期的层训练分类器时，一个像素的偏移导致输出改变的概率低于<code>5%</code>，但是当层数越来越深时，下采样操作和非线性会使得表征不再 shiftable, 网络也丢失了不变性。</li>
+</ul>
+<p><img src="depth.png" alt="不同深度的层由于像素偏移造成的输出改变"></p>
+<ul>
+<li>非线性操作可能带来输入中所不具有的高频</li>
+<li><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it r(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathit">r</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span> 是先下采样（采样率<code>s</code>），然后经过一系列卷积和非线性操作的结果。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mn mathvariant="italic">2</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it r_2(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathit">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span> 是不下采样，直接进行同样的卷积和非线性操作（所有的卷积核都是空洞率为 <code>s</code>）。对 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mn mathvariant="italic">2</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it r_2(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathit">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span> 下采样（采样率为<code>s</code>）得到的结果就是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">r(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></li>
+<li>对 CNN 中一个 stride 为 <code>s</code> 的层，对任何后面的层，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it r(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathit">r</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span>, 试想一个等价于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mn mathvariant="italic">2</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it r_2(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathit">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span> 的层，如果 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>r</mi><mn mathvariant="italic">2</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it r_2(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathit">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span> 包含超过奈奎斯特频率 <code>s</code> 的频率，那么 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\it r(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathit">r</span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span></span></span></span></span> 则不是 shiftable 的。</li>
+</ul>
+<br>
+<h1 id="4-why-dont-modern-cnns-learn-to-be-invariant-from-data-augmentation"><a class="markdownIt-Anchor" href="#4-why-dont-modern-cnns-learn-to-be-invariant-from-data-augmentation"></a> 4. Why don’t modern CNNs learn to be invariant from data augmentation?</h1>
+<ul>
+<li>CNN的结构不能带来平移不变性，但是通过训练样本来学习到平移不变性还是有可能的。</li>
+<li>这可以通过网络学习到能量集中在低频的 filter 来实现。</li>
+<li>使用数据增强训练得到这样的 filter 是可以期待的。</li>
+<li>数据增强使用了很多随机 crop 的图像，所以网络有同样的概率看到一张图以及它的平移一个像素的版本。为什么这样不能使得网络学到一个对一个像素偏移具有不变性的判别函数呢？
+<ul>
+<li>一个可能的原因是网络只能学到对数据集里存在的图的不变性。网络的泛化性能可能只能泛化到跟训练集里图像比较相似的图像。</li>
+</ul>
+</li>
+<li>如果CNN中大多数的平移不变性是网络在训练时学到的<strong>部分平移不变性</strong>的话，那么网络对大的嵌入图像应该更平移不变，对小的嵌入图像不那么平移不变。图6证实了这点</li>
+</ul>
+<p><img src="embedding.png" alt="不同embedding window size造成的不同程度的不变性"></p>
+<br>
+<h1 id="5-possible-solutions"><a class="markdownIt-Anchor" href="#5-possible-solutions"></a> 5. Possible Solutions</h1>
+<h2 id="51-antialiasing"><a class="markdownIt-Anchor" href="#51-antialiasing"></a> 5.1 Antialiasing</h2>
+<h2 id="52-increased-data-augmentation"><a class="markdownIt-Anchor" href="#52-increased-data-augmentation"></a> 5.2 Increased Data Augmentation</h2>
+<h2 id="53-reducing-subsampling"><a class="markdownIt-Anchor" href="#53-reducing-subsampling"></a> 5.3 Reducing subsampling</h2>
+<br>
+<h1 id="参考文章"><a class="markdownIt-Anchor" href="#参考文章"></a> 参考文章</h1>
+<p>[1] <a href="https://zhuanlan.zhihu.com/p/50222337" target="_blank" rel="noopener">难以泛化的卷积神经网络</a></p>
+<p>[2] <a href="https://lossherl.github.io/2020/04/28/2019%20Why%20do%20deep%20convolutional%20networks%20generalize%20so%20poorly%20to%20small%20image%20transformation/" target="_blank" rel="noopener">Why do deep convolutional networks generalize so poorly to small image transformation?</a></p>
+<hr>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">taosean</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://taosean.github.io/2021/03/19/CNN-generalize-poorly/">https://taosean.github.io/2021/03/19/CNN-generalize-poorly/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://taosean.github.io">taosean's 学习之旅</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/generalize/">generalize</a><a class="post-meta__tags" href="/tags/transformation/">transformation</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2021/03/19/Position-information-CNN-encode/"><i class="fa fa-chevron-left">  </i><span>How much Position Information Do Convolutional Neural Networks Encode?</span></a></div><div class="next-post pull-right"><a href="/2021/03/18/Location-and-scale-in-CNN/"><span>【转载】谈谈CNN中的位置和尺度问题</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '9738353720f54c04f11e',
+  clientSecret: '1511bb92984c25bbde5236ba58e4673d4ff5f92e',
+  repo: 'taosean.github.io',
+  owner: 'taosean',
+  admin: 'taosean',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/top_img.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2022 By taosean</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

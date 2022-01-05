@@ -1,0 +1,562 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="关于视频理解以及一些模型的分析"><meta name="keywords" content=""><meta name="author" content="taosean"><meta name="copyright" content="taosean"><title>关于视频理解以及一些模型的分析 | taosean's 学习之旅</title><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '3.7.1'
+} </script></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-视频理解的难点"><span class="toc-number">1.</span> <span class="toc-text"> 1. 视频理解的难点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-个人看法"><span class="toc-number">2.</span> <span class="toc-text"> 2. 个人看法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-baseline-模型效果比较"><span class="toc-number">3.</span> <span class="toc-text"> 3. Baseline 模型效果比较</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ava-标注文件意义"><span class="toc-number">4.</span> <span class="toc-text"> 4. AVA 标注文件意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#lfb-模块控制参数"><span class="toc-number">5.</span> <span class="toc-text"> LFB 模块控制参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#todo"><span class="toc-number">6.</span> <span class="toc-text"> TODO</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.jpg"></div><div class="author-info__name text-center">taosean</div><div class="author-info__description text-center"></div><div class="follow-button"><a href="https://github.com/taosean">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">57</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">188</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://github.com/xiaolai">李笑来</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/top_img.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">taosean's 学习之旅</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/about">关于</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">关于视频理解以及一些模型的分析</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-05-06</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.2k</span><span class="post-meta__separator">|</span><span>阅读时长: 5 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>本文记录了有关视频理解和 AVA 比赛的分析。</p>
+<a id="more"></a>
+<h2 id="1-视频理解的难点"><a class="markdownIt-Anchor" href="#1-视频理解的难点"></a> 1. 视频理解的难点</h2>
+<ol>
+<li>
+<p>不能只是关注 Person of Interest (PoI) 本身的信息，同时也需关注周边其他人，以及其他物体的信息。比如一些交互动作。</p>
+<ul>
+<li>尝试解决此问题的方法：
+<ul>
+<li>Video Action Transformer Network</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>目前一些直接在 3D feature map 上，简单地在时间轴上复制 keyframe 上的 box，构成一个 straight tube。然而由于 PoI 的 motion，会出现在其他时间点上 PoI 超出 tube 范围的情况。</p>
+<ul>
+<li>尝试解决此问题的方法：
+<ul>
+<li>STEP</li>
+<li>SlowFast: Slow 通道只在 res4, res5 才开始使用 <code>temporal kernel size &gt; 1</code> 的 <em>non-degenerate</em> temporal convolution，也就是说，从 conv1 到 res3 本质上都只是在使用 2D 卷积。这是因为实验发现过早使用时域卷积会降低精度。作者认为，当运动过快或者  temporal stride 过大时，时域感受野内的相关性会较低，除非空间感受野已经够大。也就是说，到达了较靠后的层。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-个人看法"><a class="markdownIt-Anchor" href="#2-个人看法"></a> 2. 个人看法</h2>
+<ul>
+<li>LFB 中直接使用 3D CNN (I3D) 提取 short term 特征，最后通过 RoI Pooling 在 feature map 上获取 straight tube。由于 I3D 是从一开始就在时域上进行了卷积，因此，可能会遭遇 难点2 当中提及的问题。
+<ul>
+<li>可以尝试类似 SlowFast 中的网络方式，在网络开始时不使用时域卷积。这其实就是在解决 straight tube 问题，但是感觉不是很直接的解决方案，像是一个 detour。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-baseline-模型效果比较"><a class="markdownIt-Anchor" href="#3-baseline-模型效果比较"></a> 3. Baseline 模型效果比较</h2>
+<blockquote>
+<p>on AVA Val set</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>model</th>
+<th>pretrain</th>
+<th>version</th>
+<th>mAP</th>
+<th>source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r101</td>
+<td>k400</td>
+<td>v2.2</td>
+<td>23.53</td>
+<td>LFB</td>
+</tr>
+<tr>
+<td>I3D</td>
+<td>k600</td>
+<td>v2.1</td>
+<td>21.9</td>
+<td>A better baseline for AVA</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>on Kinetics 400</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>index</th>
+<th>model</th>
+<th>backbone</th>
+<th>modality</th>
+<th>pretrain</th>
+<th>top-1 val</th>
+<th>top-5 val</th>
+<th>top-1 test</th>
+<th>top-5 test</th>
+<th>GFLOPs x views</th>
+<th>source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>I3D</td>
+<td>Inception</td>
+<td>RGB</td>
+<td>ImageNet</td>
+<td>72.1</td>
+<td>90.3</td>
+<td>71.1</td>
+<td>89.3</td>
+<td>108xN/A</td>
+<td>Quo Vadis</td>
+</tr>
+<tr>
+<td>2</td>
+<td>I3D</td>
+<td>Inception</td>
+<td>RGB+Flow</td>
+<td>ImageNet</td>
+<td>75.7</td>
+<td>92.0</td>
+<td>74.2</td>
+<td>91.3</td>
+<td>216xN/A</td>
+<td>Quo Vadis</td>
+</tr>
+<tr>
+<td>3</td>
+<td>I3D</td>
+<td>Inception</td>
+<td>RGB+Flow</td>
+<td><center>-</center></td>
+<td>71.6</td>
+<td>90.0</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>216xN/A</td>
+<td>Quo Vadis</td>
+</tr>
+<tr>
+<td>4</td>
+<td>NL I3D</td>
+<td>128 R50</td>
+<td>RGB</td>
+<td>ImageNet</td>
+<td>76.5</td>
+<td>92.6</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>282x30</td>
+<td>Non-local</td>
+</tr>
+<tr>
+<td>5</td>
+<td>NL I3D</td>
+<td>128 R101</td>
+<td>RGB</td>
+<td>ImageNet</td>
+<td>77.7</td>
+<td>93.3</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>359x30</td>
+<td>Non-local</td>
+</tr>
+<tr>
+<td>6</td>
+<td>NL I3D</td>
+<td>32x2 R50</td>
+<td>RGB</td>
+<td>ImageNet</td>
+<td>74.9</td>
+<td>91.6</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>38</td>
+<td>Non-local</td>
+</tr>
+<tr>
+<td>7</td>
+<td>NL I3D</td>
+<td>32x2 R101</td>
+<td>RGB</td>
+<td>ImageNet</td>
+<td>76.0</td>
+<td>92.1</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td></td>
+<td>Non-local</td>
+</tr>
+<tr>
+<td>8</td>
+<td>SlowFast</td>
+<td>8x8 R101</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td>77.9</td>
+<td>93.2</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>106x30</td>
+<td>SlowFast</td>
+</tr>
+<tr>
+<td>9</td>
+<td>SlowFast</td>
+<td>16x8 R101</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td>78.9</td>
+<td>93.5</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>213x30</td>
+<td>SlowFast</td>
+</tr>
+<tr>
+<td>10</td>
+<td>SlowFast</td>
+<td>16x8 R101+NL</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td>79.8</td>
+<td>93.9</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>234x30</td>
+<td>SlowFast</td>
+</tr>
+<tr>
+<td>11</td>
+<td>SlowOnly</td>
+<td>4x16 R50</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td>72.6</td>
+<td>90.3</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>27.3</td>
+<td>SlowFast</td>
+</tr>
+<tr>
+<td>12</td>
+<td>SlowFast</td>
+<td>4x16 R50</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td>75.6</td>
+<td>92.1</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>36.1x30</td>
+<td>SlowFast</td>
+</tr>
+<tr>
+<td>13</td>
+<td>SlowFast</td>
+<td>8x8 R50</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td>77.0</td>
+<td>92.6</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td>65.7x30</td>
+<td>SlowFast</td>
+</tr>
+<tr>
+<td>14</td>
+<td><font color="red">LFB baseline</font></td>
+<td>32x2 R101</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><strong>264.8</strong>x30</td>
+<td>LFB</td>
+</tr>
+<tr>
+<td>15</td>
+<td><font color="red">LFB baseline</font></td>
+<td>32x2 R50</td>
+<td>RGB</td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><center>-</center></td>
+<td><strong>176.9</strong>x30</td>
+<td>LFB</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>6</code> 和 <code>15</code> 的区别: <code>15</code> 是 LFB 中的 baseline，它是来自 <code>6</code> 号模型，但是区别是 <code>6</code> 在 <code>conv1</code>, <code>pool1</code> 这两个阶段在时域上进行了下采样，<code>res5</code> 在空域上进行了下采样，而 <code>15</code> 都没有，因此，<code>15</code> 的计算量是 <code>6</code> 的四倍多。</li>
+</ul>
+<h2 id="4-ava-标注文件意义"><a class="markdownIt-Anchor" href="#4-ava-标注文件意义"></a> 4. AVA 标注文件意义</h2>
+<blockquote>
+<p>ava_train_predicted_boxes.csv</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>original_vido_id</th>
+<th>sec</th>
+<th>coords</th>
+<th>class</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-5KQ66BBWC4</td>
+<td>0902</td>
+<td>0.326, 0.185, 0.470, 0.887</td>
+<td>80</td>
+<td>0.996382</td>
+</tr>
+<tr>
+<td>-5KQ66BBWC4</td>
+<td>0902</td>
+<td>0.003, 0.125, 0.119, 0.837</td>
+<td>-1</td>
+<td>0.742486</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>ava_val_predicted_boxes.csv</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>original_vido_id</th>
+<th>sec</th>
+<th>coords</th>
+<th>class</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1j20qq1JyX4</td>
+<td>0902</td>
+<td>0.036, 0.098, 0.550, 0.979</td>
+<td></td>
+<td>0.995518</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>ava_train_v2.2.csv</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>original_vido_id</th>
+<th>sec</th>
+<th>coords</th>
+<th>class</th>
+<th>person track id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-5KQ66BBWC4</td>
+<td>0906</td>
+<td>0.408, 0.008, 0.586, 0.639</td>
+<td>14</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>ava_val_v2.2.csv</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>original_vido_id</th>
+<th>sec</th>
+<th>coords</th>
+<th>class</th>
+<th>person track id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1j20qq1JyX4</td>
+<td>0907</td>
+<td>0.041, 0.145, 0.992, 0.985</td>
+<td>17</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>train.csv</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>original_vido_id</th>
+<th>video_id</th>
+<th>frame_id</th>
+<th>path</th>
+<th>labels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-5KQ66BBWC4</td>
+<td>0</td>
+<td>0</td>
+<td>-5KQ66BBWC4/-5KQ66BBWC4_000001.jpg</td>
+<td>“”</td>
+</tr>
+<tr>
+<td>-5KQ66BBWC4</td>
+<td>0</td>
+<td>1</td>
+<td>-5KQ66BBWC4/-5KQ66BBWC4_000002.jpg</td>
+<td>“”</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>val.csv</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>original_vido_id</th>
+<th>video_id</th>
+<th>frame_id</th>
+<th>path</th>
+<th>labels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1j20qq1JyX4</td>
+<td>235</td>
+<td>0</td>
+<td>1j20qq1JyX4/1j20qq1JyX4_000001.jpg</td>
+<td>“”</td>
+</tr>
+<tr>
+<td>1j20qq1JyX4</td>
+<td>235</td>
+<td>1</td>
+<td>1j20qq1JyX4/1j20qq1JyX4_000002.jpg</td>
+<td>“”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lfb-模块控制参数"><a class="markdownIt-Anchor" href="#lfb-模块控制参数"></a> LFB 模块控制参数</h2>
+<blockquote>
+<p>训练</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>LFB.ENABLED</th>
+<th>lfb_infer_only</th>
+<th>test_mode</th>
+<th>作用</th>
+<th>Comments</th>
+<th>status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>False</td>
+<td>False</td>
+<td>没有使用到，因为没有进行 fbo 操作</td>
+<td>训练 baseline</td>
+<td>当 <code>LFB.ENABLED</code> 为 <code>False</code> 时，<code>lfb_infer_only</code> 必须为 <code>False</code> <br>- train 集的 GT 和 预测框 都被读取 <br>- val 集 <strong>1/4</strong> 被读取</td>
+<td><font color="green"><strong>Success</strong></font></td>
+</tr>
+<tr>
+<td>True</td>
+<td>True</td>
+<td>没有使用到，因为没有进行 fbo 操作</td>
+<td>infer lfb 特征</td>
+<td>- 这一条只针对为提取 lfb 特征而创建的模型，即 <code>get_lfb</code> 函数里的模型。<br>- 这里 train 集只读取了 预测框的标注，GT 框没有读取，是正确的。<br>- val 集 <strong>全部</strong> 被读取。</td>
+<td><font color="green"><strong>Success</strong></font></td>
+</tr>
+<tr>
+<td>True</td>
+<td>False</td>
+<td>False</td>
+<td>进行有 lfb 特征的 <strong>训练</strong></td>
+<td>- 这是带 lfb 特征的训练模型，所以 <code>test_mode</code> 设为 <code>False</code>。<br>- train 集的 GT 和 预测框 都被读取 <br>- val 集 <strong>1/4</strong> 被读取。</td>
+<td><font color="green"><strong>Success</strong></font></td>
+</tr>
+</tbody>
+</table>
+<h2 id="todo"><a class="markdownIt-Anchor" href="#todo"></a> TODO</h2>
+<ol>
+<li>
+<p>尝试根据 SlowFast 中的 Slow 通道的模型，修改 LFB 中的 Baseline。</p>
+<ul>
+<li>Slow 通道模型只在 res4, res5 两个 stage 在时域上进行卷积。LFB 中从一开始就有。</li>
+<li>LFB 中使用了 Nonlocal，但是 SlowFast 里的 Non-local 只在 <code>res4</code> 出现，<code>res3</code> 没有。</li>
+<li>R101 中 <code>res4</code> stage 从第 6 个 block 往后，每个 block 的时域卷积核都是 1.</li>
+<li>LFB 代码中的 res5 并未减半尺寸，与论文中不一致。</li>
+<li>[这个表格.</li>
+</ul>
+</li>
+<li>
+<p>研究 <a href="%5Bhttps://gitzhuanlan.zhihub.com/facebookresearch/SlowFast/blob/master/MODEL_ZOO.md#kinetics">知乎文章</a>对应 SlowFast 论文中的 Table2. 具体数值稍有不同是 Pytorch 和 Caffe2 的区别。</p>
+</li>
+</ol>
+<ul>
+<li>[ ] <code>FUSION_KERNEL_SZ</code> 是 5 还是 7</li>
+<li>[ ] <code>ALIGNED</code> 是 True 还是 False</li>
+<li>[ ] <code>TRAIN_JITTER_SCALES</code>: 是 [256, 320] 还是 [256, 240]</li>
+</ul>
+<ol start="3">
+<li>研究 <a href="https://zhuanlan.zhihu.com/p/101418916?utm_source=weibo" target="_blank" rel="noopener">知乎文章p/101418916?utm_source=weibo</a>)</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">taosean</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://taosean.github.io/2021/05/06/Video-Analysis/">https://taosean.github.io/2021/05/06/Video-Analysis/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://taosean.github.io">taosean's 学习之旅</a>！</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2021/05/18/Camera-Distortion/"><i class="fa fa-chevron-left">  </i><span>镜头畸变</span></a></div><div class="next-post pull-right"><a href="/2021/05/06/Common-used-commands/"><span>常用命令</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: '9738353720f54c04f11e',
+  clientSecret: '1511bb92984c25bbde5236ba58e4673d4ff5f92e',
+  repo: 'taosean.github.io',
+  owner: 'taosean',
+  admin: 'taosean',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer class="footer-bg" style="background-image: url(/img/top_img.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2022 By taosean</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
